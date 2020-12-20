@@ -1,0 +1,159 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "jira-software.fullname" . }}
+  labels:
+    {{- include "jira-software.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      {{- include "jira-software.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+      {{- include "jira-software.selectorLabels" . | nindent 8 }}
+    {{- with .Values.podAnnotations }}
+      annotations:
+        {{- . | toYaml | trim | nindent 8 }}
+    {{- end }}
+    spec:
+    {{- with .Values.image.pullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      serviceAccountName: {{ include "jira-software.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+    {{- if .Values.caCerts.enabled }}
+      initContainers:
+        - name: ca-certs
+          image: adoptopenjdk:11-jdk-hotspot
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- with .Values.env }}
+          env:
+            {{- . | toYaml | trim | nindent 12 }}
+          {{- end }}
+          command: ["sh"]
+          args: ["-c", "cp -f \"${JAVA_HOME}/lib/security/cacerts\" /var/atlassian/application-data/jira/cacerts; for f in /var/atlassian/application-data/jira/secrets/cas/*; do keytool -importcert -file \"${f}\" -alias \"$(basename \"${f}\")\" -keystore /var/atlassian/application-data/jira/cacerts -storepass changeit -trustcacerts -noprompt; done;"]
+          volumeMounts:
+            - mountPath: /var/atlassian/application-data/jira
+              name: {{ include "jira-software.pvcname" . }}
+            - mountPath: /var/atlassian/application-data/jira/secrets/cas
+              name: jira-cas
+    {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: JVM_MINIMUM_MEMORY
+              value: {{ .Values.envVars.jvmMinHeapSize | quote }}
+            - name: JVM_MAXIMUM_MEMORY
+              value: {{ .Values.envVars.jvmMaxHeapSize | quote }}
+            - name: JVM_SUPPORT_RECOMMENDED_ARGS
+            {{- if .Values.caCerts.enabled }}
+              value: {{ printf "-Djavax.net.ssl.trustStore=/var/atlassian/application-data/jira/cacerts %s %s" .Values.envVars.jvmAdditionalMemoryOptions .Values.envVars.jvmAdditionalOptions | trim | quote }}
+            {{- else }}
+              value: {{ printf "%s %s" .Values.envVars.jvmAdditionalMemoryOptions .Values.envVars.jvmAdditionalOptions | trim | quote }}
+            {{- end }}
+            {{- if .Values.ingress.enabled }}
+            - name: ATL_PROXY_NAME
+              value: {{ index .Values.ingress.hosts 0 | quote }}
+            - name: ATL_PROXY_PORT
+              value: {{ if .Values.ingress.tls }}"443"{{ else }}"80"{{ end }}
+            - name: ATL_TOMCAT_SCHEME
+              value: {{ if .Values.ingress.tls }}"https"{{ else }}"http"{{ end }}
+            - name: ATL_TOMCAT_SECURE
+              value: {{ if .Values.ingress.tls }}"true"{{ else }}"false"{{ end }}
+            {{- end }}
+            {{- if .Values.postgresql.enabled }}
+            - name: ATL_JDBC_URL
+              value: "jdbc:postgresql://{{ include "jira-software.postgresql.fullname" . }}:{{ .Values.postgresql.service.port | default "5432" }}/{{ .Values.postgresql.postgresqlDatabase }}"
+            - name: ATL_JDBC_USER
+              value: {{.Values.postgresql.postgresqlUsername | quote }}
+            - name: ATL_JDBC_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  {{- if .Values.postgresql.existingSecret }}
+                  name:  {{ .Values.postgresql.existingSecret }}
+                  {{- else }}
+                  name:  {{ include "jira-software.postgresql.fullname" . }}
+                  {{- end }}
+                  key: postgresql-password
+            - name: ATL_DB_DRIVER
+              value: "org.postgresql.Driver"
+            - name: ATL_DB_TYPE
+              value: "postgres72"
+            {{- else if .Values.psql }}
+            - name: ATL_JDBC_URL
+              value: "jdbc:postgresql://{{ .Values.psql.host }}:{{ .Values.psql.port | default "5432" }}/{{ .Values.psql.database }}"
+            - name: ATL_JDBC_USER
+              value: {{ .Values.psql.username | quote }}
+            - name: ATL_JDBC_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.psql.password.secret }}
+                  key: {{ .Values.psql.password.key }}
+            - name: ATL_DB_DRIVER
+              value: "org.postgresql.Driver"
+            - name: ATL_DB_TYPE
+              value: "postgres72"
+            {{- end }}
+            {{- with .Values.env }}
+            {{- . | toYaml | trim | nindent 12 }}
+            {{- end }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /status
+              port: http
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            failureThreshold: 10
+            timeoutSeconds: 1
+          readinessProbe:
+            httpGet:
+              path: /status
+              port: http
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            failureThreshold: 10
+            timeoutSeconds: 1
+          volumeMounts:
+            - mountPath: /var/atlassian/application-data/jira
+              name: {{ include "jira-software.pvcname" . }}
+          resources:
+            {{- .Values.resources | toYaml | trim | nindent 12 }}
+      volumes:
+        - name: {{ include "jira-software.pvcname" . }}
+          {{- if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.existingClaim | default (include "jira-software.pvcname" .) }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+        {{- if .Values.caCerts.enabled }}
+        - name: jira-cas
+          secret:
+            secretName: {{ .Values.caCerts.secret }}
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- . | toYaml | trim | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- . | toYaml | trim | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- . | toYaml | trim | nindent 8 }}
+      {{- end }}
