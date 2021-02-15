@@ -155,4 +155,47 @@ entries:
     urls:
     - https://github.com/SomeBlackMagic/helm-charts/releases/download/jira-software-3.3.0/jira-software-3.3.0.tgz
     version: 3.3.0
+  mysql:
+  - apiVersion: v1
+    appVersion: 5.7.33
+    created: "2021-02-15T10:14:38.218790005Z"
+    description: Fast, reliable, scalable, and easy to use open-source relational database system.
+    digest: 622c4d527cd1e3d774859ef2f047891721c9624f51ed6c3732864fcf5af8d188
+    home: https://www.mysql.com/
+    icon: https://www.mysql.com/common/logos/logo-mysql-170x115.png
+    keywords:
+    - mysql
+    - database
+    - sql
+    name: mysql
+    sources:
+    - https://github.com/kubernetes/charts
+    - https://github.com/docker-library/mysql
+    urls:
+    - https://github.com/SomeBlackMagic/helm-charts/releases/download/mysql-1.7.0/mysql-1.7.0.tgz
+    version: 1.7.0
+  phpmyadmin:
+  - annotations:
+      category: Infrastructure
+    apiVersion: v1
+    appVersion: 5.0.2
+    created: "2021-02-15T10:14:38.345302197Z"
+    description: phpMyAdmin is an mysql administration frontend
+    digest: 0925a007f7159b65ddf8a69ab52b67ec68b92b6166137a497045d590eb020659
+    home: https://github.com/bitnami/charts/tree/master/bitnami/phpmyadmin
+    icon: https://bitnami.com/assets/stacks/phpmyadmin/img/phpmyadmin-stack-220x234.png
+    keywords:
+    - mariadb
+    - mysql
+    - phpmyadmin
+    maintainers:
+    - email: containers@bitnami.com
+      name: Bitnami
+    name: phpmyadmin
+    sources:
+    - https://github.com/bitnami/bitnami-docker-phpmyadmin
+    - https://www.phpmyadmin.net/
+    urls:
+    - https://github.com/SomeBlackMagic/helm-charts/releases/download/phpmyadmin-6.5.2/phpmyadmin-6.5.2.tgz
+    version: 6.5.2
 generated: "2020-12-20T13:02:47.671868427+02:00"
