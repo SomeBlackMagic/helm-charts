@@ -158,6 +158,24 @@ entries:
   mysql:
   - apiVersion: v1
     appVersion: 5.7.33
+    created: "2021-05-13T10:57:37.449830579Z"
+    description: Fast, reliable, scalable, and easy to use open-source relational database system.
+    digest: 5d92d133dc3f451194de092d3e0bc1b4cc3127565083214840ee01fe3e1779ae
+    home: https://www.mysql.com/
+    icon: https://www.mysql.com/common/logos/logo-mysql-170x115.png
+    keywords:
+    - mysql
+    - database
+    - sql
+    name: mysql
+    sources:
+    - https://github.com/kubernetes/charts
+    - https://github.com/docker-library/mysql
+    urls:
+    - https://github.com/SomeBlackMagic/helm-charts/releases/download/mysql-1.7.1/mysql-1.7.1.tgz
+    version: 1.7.1
+  - apiVersion: v1
+    appVersion: 5.7.33
     created: "2021-02-15T10:14:38.218790005Z"
     description: Fast, reliable, scalable, and easy to use open-source relational database system.
     digest: 622c4d527cd1e3d774859ef2f047891721c9624f51ed6c3732864fcf5af8d188
