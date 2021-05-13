@@ -165,6 +165,22 @@ spec:
           timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
           successThreshold: {{ .Values.readinessProbe.successThreshold }}
           failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+        startupProbe:
+          exec:
+            command:
+              {{- if .Values.mysqlAllowEmptyPassword }}
+              - mysqladmin
+              - ping
+              {{- else }}
+              - sh
+              - -c
+              - "mysqladmin ping -u root -p${MYSQL_ROOT_PASSWORD}"
+          {{- end }}
+          initialDelaySeconds: {{ .Values.startupProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.startupProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.startupProbe.successThreshold }}
+          failureThreshold: {{ .Values.startupProbe.failureThreshold }}
         volumeMounts:
         - name: data
           mountPath: /var/lib/mysql

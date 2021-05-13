@@ -244,3 +244,10 @@ initContainer:
     requests:
       memory: 10Mi
       cpu: 10m
+
+startupProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 30
