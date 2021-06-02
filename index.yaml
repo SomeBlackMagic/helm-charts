@@ -1,5 +1,20 @@
 apiVersion: v1
 entries:
+  alerta:
+  - apiVersion: v1
+    appVersion: 7.5.1
+    created: "2021-06-02T13:50:30.062471799Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 8.9.*
+    description: A Helm chart for Kubernetes
+    digest: 3aa2c13fb97ace6a6bb54f63a34386eee6aca36cdfa68fe7c6bf57f8fd7646ef
+    name: alerta
+    urls:
+    - https://github.com/SomeBlackMagic/helm-charts/releases/download/alerta-0.1.1/alerta-0.1.1.tgz
+    version: 0.1.1
   atlassian-confluence:
   - apiVersion: v1
     appVersion: 7.10.0
