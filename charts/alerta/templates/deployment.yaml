@@ -56,16 +56,20 @@ spec:
             - name: http
               containerPort: 8080
               protocol: TCP
+          startupProbe:
+            exec:
+              command:
+                - alerta
+                - status
+            failureThreshold: 30
+            periodSeconds: 1
           livenessProbe:
-            httpGet:
-              path: /
-              port: http
-            initialDelaySeconds: 300
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
-            initialDelaySeconds: 5
+            exec:
+              command:
+                - alerta
+                - status
+            initialDelaySeconds: 10
+            periodSeconds: 5
           volumeMounts:
           {{- range .Values.extraSecretMounts }}
             - name: {{ .name }}

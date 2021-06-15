@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: alerta/alerta-web
-  tag: 8.1.0
+  tag: 8.5.0
   pullPolicy: IfNotPresent
 
 nameOverride: ""
