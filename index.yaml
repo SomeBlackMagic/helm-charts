@@ -283,6 +283,14 @@ entries:
     version: 0.1.0
   statsd-proxy:
   - apiVersion: v1
+    created: "2021-06-25T12:41:47.854055949Z"
+    description: __GITLAB_PROJECT__ - statsd proxy
+    digest: 2e669ced994c48cec9b69fb442a5f68e073cfc6a8d829d065cd4f406973acdd9
+    name: statsd-proxy
+    urls:
+    - https://github.com/SomeBlackMagic/helm-charts/releases/download/statsd-proxy-0.1.2/statsd-proxy-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v1
     created: "2021-06-25T09:27:06.230622703Z"
     description: __GITLAB_PROJECT__ - statsd proxy
     digest: 6f162618c29d691400233de4f136e8eea5d4e82d3cead07c7d54562eab6eafa1
