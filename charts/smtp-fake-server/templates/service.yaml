@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "smpt-fake-server.fullname" . }}
+  labels:
+    app: {{ template "smpt-fake-server.name" . }}
+    chart: {{ template "smpt-fake-server.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: 5080
+      protocol: TCP
+      name: http
+
+    - port: 5081
+      targetPort: 5081
+      protocol: TCP
+      name: api
+
+    - port: 25
+      targetPort: 25
+      protocol: TCP
+      name: smtp
+
+  selector:
+    app: {{ template "smpt-fake-server.name" . }}
+    release: {{ .Release.Name }}

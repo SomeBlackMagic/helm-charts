@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "smpt-fake-server.fullname" . }}
+  labels:
+    app: {{ template "smpt-fake-server.name" . }}
+    chart: {{ template "smpt-fake-server.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "smpt-fake-server.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "smpt-fake-server.name" . }}
+        chart: {{ template "smpt-fake-server.chart" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: {{ template "smpt-fake-server.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+{{/*            - name: JAVA_OPTS*/}}
+{{/*              value: "-Ddebug=true"*/}}
+            - name: FAKESMTP_AUTHENTICATION_USERNAME
+              value: "root"
+            - name: FAKESMTP_AUTHENTICATION_PASSWORD
+              value: "root"
