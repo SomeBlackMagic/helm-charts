@@ -281,4 +281,13 @@ entries:
     urls:
     - https://github.com/SomeBlackMagic/helm-charts/releases/download/smtp-fake-server-0.1.0/smtp-fake-server-0.1.0.tgz
     version: 0.1.0
+  statsd-proxy:
+  - apiVersion: v1
+    created: "2021-06-25T09:27:06.230622703Z"
+    description: __GITLAB_PROJECT__ - statsd proxy
+    digest: 6f162618c29d691400233de4f136e8eea5d4e82d3cead07c7d54562eab6eafa1
+    name: statsd-proxy
+    urls:
+    - https://github.com/SomeBlackMagic/helm-charts/releases/download/statsd-proxy-0.1.1/statsd-proxy-0.1.1.tgz
+    version: 0.1.1
 generated: "2020-12-20T13:02:47.671868427+02:00"
