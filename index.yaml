@@ -273,4 +273,12 @@ entries:
     urls:
     - https://github.com/SomeBlackMagic/helm-charts/releases/download/phpmyadmin-6.5.2/phpmyadmin-6.5.2.tgz
     version: 6.5.2
+  smtp-fake-server:
+  - apiVersion: v1
+    created: "2021-06-25T07:58:17.314081175Z"
+    digest: 7eb5fa0cd76a681c2ed4787054b63b0c37ba519f1037b7b96e742d2c1b2408ec
+    name: smtp-fake-server
+    urls:
+    - https://github.com/SomeBlackMagic/helm-charts/releases/download/smtp-fake-server-0.1.0/smtp-fake-server-0.1.0.tgz
+    version: 0.1.0
 generated: "2020-12-20T13:02:47.671868427+02:00"
