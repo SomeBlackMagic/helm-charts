@@ -1,0 +1,4 @@
+apiVersion: v1
+description: __GITLAB_PROJECT__ - statsd proxy
+name: statsd-proxy
+version: 0.1.1

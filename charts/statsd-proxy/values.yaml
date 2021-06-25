@@ -1,0 +1,10 @@
+replicaCount: 1
+
+image:
+  repository: docker.io/adgoal/statsd-proxy
+  tag: latets
+  pullPolicy: Always
+  secret: docker-registry
+
+app:
+    secretPrefix: null-value
