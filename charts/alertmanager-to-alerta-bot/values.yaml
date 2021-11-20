@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  regostry: docker.io
+  registry: docker.io
   repository: someblackmagic/alertmanager-to-alerta-bot
   tag: latest
   pullPolicy: Always
