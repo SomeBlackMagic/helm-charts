@@ -57,6 +57,18 @@ entries:
     urls:
     - https://github.com/SomeBlackMagic/helm-charts/releases/download/alerta-0.1.1/alerta-0.1.1.tgz
     version: 0.1.1
+  alertmanager-to-alerta-bot:
+  - apiVersion: v1
+    created: "2021-11-20T11:41:52.930752467Z"
+    description: alertmanager-to-alerta-bot
+    digest: 5c439be0fbedf5c5397c36d0a4a348484888e94529791eb62448bca17547beb8
+    maintainers:
+    - name: Andru Cherny
+      url: https://github.com/wirwolf
+    name: alertmanager-to-alerta-bot
+    urls:
+    - https://github.com/SomeBlackMagic/helm-charts/releases/download/alertmanager-to-alerta-bot-0.1.1/alertmanager-to-alerta-bot-0.1.1.tgz
+    version: 0.1.1
   atlassian-confluence:
   - apiVersion: v1
     appVersion: 7.10.0
