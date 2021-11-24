@@ -18,6 +18,8 @@ spec:
       labels:
         app.kubernetes.io/name: {{ $.Chart.Name }}
         app.kubernetes.io/instance: {{ $.Release.Name }}
+      annotations:
+        checksum/secrets: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
     spec:
       terminationGracePeriodSeconds: 10
       containers:
@@ -34,11 +36,10 @@ spec:
           {{- end }}
           envFrom:
             - secretRef:
-                name: {{ .Chart.Name }}-secrets
-          {{- if $.Values.resources }}
-          resources: {{ toYaml $.Values.resources | nindent 12 }}
+                name: {{ $.Release.Name }}-secrets
+          {{- if $.Values.resources.enabled }}
+          resources: {{- omit $.Values.resources "enabled" | toYaml | nindent 12 }}
           {{- end }}
-
           {{- if $.Values.readinessProbe.enabled }}
           readinessProbe:
             initialDelaySeconds: {{ $.Values.readinessProbe.initialDelaySeconds }}
