@@ -227,6 +227,27 @@ entries:
     urls:
     - https://github.com/SomeBlackMagic/helm-charts/releases/download/confluence-server-3.4.0/confluence-server-3.4.0.tgz
     version: 3.4.0
+  ingress-nginx-monitoring:
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2022-01-25T15:11:14.331920229Z"
+    description: Monitor nginx ingress controller
+    digest: cf6e19640fe3dd44deff64dc49167ca214dcb5dc3c29d1a63bb416a35d8782fe
+    icon: https://raw.githubusercontent.com/SomeBlackMagic/helm-charts/master/charts/ingress-nginx-monitoring/nginx-prometheus-grafana.png
+    keywords:
+    - http
+    - nginx
+    - monitoring
+    maintainers:
+    - name: Andru Cherny
+      url: https://github.com/wirwolf
+    name: ingress-nginx-monitoring
+    sources:
+    - https://github.com/SomeBlackMagic/helm-charts
+    type: application
+    urls:
+    - https://github.com/SomeBlackMagic/helm-charts/releases/download/ingress-nginx-monitoring-0.1.0/ingress-nginx-monitoring-0.1.0.tgz
+    version: 0.1.0
   jira-software:
   - apiVersion: v1
     appVersion: 8.14.0
