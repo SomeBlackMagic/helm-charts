@@ -1,0 +1,63 @@
+{{- if and .Values.prometheus.enabled .Values.prometheus.rule.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ include "ingress-nginx-monitoring.fullname" . }}
+  {{- if .Values.prometheus.rule.namespace }}
+  namespace: {{ .Values.prometheus.rule.namespace }}
+  {{- end }}
+  labels:
+    {{- include "ingress-nginx-monitoring.labels" . | nindent 4 }}
+    {{- if .Values.prometheus.rule.additionalLabels }}
+    {{- toYaml .Values.prometheus.rule.additionalLabels | nindent 4 }}
+    {{- end }}
+spec:
+  groups:
+  - name: ingress-nginx
+    rules:
+    {{- if .Values.prometheus.rule.alerts.configFailed }}
+    - alert: NGINXConfigFailed
+      expr: count(nginx_ingress_controller_config_last_reload_successful == 0) > 0
+      for: 1s
+      labels:
+        severity: critical
+      annotations:
+        description: bad ingress config - nginx config test failed
+        summary: uninstall the latest ingress changes to allow config reloads to resume
+    {{- end }}
+    {{- if .Values.prometheus.rule.alerts.certificateExpiry }}
+    - alert: NGINXCertificateExpiry
+      expr: (avg(nginx_ingress_controller_ssl_expire_time_seconds) by (host) - time()) < 604800
+      for: 1s
+      labels:
+        severity: critical
+      annotations:
+        description: ssl certificate(s) will expire in less then a week
+        summary: renew expiring certificates to avoid downtime
+    {{- end }}
+    {{- if .Values.prometheus.rule.alerts.tooMany500s }}
+    - alert: NGINXTooMany500s
+      expr: 100 * ( sum( increase( nginx_ingress_controller_requests{status=~"5.+"}[1h] ) ) / sum( increase(nginx_ingress_controller_requests[1h]) ) ) > 5
+      for: 1m
+      labels:
+        severity: warning
+      annotations:
+        description: Too many 5XXs
+        summary: More than 5% of all requests returned 5XX, this requires your attention
+    {{- end }}
+    {{- if .Values.prometheus.rule.alerts.tooMany400s }}
+    - alert: NGINXTooMany400s
+      expr: 100 * ( sum( increase( nginx_ingress_controller_requests{status=~"4.+"}[1h] ) ) / sum( increase( nginx_ingress_controller_requests[1h]) ) ) > 5
+      for: 1m
+      labels:
+        severity: warning
+      annotations:
+        description: Too many 4XXs
+        summary: More than 5% of all requests returned 4XX, this requires your attention
+    {{- end }}
+
+
+    {{- with .Values.prometheus.rule.additionalAlerts }}
+    {{ . | nindent 4 }}
+    {{- end }}
+{{- end }}
