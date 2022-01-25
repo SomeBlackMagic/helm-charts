@@ -1,0 +1,32 @@
+{{- if and .Values.prometheus.enabled .Values.prometheus.rule.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ include "cilium-monitoring.fullname" . }}
+  {{- if .Values.prometheus.rule.namespace }}
+  namespace: {{ .Values.prometheus.rule.namespace }}
+  {{- end }}
+  labels:
+    {{- include "cilium-monitoring.labels" . | nindent 4 }}
+    {{- if .Values.prometheus.rule.additionalLabels }}
+    {{- toYaml .Values.prometheus.rule.additionalLabels | nindent 4 }}
+    {{- end }}
+spec:
+  groups:
+  - name: cilium-agent-rules
+    rules:
+    {{- if .Values.prometheus.rule.alerts.errorsAndWarning }}
+    - alert: CiliumErrorsAndWarning
+      expr: sum(rate(cilium_errors_warnings_total{k8s_app="cilium"}[1m])) by (pod, level) * 60
+      for: 1m
+      labels:
+        severity: "\{\{ $labels.level \}\}"
+        subsystem: "\{\{ $labels.subsystem \}\}"
+      annotations:
+        summary: "Cilium has error"
+        description: "Error on \{\{ $labels.subsystem \}\} group"
+    {{- end }}
+    {{- with .Values.prometheus.rule.additionalAlerts }}
+    {{ . | nindent 4 }}
+    {{- end }}
+{{- end }}
