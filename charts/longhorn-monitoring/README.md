@@ -2,7 +2,7 @@
 
 ![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
-Monitor nginx ingress controller
+Monitor longhorn storage engine
 
 
 ## Values
@@ -16,10 +16,8 @@ Monitor nginx ingress controller
 | prometheus.enabled | bool | `true` | Create prometheus-operator resources |
 | prometheus.rule.additionalAlerts | list | `[]` | Add additional alerts to the group |
 | prometheus.rule.additionalLabels | object | `{}` | Additional Labels for PrometheusRule resource |
-| prometheus.rule.alerts.configFailed | bool | `true` | Enable NGINXConfigFailed alert |
-| prometheus.rule.alerts.certificateExpiry | bool | `true` | Enable NGINXCertificateExpiry alert |
-| prometheus.rule.alerts.tooMany500s | bool | `true` | Enable NGINXTooMany500s alert |
-| prometheus.rule.alerts.tooMany400s | bool | `true` | Enable NGINXTooMany400s alert |
+| prometheus.rule.alerts.degradedVolumes | bool | `true` | Enable DegradedVolumes alert |
+| prometheus.rule.alerts.detachedVolume | bool | `true` | Enable DetachedVolume alert |
 | prometheus.rule.enabled | bool | `true` | Create PrometheusRule resource |
 | prometheus.rule.namespace | string | `""` | Optional Namespace for PrometheusRule resource |
 
