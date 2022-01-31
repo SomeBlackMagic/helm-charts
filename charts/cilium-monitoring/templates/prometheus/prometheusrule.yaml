@@ -20,11 +20,11 @@ spec:
       expr: sum(rate(cilium_errors_warnings_total{k8s_app="cilium"}[1m])) by (pod, level) * 60
       for: 1m
       labels:
-        severity: "\{\{ $labels.level \}\}"
-        subsystem: "\{\{ $labels.subsystem \}\}"
+        severity: "{{`{{ $labels.level }}`}}"
+        subsystem: "{{`{{ $labels.subsystem }}`}}"
       annotations:
         summary: "Cilium has error"
-        description: "Error on \{\{ $labels.subsystem \}\} group"
+        description: {{`Error on '{{ $labels.subsystem }}' group.`}}
     {{- end }}
     {{- with .Values.prometheus.rule.additionalAlerts }}
     {{ . | nindent 4 }}
