@@ -298,6 +298,26 @@ entries:
     urls:
     - https://github.com/SomeBlackMagic/helm-charts/releases/download/jira-software-3.3.0/jira-software-3.3.0.tgz
     version: 3.3.0
+  longhorn-monitoring:
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2022-01-31T10:16:03.956187516Z"
+    description: Monitor nginx ingress controller
+    digest: 7e13ec2e2d8d7194f1b954dad0cece70747b11e961811bd13f1ff4ca9f8a7e39
+    icon: https://raw.githubusercontent.com/SomeBlackMagic/helm-charts/master/charts/longhorn-monitoring/longhorn-prometheus-grafana.png
+    keywords:
+    - longhorn
+    - monitoring
+    maintainers:
+    - name: Andru Cherny
+      url: https://github.com/wirwolf
+    name: longhorn-monitoring
+    sources:
+    - https://github.com/SomeBlackMagic/helm-charts
+    type: application
+    urls:
+    - https://github.com/SomeBlackMagic/helm-charts/releases/download/longhorn-monitoring-0.1.0/longhorn-monitoring-0.1.0.tgz
+    version: 0.1.0
   mysql:
   - apiVersion: v1
     appVersion: 5.7.33
