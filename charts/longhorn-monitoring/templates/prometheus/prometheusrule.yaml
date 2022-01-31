@@ -1,0 +1,43 @@
+{{- if and .Values.prometheus.enabled .Values.prometheus.rule.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ include "longhorn-monitoring.fullname" . }}
+  {{- if .Values.prometheus.rule.namespace }}
+  namespace: {{ .Values.prometheus.rule.namespace }}
+  {{- end }}
+  labels:
+    {{- include "longhorn-monitoring.labels" . | nindent 4 }}
+    {{- if .Values.prometheus.rule.additionalLabels }}
+    {{- toYaml .Values.prometheus.rule.additionalLabels | nindent 4 }}
+    {{- end }}
+spec:
+  groups:
+  - name: longhorn
+    rules:
+    {{- if .Values.prometheus.rule.alerts.degradedVolumes }}
+    - alert: DegradedVolumes
+      expr: (longhorn_volume_robustness == 2)
+      for: 1s
+      labels:
+        severity: critical
+      annotations:
+        description: Please open longhorn UI for more information
+        summary: {{`Volume '{{ $labels.volume }}' was Degraded`}}
+    {{- end }}
+    {{- if .Values.prometheus.rule.alerts.detachedVolume }}
+    - alert: DetachedVolume
+      expr: (longhorn_volume_robustness == 2)
+      for: 1h
+      labels:
+        severity: warning
+      annotations:
+        description: Check if this pvc needed, and remove it if not needed
+        summary: {{`Volume '{{ $labels.volume }}' was Detached a long time ago`}}
+    {{- end }}
+
+
+    {{- with .Values.prometheus.rule.additionalAlerts }}
+    {{ . | nindent 4 }}
+    {{- end }}
+{{- end }}

@@ -1,0 +1,43 @@
+serviceMonitor:
+  enabled: true
+  # serviceMonitor.labels -- labels to set on the vault serviceMonitor
+  labels: {}
+  # scrapeTimeout  -- scrapeTimeout of the serviceMonitor
+  scrapeTimeout: 30s
+
+  scrapeInterval: 30s
+
+
+prometheus:
+  # -- Create prometheus-operator resources
+  enabled: true
+  rule:
+    # -- Create PrometheusRule resource
+    enabled: true
+    # -- Optional Namespace for PrometheusRule resource
+    namespace: ""
+    # -- Additional Labels for PrometheusRule resource
+    additionalLabels: {}
+    alerts:
+      # -- Enable DegradedVolumes alert
+      degradedVolumes: true
+      # -- Enable DetachedVolume alert
+      detachedVolume: true
+    additionalAlerts: []
+    # - alert: CertManagerCertificateReadyStatus
+    #   annotations:
+    #     description: 'Failed node exist in cluster'
+    #     summary: Number Of Failed Nodes above zero
+    #   expr: (avg(longhorn_node_count_total) OR on() vector(0)) - (count(longhorn_node_status{condition="ready"}==1) OR on() vector(0)) == 1
+    #   labels:
+    #     severity: critical
+
+grafana:
+  # -- Enable deploying cert-manager dashboard to Grafana
+  enabled: false
+  # -- Add `grafana_dashboard: "1"` default label
+  defaultLabel: true
+  # -- Extra labels for dashboard ConfigMap
+  extraLabels: {}
+  # -- Extra annotations for dashboard ConfigMap
+  extraAnnotations: {}
