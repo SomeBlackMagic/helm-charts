@@ -197,6 +197,27 @@ entries:
     urls:
     - https://github.com/SomeBlackMagic/helm-charts/releases/download/atlassian-jira-3.3.0/atlassian-jira-3.3.0.tgz
     version: 3.3.0
+  cilium-monitoring:
+  - apiVersion: v2
+    appVersion: 0.1.1
+    created: "2022-01-31T12:03:03.075139609Z"
+    description: Monitor cilium CNI
+    digest: d7850eb9b9d03878a52f47dbe384dd56a25846e5c364466e2fbe68ea3de221ec
+    icon: https://raw.githubusercontent.com/SomeBlackMagic/helm-charts/master/charts/cilium-monitoring/cilium-prometheus-grafana.png
+    keywords:
+    - ebpf
+    - network
+    - monitoring
+    maintainers:
+    - name: Andru Cherny
+      url: https://github.com/wirwolf
+    name: cilium-monitoring
+    sources:
+    - https://github.com/SomeBlackMagic/helm-charts
+    type: application
+    urls:
+    - https://github.com/SomeBlackMagic/helm-charts/releases/download/cilium-monitoring-0.1.1/cilium-monitoring-0.1.1.tgz
+    version: 0.1.1
   confluence-server:
   - apiVersion: v1
     appVersion: 7.10.0
