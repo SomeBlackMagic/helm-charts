@@ -17,7 +17,7 @@ spec:
     rules:
     {{- if .Values.prometheus.rule.alerts.errorsAndWarning }}
     - alert: CiliumErrorsAndWarning
-      expr: sum(rate(cilium_errors_warnings_total{k8s_app="cilium"}[1m])) by (pod, level) * 60
+      expr: ((rate(cilium_errors_warnings_total{k8s_app="cilium"}[1m])) * 60) >= 1
       for: 1m
       labels:
         severity: "{{`{{ $labels.level }}`}}"
