@@ -1,7 +1,0 @@
-apiVersion: v1
-description: alertmanager-to-alerta-bot
-name: alertmanager-to-alerta-bot
-version: 0.2.0
-maintainers:
-  - name: Andru Cherny
-    url: https://github.com/wirwolf

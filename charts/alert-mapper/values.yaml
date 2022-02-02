@@ -2,9 +2,9 @@ replicaCount: 1
 
 image:
   registry: docker.io
-  repository: someblackmagic/alertmanager-to-alerta-bot
+  repository: someblackmagic/alert-mapper
   tag: latest
-  pullPolicy: Always
+  pullPolicy: IfNotPresent
 
 
 app:
@@ -21,11 +21,11 @@ resources:
   # limits: {}
   limits:
     cpu: 200m
-    memory: "200Mi"
+    memory: 200Mi
   # requests: {}
   requests:
     cpu: 100m
-    memory: "100Mi"
+    memory: 100Mi
 
   ## Configure extra options for liveness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes

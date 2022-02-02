@@ -1,0 +1,15 @@
+apiVersion: v2
+name: alert-mapper
+type: application
+version: 0.1.0
+appVersion: latest
+icon: https://raw.githubusercontent.com/SomeBlackMagic/helm-charts/master/charts/alert-mapper/icon.png
+keywords:
+  - Alerta
+  - AlertManager
+  - Alerting
+sources:
+  - https://github.com/SomeBlackMagic/alert-mapper
+maintainers:
+  - name: Andru Cherny
+    url: https://github.com/wirwolf
