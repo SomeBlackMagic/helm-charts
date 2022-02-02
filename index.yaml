@@ -3,6 +3,25 @@ entries:
   alert-mapper:
   - apiVersion: v2
     appVersion: latest
+    created: "2022-02-02T16:25:49.259244087Z"
+    digest: 38907bbb363e0b213ab26ee33618f6261e2842c72329e322b7ffc48e6608d49c
+    icon: https://raw.githubusercontent.com/SomeBlackMagic/helm-charts/master/charts/alert-mapper/icon.png
+    keywords:
+    - Alerta
+    - AlertManager
+    - Alerting
+    maintainers:
+    - name: Andru Cherny
+      url: https://github.com/wirwolf
+    name: alert-mapper
+    sources:
+    - https://github.com/SomeBlackMagic/alert-mapper
+    type: application
+    urls:
+    - https://github.com/SomeBlackMagic/helm-charts/releases/download/alert-mapper-0.1.1/alert-mapper-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: latest
     created: "2022-02-02T12:43:37.012000157Z"
     digest: 65883c6a6ff890dd6ef1b742dc8b2b816b96db4d5dfa22280a7e0e2adcf8316a
     icon: https://raw.githubusercontent.com/SomeBlackMagic/helm-charts/master/charts/alert-mapper/icon.png
