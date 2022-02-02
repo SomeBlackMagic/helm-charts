@@ -3,7 +3,7 @@ replicaCount: 1
 image:
   registry: docker.io
   repository: someblackmagic/alert-mapper
-  tag: latest
+  tag: v0.1.0
   pullPolicy: IfNotPresent
 
 
