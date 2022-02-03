@@ -7,6 +7,10 @@ serviceMonitor:
 
   scrapeInterval: 30s
 
+  # -- Specify the Kubernetes namespace where Prometheus expects to find
+  # service monitors configured.
+  # namespace: ""
+
 
 prometheus:
   # -- Create prometheus-operator resources

@@ -2,8 +2,8 @@ apiVersion: v2
 name: longhorn-monitoring
 description: Monitor nginx ingress controller
 type: application
-version: 0.1.1
-appVersion: 0.1.1
+version: 0.1.2
+appVersion: 0.1.2
 icon: https://raw.githubusercontent.com/SomeBlackMagic/helm-charts/master/charts/longhorn-monitoring/longhorn-prometheus-grafana.png
 keywords:
   - longhorn

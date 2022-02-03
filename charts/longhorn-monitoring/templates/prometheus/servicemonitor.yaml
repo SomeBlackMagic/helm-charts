@@ -3,10 +3,11 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: longhorn-prometheus-servicemonitor
+  namespace: {{ $.Values.serviceMonitor.namespace | default $.Release.Namespace }}
   labels:
     {{- include "longhorn-monitoring.labels" . | nindent 4 }}
-{{- if .Values.serviceMonitor.labels }}
-    {{- toYaml .Values.serviceMonitor.labels | nindent 4}}
+{{- if $.Values.serviceMonitor.labels }}
+    {{- toYaml $.Values.serviceMonitor.labels | nindent 4}}
 {{- end }}
 spec:
   selector:
@@ -14,9 +15,9 @@ spec:
       app: longhorn-manager
   namespaceSelector:
     matchNames:
-      - {{ .Release.Namespace }}
+      - {{ $.Release.Namespace }}
   endpoints:
     - port: manager
       scrapeTimeout: {{ .Values.serviceMonitor.scrapeTimeout }}
-      interval: {{ .Values.serviceMonitor.scrapeInterval }}
+      interval: {{ $.Values.serviceMonitor.scrapeInterval }}
 {{- end }}
