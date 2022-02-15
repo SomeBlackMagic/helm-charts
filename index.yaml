@@ -236,6 +236,28 @@ entries:
     urls:
     - https://github.com/SomeBlackMagic/helm-charts/releases/download/atlassian-jira-3.3.0/atlassian-jira-3.3.0.tgz
     version: 3.3.0
+  banzaicloud-logging-operator-monitoring:
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2022-02-15T08:33:03.167228553Z"
+    description: Monitor logging-operator
+    digest: 5a6feb678027663387b5009c2ebf61c84cfc6a09270d35516802e161ae2b3040
+    icon: https://raw.githubusercontent.com/SomeBlackMagic/helm-charts/master/charts/banzaicloud-logging-operator-monitoring/icon.png
+    keywords:
+    - banzaicloud
+    - logging-operator
+    - monitoring
+    maintainers:
+    - name: Andru Cherny
+      url: https://github.com/wirwolf
+    name: banzaicloud-logging-operator-monitoring
+    sources:
+    - https://github.com/SomeBlackMagic/helm-charts
+    - https://github.com/banzaicloud/logging-operator
+    type: library
+    urls:
+    - https://github.com/SomeBlackMagic/helm-charts/releases/download/banzaicloud-logging-operator-monitoring-0.1.0/banzaicloud-logging-operator-monitoring-0.1.0.tgz
+    version: 0.1.0
   cilium-monitoring:
   - apiVersion: v2
     appVersion: 0.1.3
