@@ -1,0 +1,45 @@
+{{- if and .Values.prometheus.enabled .Values.prometheus.rule.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ include "banzaicloud-logging-operator-monitoring.fullname" . }}
+  {{- if .Values.prometheus.rule.namespace }}
+  namespace: {{ .Values.prometheus.rule.namespace }}
+  {{- end }}
+  labels:
+    {{- include "banzaicloud-logging-operator-monitoring.labels" . | nindent 4 }}
+    {{- if .Values.prometheus.rule.additionalLabels }}
+    {{- toYaml .Values.prometheus.rule.additionalLabels | nindent 4 }}
+    {{- end }}
+spec:
+  groups:
+  - name: logging-operator-fluentd
+    rules:
+    {{- if .Values.prometheus.rule.alerts.fluentdDown }}
+    - alert: FluentdDown
+      expr: kube_statefulset_status_replicas{statefulset=~".*fluentd.*"} == 0
+      for: 1m
+      labels:
+        context: fluentd
+        severity: warning
+      annotations:
+        summary: "Fluentd Down"
+        description: {{`"{{ $labels.statefulset }} on {{ $labels.instance }} is down"`}}
+    {{- end }}
+    {{- if .Values.prometheus.rule.alerts.noOutputBytesProcessed }}
+    - alert: NoOutputBytesProcessed
+      expr: rate(fluentbit_output_proc_bytes_total[5m]) == 0
+      annotations:
+        message: |
+          {{`Fluent Bit instance {{ $labels.instance }}'s output plugin {{ $labels.name }} has not processed any
+          bytes for at least 15 minutes.`}}
+        summary: No Output Bytes Processed
+      for: 15m
+      labels:
+        severity: critical
+    {{- end }}
+
+    {{- with .Values.prometheus.rule.additionalAlerts }}
+    {{ . | nindent 4 }}
+    {{- end }}
+{{- end }}

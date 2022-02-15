@@ -1,0 +1,17 @@
+apiVersion: v2
+name: banzaicloud-logging-operator-monitoring
+description: Monitor logging-operator
+type: library
+version: 0.1.0
+appVersion: 0.1.0
+icon: https://raw.githubusercontent.com/SomeBlackMagic/helm-charts/master/charts/banzaicloud-logging-operator-monitoring/icon.png
+keywords:
+  - banzaicloud
+  - logging-operator
+  - monitoring
+sources:
+  - https://github.com/SomeBlackMagic/helm-charts
+  - https://github.com/banzaicloud/logging-operator
+maintainers:
+  - name: Andru Cherny
+    url: https://github.com/wirwolf

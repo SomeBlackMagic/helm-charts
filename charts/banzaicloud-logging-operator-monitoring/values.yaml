@@ -1,0 +1,37 @@
+prometheus:
+  # -- Create prometheus-operator resources
+  enabled: true
+  rule:
+    # -- Create PrometheusRule resource
+    enabled: true
+    # -- Optional Namespace for PrometheusRule resource
+    namespace: ""
+    # -- Additional Labels for PrometheusRule resource
+    additionalLabels: {}
+    alerts:
+      # -- Enable FluentdDown alert
+      fluentdDown: true
+      # -- Enable NoOutputBytesProcessed alert
+      noOutputBytesProcessed: true
+
+    # -- Add additional alerts to the group
+    additionalAlerts: []
+    # - alert: AppNotReady
+    #   annotations:
+    #     description: 'App for "{{`{{ $labels.name }}`}}" is not ready.'
+    #     summary: condition is false
+    #   expr: my_metric{condition="False"} == 1
+    #   labels:
+    #     severity: critical
+
+grafana:
+  # https://grafana.com/grafana/dashboards/7752
+
+  # -- Enable deploying cert-manager dashboard to Grafana
+  enabled: false
+  # -- Add `grafana_dashboard: "1"` default label
+  defaultLabel: true
+  # -- Extra labels for dashboard ConfigMap
+  extraLabels: {}
+  # -- Extra annotations for dashboard ConfigMap
+  extraAnnotations: {}
