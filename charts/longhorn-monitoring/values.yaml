@@ -23,10 +23,14 @@ prometheus:
     # -- Additional Labels for PrometheusRule resource
     additionalLabels: {}
     alerts:
-      # -- Enable DegradedVolumes alert
-      degradedVolumes: true
-      # -- Enable DetachedVolume alert
-      detachedVolume: true
+      volumeActualSpaceUsedWarning: true
+      volumeStatusCritical: true
+      volumeStatusWarning: true
+      nodeStorageWarning: true
+      diskStorageWarning: true
+      nodeDown: true
+      instanceManagerCPUUsageWarning: true
+      nodeCPUUsageWarning: true
     additionalAlerts: []
     # - alert: CertManagerCertificateReadyStatus
     #   annotations:
