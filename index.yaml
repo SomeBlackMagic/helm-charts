@@ -372,6 +372,26 @@ entries:
     version: 3.4.0
   ingress-nginx-monitoring:
   - apiVersion: v2
+    appVersion: 0.1.2
+    created: "2022-03-27T18:03:33.418341576Z"
+    description: Monitor nginx ingress controller
+    digest: e6c10f70e91b7e76376b89768b9b4b0fc08719e5871983949aecbd90daf7aa7b
+    icon: https://raw.githubusercontent.com/SomeBlackMagic/helm-charts/master/charts/ingress-nginx-monitoring/nginx-prometheus-grafana.png
+    keywords:
+    - http
+    - nginx
+    - monitoring
+    maintainers:
+    - name: Andru Cherny
+      url: https://github.com/wirwolf
+    name: ingress-nginx-monitoring
+    sources:
+    - https://github.com/SomeBlackMagic/helm-charts
+    type: application
+    urls:
+    - https://github.com/SomeBlackMagic/helm-charts/releases/download/ingress-nginx-monitoring-0.1.2/ingress-nginx-monitoring-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
     appVersion: 0.1.1
     created: "2022-01-25T15:49:39.863723466Z"
     description: Monitor nginx ingress controller
