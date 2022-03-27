@@ -37,7 +37,7 @@ spec:
     {{- end }}
     {{- if .Values.prometheus.rule.alerts.tooMany500s }}
     - alert: NGINXTooMany500s
-      expr: 100 * ( sum( increase( nginx_ingress_controller_requests{status=~"5.+"}[1h] ) ) / sum( increase(nginx_ingress_controller_requests[1h]) ) ) > 5
+      expr: 100 * (sum(rate(nginx_ingress_controller_requests{status=~"5.+"}[1h])) by (ingress, exported_namespace) / sum(rate(nginx_ingress_controller_requests[1h])) by (ingress, exported_namespace) ) > 5
       for: 1m
       labels:
         severity: warning
@@ -47,7 +47,7 @@ spec:
     {{- end }}
     {{- if .Values.prometheus.rule.alerts.tooMany400s }}
     - alert: NGINXTooMany400s
-      expr: 100 * ( sum( increase( nginx_ingress_controller_requests{status=~"4.+"}[1h] ) ) / sum( increase( nginx_ingress_controller_requests[1h]) ) ) > 5
+      expr: 100 * (sum(rate(nginx_ingress_controller_requests{status=~"4.+"}[1h])) by (ingress, exported_namespace) / sum(rate(nginx_ingress_controller_requests[1h])) by (ingress, exported_namespace) ) > 5
       for: 1m
       labels:
         severity: warning
