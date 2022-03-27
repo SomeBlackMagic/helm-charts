@@ -463,6 +463,25 @@ entries:
     version: 3.3.0
   longhorn-monitoring:
   - apiVersion: v2
+    appVersion: 0.2.0
+    created: "2022-03-27T18:39:33.321864574Z"
+    description: Monitor longhorn storage driver
+    digest: 3fd483cd6075038a2e446258f9519f5b2fcd6553f16cd46e388f744bcc07a56b
+    icon: https://raw.githubusercontent.com/SomeBlackMagic/helm-charts/master/charts/longhorn-monitoring/longhorn-prometheus-grafana.png
+    keywords:
+    - longhorn
+    - monitoring
+    maintainers:
+    - name: Andru Cherny
+      url: https://github.com/wirwolf
+    name: longhorn-monitoring
+    sources:
+    - https://github.com/SomeBlackMagic/helm-charts
+    type: application
+    urls:
+    - https://github.com/SomeBlackMagic/helm-charts/releases/download/longhorn-monitoring-0.2.0/longhorn-monitoring-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
     appVersion: 0.1.2
     created: "2022-02-03T13:07:08.981375828Z"
     description: Monitor nginx ingress controller
