@@ -9,10 +9,14 @@ prometheus:
     # -- Additional Labels for PrometheusRule resource
     additionalLabels: {}
     alerts:
-      # -- Enable FluentdDown alert
-      fluentdDown: true
-      # -- Enable NoOutputBytesProcessed alert
-      noOutputBytesProcessed: true
+
+      fluentdDown:
+        enabled: true
+        severity: warning
+
+      noOutputBytesProcessed:
+        enabled: true
+        severity: critical
 
     # -- Add additional alerts to the group
     additionalAlerts: []

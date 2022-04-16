@@ -15,18 +15,20 @@ spec:
   groups:
   - name: logging-operator-fluentd
     rules:
-    {{- if .Values.prometheus.rule.alerts.fluentdDown }}
+
+    {{- if .Values.prometheus.rule.alerts.fluentdDown.enabled }}
     - alert: FluentdDown
       expr: kube_statefulset_status_replicas{statefulset=~".*fluentd.*"} == 0
       for: 1m
       labels:
         context: fluentd
-        severity: warning
+        severity: "{{ $.Values.prometheus.rule.alerts.fluentdDown.severity }}"
       annotations:
         summary: "Fluentd Down"
         description: {{`"{{ $labels.statefulset }} on {{ $labels.instance }} is down"`}}
     {{- end }}
-    {{- if .Values.prometheus.rule.alerts.noOutputBytesProcessed }}
+
+    {{- if .Values.prometheus.rule.alerts.noOutputBytesProcessed.enabled }}
     - alert: NoOutputBytesProcessed
       expr: rate(fluentbit_output_proc_bytes_total[5m]) == 0
       annotations:
@@ -36,7 +38,7 @@ spec:
         summary: No Output Bytes Processed
       for: 15m
       labels:
-        severity: critical
+        severity: "{{ $.Values.prometheus.rule.alerts.noOutputBytesProcessed.severity }}"
     {{- end }}
 
     {{- with .Values.prometheus.rule.additionalAlerts }}
