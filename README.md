@@ -14,6 +14,11 @@ helm repo update
 
 You can then run `helm search repo someblackmagic` to see the charts.
 
+## TODO
+
+* add https://github.com/c4po/harbor_exporter to helm charn and rules
+* add hashicorp vault monitoring serivice and rules 
+
 ## License
 
 [MIT License](./LICENSE).
