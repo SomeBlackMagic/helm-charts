@@ -9,15 +9,22 @@ prometheus:
     # -- Additional Labels for PrometheusRule resource
     additionalLabels: {}
     alerts:
-      # -- Enable NGINXConfigFailed alert
-      configFailed: true
-      # -- Enable NGINXCertificateExpiry alert
-      certificateExpiry: true
-      # -- Enable NGINXTooMany500s alert
-      tooMany500s: true
-      # -- Enable NGINXTooMany400s alert
-      tooMany400s: true
-    # -- Add additional alerts to the nginx ingress group
+      configFailed:
+        enabled: true
+        severity: critical
+
+      certificateExpiry:
+        enabled: true
+        severity: critical
+
+      tooMany500s:
+        enabled: true
+        severity: warning
+
+      tooMany400s:
+        enabled: true
+        severity: warning
+
     additionalAlerts: []
     # - alert: CertManagerCertificateReadyStatus
     #   annotations:
