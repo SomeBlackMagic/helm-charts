@@ -23,14 +23,30 @@ prometheus:
     # -- Additional Labels for PrometheusRule resource
     additionalLabels: {}
     alerts:
-      volumeActualSpaceUsedWarning: true
-      volumeStatusCritical: true
-      volumeStatusWarning: true
-      nodeStorageWarning: true
-      diskStorageWarning: true
-      nodeDown: true
-      instanceManagerCPUUsageWarning: true
-      nodeCPUUsageWarning: true
+      volumeActualSpaceUsedWarning:
+        enabled: true
+        severity: warning
+      volumeStatusCritical:
+        enabled: true
+        severity: critical
+      volumeStatusWarning:
+        enabled: true
+        severity: warning
+      nodeStorageWarning:
+        enabled: true
+        severity: warning
+      diskStorageWarning:
+        enabled: true
+        severity: warning
+      nodeDown:
+        enabled: true
+        severity: critical
+      instanceManagerCPUUsageWarning:
+        enabled: true
+        severity: warning
+      nodeCPUUsageWarning:
+        enabled: true
+        severity: warning
     additionalAlerts: []
     # - alert: CertManagerCertificateReadyStatus
     #   annotations:

@@ -1,4 +1,4 @@
-{{- if .Values.serviceMonitor.enabled }}
+{{- if $.Values.serviceMonitor.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
@@ -6,9 +6,9 @@ metadata:
   namespace: {{ $.Values.serviceMonitor.namespace | default $.Release.Namespace }}
   labels:
     {{- include "longhorn-monitoring.labels" . | nindent 4 }}
-{{- if $.Values.serviceMonitor.labels }}
+    {{- if $.Values.serviceMonitor.labels }}
     {{- toYaml $.Values.serviceMonitor.labels | nindent 4}}
-{{- end }}
+    {{- end }}
 spec:
   selector:
     matchLabels:
@@ -18,6 +18,6 @@ spec:
       - {{ $.Release.Namespace }}
   endpoints:
     - port: manager
-      scrapeTimeout: {{ .Values.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ $.Values.serviceMonitor.scrapeTimeout }}
       interval: {{ $.Values.serviceMonitor.scrapeInterval }}
 {{- end }}
