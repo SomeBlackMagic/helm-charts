@@ -33,7 +33,7 @@ spec:
       labels:
         severity: "{{ $.Values.prometheus.rule.alerts.certificateExpiry.severity }}"
       annotations:
-        description: ssl certificate(s) will expire in less then a week
+        description: {{`ssl certificate {{$labels.host}} will expire in less then a week`}}
         summary: renew expiring certificates to avoid downtime
     {{- end }}
 
