@@ -18,6 +18,7 @@ You can then run `helm search repo someblackmagic` to see the charts.
 
 * add https://github.com/c4po/harbor_exporter to helm charn and rules
 * add hashicorp vault monitoring serivice and rules 
+* add alert for https://github.com/sstarcher/helm-exporter
 
 ## License
 
