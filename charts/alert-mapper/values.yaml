@@ -37,11 +37,11 @@ resources:
   ## @param primary.livenessProbe.successThreshold Success threshold for livenessProbe
   ##
 livenessProbe:
-  enabled: false
-  initialDelaySeconds: 2
+  enabled: true
+  initialDelaySeconds: 6
   periodSeconds: 10
   timeoutSeconds: 1
-  failureThreshold: 3
+  failureThreshold: 10
   successThreshold: 1
 ## Configure extra options for readiness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
@@ -53,11 +53,11 @@ livenessProbe:
 ## @param primary.readinessProbe.successThreshold Success threshold for readinessProbe
 ##
 readinessProbe:
-  enabled: false
-  initialDelaySeconds: 5
+  enabled: true
+  initialDelaySeconds: 3
   periodSeconds: 10
   timeoutSeconds: 1
-  failureThreshold: 3
+  failureThreshold: 10
   successThreshold: 1
 ## Configure extra options for startupProbe probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
