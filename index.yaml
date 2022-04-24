@@ -3,6 +3,25 @@ entries:
   alert-mapper:
   - apiVersion: v2
     appVersion: latest
+    created: "2022-04-24T10:47:24.746496164Z"
+    digest: e7fe8e7327cc358347b85ae6c4a16c01b683b33a6eab6029bfb97fdbe947b892
+    icon: https://raw.githubusercontent.com/SomeBlackMagic/helm-charts/master/charts/alert-mapper/icon.png
+    keywords:
+    - Alerta
+    - AlertManager
+    - Alerting
+    maintainers:
+    - name: Andru Cherny
+      url: https://github.com/wirwolf
+    name: alert-mapper
+    sources:
+    - https://github.com/SomeBlackMagic/alert-mapper
+    type: application
+    urls:
+    - https://github.com/SomeBlackMagic/helm-charts/releases/download/alert-mapper-0.2.0/alert-mapper-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
+    appVersion: latest
     created: "2022-02-02T16:25:49.259244087Z"
     digest: 38907bbb363e0b213ab26ee33618f6261e2842c72329e322b7ffc48e6608d49c
     icon: https://raw.githubusercontent.com/SomeBlackMagic/helm-charts/master/charts/alert-mapper/icon.png
@@ -392,6 +411,26 @@ entries:
     - https://github.com/SomeBlackMagic/helm-charts/releases/download/confluence-server-3.4.0/confluence-server-3.4.0.tgz
     version: 3.4.0
   ingress-nginx-monitoring:
+  - apiVersion: v2
+    appVersion: 1.0.1
+    created: "2022-04-24T10:47:24.970624442Z"
+    description: Monitor nginx ingress controller
+    digest: 98ffbad90af3a641d81a90d012ddff76f06a0249b633929deac0413311ef683e
+    icon: https://raw.githubusercontent.com/SomeBlackMagic/helm-charts/master/charts/ingress-nginx-monitoring/nginx-prometheus-grafana.png
+    keywords:
+    - http
+    - nginx
+    - monitoring
+    maintainers:
+    - name: Andru Cherny
+      url: https://github.com/wirwolf
+    name: ingress-nginx-monitoring
+    sources:
+    - https://github.com/SomeBlackMagic/helm-charts
+    type: application
+    urls:
+    - https://github.com/SomeBlackMagic/helm-charts/releases/download/ingress-nginx-monitoring-1.0.1/ingress-nginx-monitoring-1.0.1.tgz
+    version: 1.0.1
   - apiVersion: v2
     appVersion: 1.0.0
     created: "2022-04-16T11:30:10.361718648Z"
