@@ -1,0 +1,46 @@
+{{- if and .Values.prometheus.enabled .Values.prometheus.rule.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ include "kube-monitoring.fullname" . }}
+  {{- if .Values.prometheus.rule.namespace }}
+  namespace: {{ .Values.prometheus.rule.namespace }}
+  {{- end }}
+  labels:
+    {{- include "kube-monitoring.labels" . | nindent 4 }}
+    {{- if .Values.prometheus.rule.additionalLabels }}
+    {{- toYaml .Values.prometheus.rule.additionalLabels | nindent 4 }}
+    {{- end }}
+spec:
+  groups:
+  - name: kube
+    rules:
+    {{- if .Values.prometheus.rule.alerts.horizontalPodAutoscalerIsNotActive.enabled }}
+    - alert: kubeHorizontalPodAutoscalerIsNotActive
+      annotations:
+        description: {{`HorizontalPodAutoscaler {{$labels.horizontalpodautoscaler}} in namespace {{$labels.namespace}}
+          is not work or unknown status more than 5 minutes.`}}
+        summary: The HorizontalPodAutoscaler not work not active.
+      expr: (kube_horizontalpodautoscaler_status_condition{condition="ScalingActive", status="false"} == 1 or kube_horizontalpodautoscaler_status_condition{condition="ScalingActive", status="unknown"}  == 1)
+      for: 5m
+      labels:
+        severity: "{{ $.Values.prometheus.rule.alerts.horizontalPodAutoscalerIsNotActive.severity }}"
+    {{- end }}
+
+    {{- if .Values.prometheus.rule.alerts.horizontalPodAutoscalerIsNotAbleToScale.enabled }}
+    - alert: kubeHorizontalPodAutoscalerIsNotActive
+      annotations:
+        description: {{`HorizontalPodAutoscaler {{$labels.horizontalpodautoscaler}} in namespace {{$labels.namespace}}
+          is not able to scale or unknown status more than 5 minutes.`}}
+        summary: The actual used space of kube volume is over 90% of the capacity.
+      expr: (kube_horizontalpodautoscaler_status_condition{condition="AbleToScale", status="false"} == 1 or kube_horizontalpodautoscaler_status_condition{condition="AbleToScale", status="unknown"}  == 1)
+      for: 5m
+      labels:
+        severity: "{{ $.Values.prometheus.rule.alerts.horizontalPodAutoscalerIsNotAbleToScale.severity }}"
+    {{- end }}
+
+
+    {{- with $.Values.prometheus.rule.additionalAlerts }}
+    {{ . | nindent 4 }}
+    {{- end }}
+{{- end }}

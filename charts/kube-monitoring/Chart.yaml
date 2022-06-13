@@ -1,0 +1,15 @@
+apiVersion: v2
+name: kube-monitoring
+description: More rules for base kubernetes metrics
+type: application
+version: 0.1.0
+appVersion: 0.1.0
+icon: https://raw.githubusercontent.com/SomeBlackMagic/helm-charts/master/charts/kube-monitoring/kube-monitoring.png
+keywords:
+  - kube
+  - monitoring
+sources:
+  - https://github.com/SomeBlackMagic/helm-charts
+maintainers:
+  - name: Andru Cherny
+    url: https://github.com/wirwolf
