@@ -543,6 +543,26 @@ entries:
     urls:
     - https://github.com/SomeBlackMagic/helm-charts/releases/download/ingress-nginx-monitoring-0.1.0/ingress-nginx-monitoring-0.1.0.tgz
     version: 0.1.0
+  kube-monitoring:
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2022-06-13T14:16:15.255104162Z"
+    description: More rules for base kubernetes metrics
+    digest: 16f18ed7d47b2404d666644a3d8eb283b572ef2cc64440f4b344a7224f9a8b08
+    icon: https://raw.githubusercontent.com/SomeBlackMagic/helm-charts/master/charts/kube-monitoring/kube-monitoring.png
+    keywords:
+    - kube
+    - monitoring
+    maintainers:
+    - name: Andru Cherny
+      url: https://github.com/wirwolf
+    name: kube-monitoring
+    sources:
+    - https://github.com/SomeBlackMagic/helm-charts
+    type: application
+    urls:
+    - https://github.com/SomeBlackMagic/helm-charts/releases/download/kube-monitoring-0.1.0/kube-monitoring-0.1.0.tgz
+    version: 0.1.0
   longhorn-monitoring:
   - apiVersion: v2
     appVersion: 1.0.0
