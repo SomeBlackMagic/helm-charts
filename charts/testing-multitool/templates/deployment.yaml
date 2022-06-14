@@ -1,0 +1,37 @@
+{{/*apiVersion: apps/v1*/}}
+{{/*kind: Deployment*/}}
+{{/*metadata:*/}}
+{{/*  name: {{ include "testing-multitool.fullname" . }}*/}}
+{{/*  labels:*/}}
+{{/*    app: {{ include "testing-multitool.name" . }}*/}}
+{{/*    chart: {{ include "testing-multitool.chart" . }}*/}}
+{{/*    release: {{ $.Release.Name }}*/}}
+{{/*    heritage: {{ $.Release.Service }}*/}}
+{{/*spec:*/}}
+{{/*  replicas: {{ $.Values.replicaCount }}*/}}
+{{/*  selector:*/}}
+{{/*    matchLabels:*/}}
+{{/*      app: {{ include "testing-multitool.name" . }}*/}}
+{{/*      release: {{ $.Release.Name }}*/}}
+{{/*  template:*/}}
+{{/*    metadata:*/}}
+{{/*      labels:*/}}
+{{/*        app: {{ include "testing-multitool.name" . }}*/}}
+{{/*        release: {{ $.Release.Name }}*/}}
+{{/*    spec:*/}}
+{{/*      containers:*/}}
+{{/*        - name: {{ $.Chart.Name }}*/}}
+{{/*          image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag }}"*/}}
+{{/*          imagePullPolicy: {{ $.Values.image.pullPolicy }}*/}}
+{{/*    {{- with $.Values.nodeSelector }}*/}}
+{{/*      nodeSelector:*/}}
+{{/*{{ toYaml . | indent 8 }}*/}}
+{{/*    {{- end }}*/}}
+{{/*    {{- with $.Values.affinity }}*/}}
+{{/*      affinity:*/}}
+{{/*{{ toYaml . | indent 8 }}*/}}
+{{/*    {{- end }}*/}}
+{{/*    {{- with $.Values.tolerations }}*/}}
+{{/*      tolerations:*/}}
+{{/*{{ toYaml . | indent 8 }}*/}}
+{{/*    {{- end }}*/}}
