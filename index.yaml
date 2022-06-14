@@ -747,6 +747,14 @@ entries:
     version: 0.1.1
   testing-multitool:
   - apiVersion: v2
+    created: "2022-06-14T10:52:13.862047616Z"
+    description: A Helm chart for Kubernetes
+    digest: 7e5370ad861aaf32090204569d0521414fa56e4f3098a8eafdb00f557b4b684b
+    name: testing-multitool
+    urls:
+    - https://github.com/SomeBlackMagic/helm-charts/releases/download/testing-multitool-0.1.1/testing-multitool-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
     created: "2022-06-14T10:42:44.036148812Z"
     description: A Helm chart for Kubernetes
     digest: 7c424124e18b7b6d80854300a5da6f2fa858c2b6d5f5a65a940baed9efd6ae89
