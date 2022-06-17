@@ -29,6 +29,10 @@ spec:
           args:
             - sleep
             - infinity
+          lifecycle:
+            preStop:
+              exec:
+                command: [ "/bin/bash","-c","/bin/sleep 1; kill -QUIT 1" ]
     {{- with $.Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}
