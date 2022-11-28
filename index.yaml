@@ -442,6 +442,25 @@ entries:
     urls:
     - https://github.com/SomeBlackMagic/helm-charts/releases/download/cilium-monitoring-0.1.1/cilium-monitoring-0.1.1.tgz
     version: 0.1.1
+  grafana-dashboards-rancher:
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2022-11-28T15:55:51.440668839Z"
+    description: grafana dashboards chart for rancher
+    digest: c2350ad044267373337cdb224b47d8d4d6324017f33d61230fee6ec09ff9408f
+    keywords:
+    - grafana
+    - monitoring
+    maintainers:
+    - name: Andru Cherny
+      url: https://github.com/wirwolf
+    name: grafana-dashboards-rancher
+    sources:
+    - https://github.com/SomeBlackMagic/helm-charts
+    type: application
+    urls:
+    - https://github.com/SomeBlackMagic/helm-charts/releases/download/grafana-dashboards-rancher-0.1.0/grafana-dashboards-rancher-0.1.0.tgz
+    version: 0.1.0
   ingress-nginx-monitoring:
   - apiVersion: v2
     appVersion: 1.0.1
