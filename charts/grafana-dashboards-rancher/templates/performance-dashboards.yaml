@@ -1,5 +1,5 @@
-{{- $selector := (include "rancher.serviceMonitor.selector" .) -}}
-{{- if and .Values.grafana.enabled .Values.grafana.defaultDashboardsEnabled .Values.rancherMonitoring.enabled $selector }}
+
+{{- if and .Values.grafana.enabled .Values.grafana.defaultDashboardsEnabled .Values.rancherMonitoring.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -11,8 +11,6 @@ metadata:
     {{- if $.Values.grafana.sidecar.dashboards.label }}
     {{ $.Values.grafana.sidecar.dashboards.label }}: "1"
     {{- end }}
-    app: {{ template "kube-prometheus-stack.name" $ }}-grafana
-{{ include "kube-prometheus-stack.labels" $ | indent 4 }}
 data:
 {{ (.Files.Glob "files/performance/*").AsConfig | indent 2 }}
 {{- end }}

@@ -1,0 +1,12 @@
+grafana:
+  enabled: true
+  defaultDashboardsEnabled: true
+  defaultDashboards:
+    namespace: ~
+  sidecar:
+    dashboards:
+      annotations: {}
+      label: {}
+
+rancherMonitoring:
+  enabled: true
