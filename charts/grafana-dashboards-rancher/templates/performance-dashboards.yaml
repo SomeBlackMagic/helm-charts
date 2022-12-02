@@ -1,4 +1,3 @@
-
 {{- if and .Values.grafana.enabled .Values.grafana.defaultDashboardsEnabled .Values.rancherMonitoring.enabled }}
 apiVersion: v1
 kind: ConfigMap
