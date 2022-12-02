@@ -444,6 +444,24 @@ entries:
     version: 0.1.1
   grafana-dashboards-rancher:
   - apiVersion: v2
+    appVersion: 0.1.2
+    created: "2022-12-02T13:28:00.236737587Z"
+    description: grafana dashboards chart for rancher
+    digest: b8cb621d48dcdb30e2d1c60700c1f37c436c483af63d64cf804d6cc5f823db4c
+    keywords:
+    - grafana
+    - monitoring
+    maintainers:
+    - name: Andru Cherny
+      url: https://github.com/wirwolf
+    name: grafana-dashboards-rancher
+    sources:
+    - https://github.com/SomeBlackMagic/helm-charts
+    type: application
+    urls:
+    - https://github.com/SomeBlackMagic/helm-charts/releases/download/grafana-dashboards-rancher-0.1.2/grafana-dashboards-rancher-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
     appVersion: 0.1.1
     created: "2022-11-29T10:00:46.863911636Z"
     description: grafana dashboards chart for rancher
