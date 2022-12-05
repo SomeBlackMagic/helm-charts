@@ -17,4 +17,5 @@ data:
 {{ (.Files.Glob "files/performance/*").AsConfig | indent 2 }}
 {{ (.Files.Glob "files/pods/*").AsConfig | indent 2 }}
 {{ (.Files.Glob "files/workloads/*").AsConfig | indent 2 }}
+{{ (.Files.Glob "files/k8s/*").AsConfig | indent 2 }}
 {{- end }}
