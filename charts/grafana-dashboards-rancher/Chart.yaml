@@ -2,8 +2,8 @@ apiVersion: v2
 name: grafana-dashboards-rancher
 description: grafana dashboards chart for rancher
 type: application
-version: 0.1.2
-appVersion: 0.1.2
+version: 0.2.0
+appVersion: 0.2.0
 keywords:
   - grafana
   - monitoring
