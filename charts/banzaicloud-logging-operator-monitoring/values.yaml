@@ -10,13 +10,42 @@ prometheus:
     additionalLabels: {}
     alerts:
 
-      fluentdDown:
-        enabled: true
-        severity: warning
+      fluentBit:
+        serviceDown:
+          enabled: true
+          severity: critical
 
-      noOutputBytesProcessed:
-        enabled: true
-        severity: critical
+        noOutputBytesProcessed:
+          enabled: true
+          severity: critical
+
+
+      fluentd:
+        serviceDown:
+          enabled: true
+          severity: critical
+
+        outputBufferWarning:
+          enabled: true
+          severity: warning
+
+        outputRetryWarning:
+          enabled: true
+          severity: warning
+
+        outputBufferQueueLength:
+          enabled: true
+          severity: critical
+
+        highErrorRatio:
+          enabled: true
+          severity: critical
+
+        highRetryRatio:
+          enabled: true
+          severity: critical
+
+
 
     # -- Add additional alerts to the group
     additionalAlerts: []

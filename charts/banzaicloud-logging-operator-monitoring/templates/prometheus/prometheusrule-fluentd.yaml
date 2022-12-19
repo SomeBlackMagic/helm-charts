@@ -1,0 +1,93 @@
+{{- if and .Values.prometheus.enabled .Values.prometheus.rule.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ include "banzaicloud-logging-operator-monitoring.fullname" . }}-fluentd
+  {{- if .Values.prometheus.rule.namespace }}
+  namespace: {{ .Values.prometheus.rule.namespace }}
+  {{- end }}
+  labels:
+    {{- include "banzaicloud-logging-operator-monitoring.labels" . | nindent 4 }}
+    {{- if .Values.prometheus.rule.additionalLabels }}
+    {{- toYaml .Values.prometheus.rule.additionalLabels | nindent 4 }}
+    {{- end }}
+spec:
+  groups:
+  - name: logging-operator-fluentd
+    rules:
+
+    {{- if .Values.prometheus.rule.alerts.fluentd.serviceDown.enabled }}
+    - alert: FluentdDown
+      expr: kube_statefulset_status_replicas{statefulset=~".*fluentd.*"} == 0
+      for: 1m
+      labels:
+        context: fluentd
+        severity: "{{ $.Values.prometheus.rule.alerts.fluentd.serviceDown.severity }}"
+      annotations:
+        summary: "Fluentd Down"
+        description: {{`"{{ $labels.statefulset }} on {{ $labels.instance }} is down"`}}
+    {{- end }}
+
+
+    {{- if .Values.prometheus.rule.alerts.fluentd.outputBufferWarning.enabled }}
+    - alert: FluentdOutputBufferWarning
+      expr: max_over_time(fluentd_output_status_buffer_queue_length[1m]) > 16
+      for: 5m
+      labels:
+        severity: "{{ $.Values.prometheus.rule.alerts.fluentd.outputBufferWarning.severity }}"
+      annotations:
+        summary: {{`"Fluentd output buffer growing (instance {{ $labels.instance }})"`}}
+        description: {{`"Fluentd is not forwarding all logs\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"`}}
+    {{- end }}
+
+    {{- if .Values.prometheus.rule.alerts.fluentd.outputRetryWarning.enabled }}
+    - alert: FluentdOutputRetryWarning
+      expr: rate(fluentd_output_status_retry_count[1m]) > 0
+      for: 5m
+      labels:
+        severity: "{{ $.Values.prometheus.rule.alerts.fluentd.outputRetryWarning.severity }}"
+      annotations:
+        summary: {{`"Fluentd output retry counter non-null (instance {{ $labels.instance }})"`}}
+        description: {{`"Fluentd is not forwarding all logs\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"`}}
+    {{- end }}
+
+    {{- if .Values.prometheus.rule.alerts.fluentd.outputBufferQueueLength.enabled }}
+    - alert: FluentdOutputBufferQueueLength
+      expr: max_over_time(fluentd_status_buffer_queue_length[5m]) > 2
+      for: 5m
+      labels:
+        severity: "{{ $.Values.prometheus.rule.alerts.fluentd.outputBufferQueueLength.severity }}"
+      annotations:
+        summary: {{`"Fluentd output buffer queue length"`}}
+        description: {{`"Output plugin {{ $labels.type }} on Pod {{ $labels.namespace }}/{{ $labels.instance }} has a buffer that can not been flushed.\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"`}}
+    {{- end }}
+
+    {{- if .Values.prometheus.rule.alerts.fluentd.highErrorRatio.enabled }}
+    - alert: FluentdHighErrorRatio
+      expr: |
+        sum by (type, plugin_id)(rate(fluentd_output_status_num_errors[5m])) /sum by (type, plugin_id)(rate(fluentd_output_status_emit_count[5m]))> 0.05
+      for: 5m
+      labels:
+        severity: "{{ $.Values.prometheus.rule.alerts.fluentd.highErrorRatio.severity }}"
+      annotations:
+        summary: {{`"High Error Ratio."`}}
+        description: {{`"High Error Ratio"`}}
+    {{- end }}
+
+    {{- if .Values.prometheus.rule.alerts.fluentd.highRetryRatio.enabled }}
+    - alert: FluentdHighErrorRatio
+      expr: |
+        sum by (type, plugin_id)(rate(fluentd_output_status_retry_count[5m])) /sum by (type, plugin_id)(rate(fluentd_output_status_emit_count[5m]))> 0.05
+      for: 5m
+      labels:
+        severity: "{{ $.Values.prometheus.rule.alerts.fluentd.highRetryRatio.severity }}"
+      annotations:
+        summary: {{`"High Retry Ratio."`}}
+        description: {{`"High Retry Ratio"`}}
+    {{- end }}
+
+
+    {{- with .Values.prometheus.rule.additionalAlerts }}
+    {{ . | nindent 4 }}
+    {{- end }}
+{{- end }}

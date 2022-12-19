@@ -1,0 +1,59 @@
+{{- if and .Values.prometheus.enabled .Values.prometheus.rule.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ include "banzaicloud-logging-operator-monitoring.fullname" . }}-fluent-bit
+  {{- if .Values.prometheus.rule.namespace }}
+  namespace: {{ .Values.prometheus.rule.namespace }}
+  {{- end }}
+  labels:
+    {{- include "banzaicloud-logging-operator-monitoring.labels" . | nindent 4 }}
+    {{- if .Values.prometheus.rule.additionalLabels }}
+    {{- toYaml .Values.prometheus.rule.additionalLabels | nindent 4 }}
+    {{- end }}
+spec:
+  groups:
+  - name: logging-operator-fluent-bit
+    rules:
+
+    {{- if .Values.prometheus.rule.alerts.fluentBit.serviceDown.enabled }}
+    - alert: FluentBitDown
+      expr: absent(up{container="fluent-bit"}== 1)
+      for: 1m
+      labels:
+        severity: "{{ $.Values.prometheus.rule.alerts.fluentBit.serviceDown.severity }}"
+      annotations:
+        summary: "Fluentd Down"
+        description: {{`"{{ $labels.statefulset }} on {{ $labels.instance }} is down. No logs will be collected."`}}
+    {{- end }}
+
+    {{- if .Values.prometheus.rule.alerts.fluentBit.noOutputBytesProcessed.enabled }}
+    - alert: FluentBitNoOutputBytesProcessed
+      expr: rate(fluentbit_output_proc_bytes_total[5m]) == 0
+      for: 15m
+      labels:
+        severity: "{{ $.Values.prometheus.rule.alerts.fluentBit.noOutputBytesProcessed.severity }}"
+      annotations:
+        summary: "Fluent Bit no output bytes processed"
+        description: {{`"Output plugin {{ $labels.name }} on Pod {{ $labels.namespace }}/{{ $labels.pod }} has not processed any bytes for at least 5 minutes.\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"`}}
+
+
+    {{- end }}
+
+    {{- if .Values.prometheus.rule.alerts.fluentBit.noOutputBytesProcessed.enabled }}
+    - alert: FluentBitNoOutputBytesProcessed
+      expr: sum by (pod) (increase(fluentbit_input_bytes_total{container=~"fluent-bit.*"}[4m])) == 0
+      for: 6h
+      labels:
+        severity: "{{ $.Values.prometheus.rule.alerts.fluentBit.noOutputBytesProcessed.severity }}"
+      annotations:
+        summary: Fluent-bit input plugins haven't process any data for the past 6 hours
+        message: |
+          {{`The input plugins of Fluent-bit pod {{$labels.pod}} haven't collected any logs for the last 6 hours.`}}
+    {{- end }}
+
+
+    {{- with .Values.prometheus.rule.additionalAlerts }}
+    {{ . | nindent 4 }}
+    {{- end }}
+{{- end }}
