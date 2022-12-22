@@ -2,7 +2,7 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
-  name: {{ include "banzaicloud-logging-operator-monitoring.fullname" . }}-fluentd
+  name: {{ $.Release.Name }}-fluentd
   {{- if .Values.prometheus.rule.namespace }}
   namespace: {{ .Values.prometheus.rule.namespace }}
   {{- end }}
