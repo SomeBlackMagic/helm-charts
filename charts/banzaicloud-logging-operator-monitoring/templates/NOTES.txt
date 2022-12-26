@@ -13,3 +13,9 @@ Deployed resources:
       {{- end }}
   {{- end }}
 {{- end }}
+
+{{- if not ( .Capabilities.APIVersions.Has "monitoring.coreos.com/v1" )  }}
+
+!!! WARNING !!!
+Custom resource monitoring.coreos.com/v1 is not found. Deploy some resource is skipped
+{{- end }}
