@@ -488,28 +488,6 @@ entries:
     version: 0.1.0
   cert-manager-monitoring:
   - apiVersion: v2
-    appVersion: 0.1.1
-    created: "2022-12-26T14:16:06.164540661Z"
-    description: Monitor cert-manager with cert-manager-mixin.
-    digest: 886b1de7e4d97110a57a3e38cecb7b35c97ec2ff532c64f7b6d6566890083246
-    home: https://github.com/jetstack/cert-manager/issues/3342
-    keywords:
-    - cert-manager
-    - tls
-    - monitoring
-    maintainers:
-    - name: Andru Cherny
-      url: https://github.com/wirwolf
-    name: cert-manager-monitoring
-    sources:
-    - https://github.com/SomeBlackMagic/helm-charts
-    - https://gitlab.com/uneeq-oss/cert-manager-mixin
-    - https://github.com/jetstack/cert-manager/pull/3368#issuecomment-949346251
-    type: application
-    urls:
-    - https://github.com/SomeBlackMagic/helm-charts/releases/download/cert-manager-monitoring-0.1.1/cert-manager-monitoring-0.1.1.tgz
-    version: 0.1.1
-  - apiVersion: v2
     created: "2022-12-26T13:37:38.719650456Z"
     description: Monitor cert-manager with cert-manager-mixin.
     digest: b8b254db689f8dcc6c3d7343c53e14e7d4f2b44fbea969e92eb40b7ae37579c9
@@ -532,10 +510,10 @@ entries:
     version: 0.1.0
   cilium-monitoring:
   - apiVersion: v2
-    appVersion: 0.1.5
-    created: "2022-12-26T14:16:06.305952778Z"
+    appVersion: 0.1.6
+    created: "2022-12-26T14:16:31.96332776Z"
     description: Monitor cilium CNI
-    digest: 6d096e24d9df70f5122c96bca866b4e491fa8640119a70d1108b935ac4cec988
+    digest: 868d44aae97fa8f2eacf2b32710f76aa43f5e5ac34f05322591ddb2b9dd95c0b
     icon: https://raw.githubusercontent.com/SomeBlackMagic/helm-charts/master/charts/cilium-monitoring/cilium-prometheus-grafana.png
     keywords:
     - ebpf
@@ -549,8 +527,8 @@ entries:
     - https://github.com/SomeBlackMagic/helm-charts
     type: application
     urls:
-    - https://github.com/SomeBlackMagic/helm-charts/releases/download/cilium-monitoring-0.1.5/cilium-monitoring-0.1.5.tgz
-    version: 0.1.5
+    - https://github.com/SomeBlackMagic/helm-charts/releases/download/cilium-monitoring-0.1.6/cilium-monitoring-0.1.6.tgz
+    version: 0.1.6
   - apiVersion: v2
     appVersion: 0.1.4
     created: "2022-12-26T12:50:16.31028436Z"
