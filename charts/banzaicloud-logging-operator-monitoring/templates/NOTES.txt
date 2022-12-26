@@ -1,13 +1,15 @@
 Deployed resources:
-{{- if and .Values.prometheus.enabled .Values.prometheus.rule.enabled }}
-- monitoring.coreos.com/v1/PrometheusRule: {{ include "banzaicloud-logging-operator-monitoring.fullname" . }}
+{{- if and $.Values.prometheus.enabled ( .Capabilities.APIVersions.Has "monitoring.coreos.com/v1" ) }}
+- monitoring.coreos.com/v1/PrometheusRule: {{ $.Release.Name }}-fluent-bit
+- monitoring.coreos.com/v1/PrometheusRule: {{ $.Release.Name }}-fluentd
 {{- end }}
+
 {{- if .Values.grafana.enabled }}
-{{- $files := .Files.Glob "grafana/dashboards/*.json" }}
-{{- if $files }}
-{{- range $path, $fileContents := $files }}
-{{- $dashboardName := regexReplaceAll "(^.*/)(.*)\\.json$" $path "${2}" }}
-- v1/ConfigMap: {{ printf "%s-%s" (include "banzaicloud-logging-operator-monitoring.fullname" $) $dashboardName | trunc 63 | trimSuffix "-" }}
-{{- end }}
-{{- end }}
+  {{- $files := .Files.Glob "grafana/dashboards/*.json" }}
+    {{- if $files }}
+    {{- range $path, $fileContents := $files }}
+      {{- $dashboardName := regexReplaceAll "(^.*/)(.*)\\.json$" $path "${2}" }}
+- v1/ConfigMap: {{ printf "%s-%s" (include "cert-manager-monitoring.fullname" $) $dashboardName | trunc 63 | trimSuffix "-" }}
+      {{- end }}
+  {{- end }}
 {{- end }}
