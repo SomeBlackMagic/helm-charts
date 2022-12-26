@@ -9,7 +9,7 @@ Deployed resources:
     {{- if $files }}
     {{- range $path, $fileContents := $files }}
       {{- $dashboardName := regexReplaceAll "(^.*/)(.*)\\.json$" $path "${2}" }}
-- v1/ConfigMap: {{ printf "%s-%s" (include "cert-manager-monitoring.fullname" $) $dashboardName | trunc 63 | trimSuffix "-" }}
+- v1/ConfigMap: {{ printf "%s-%s" (include "banzaicloud-logging-operator-monitoring.fullname" $) $dashboardName | trunc 63 | trimSuffix "-" }}
       {{- end }}
   {{- end }}
 {{- end }}
