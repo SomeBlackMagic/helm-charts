@@ -16,8 +16,6 @@ prometheus:
   # -- Create prometheus-operator resources
   enabled: true
   rule:
-    # -- Create PrometheusRule resource
-    enabled: true
     # -- Optional Namespace for PrometheusRule resource
     namespace: ""
     # -- Additional Labels for PrometheusRule resource
