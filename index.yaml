@@ -838,6 +838,25 @@ entries:
     version: 0.1.0
   longhorn-monitoring:
   - apiVersion: v2
+    appVersion: 1.0.1
+    created: "2022-12-26T13:36:16.30606185Z"
+    description: Monitor longhorn storage driver
+    digest: aa15c1e0b90fdf95a64f18cac6e9f08029b38c2a68f98293e16771f00af073f6
+    icon: https://raw.githubusercontent.com/SomeBlackMagic/helm-charts/master/charts/longhorn-monitoring/longhorn-prometheus-grafana.png
+    keywords:
+    - longhorn
+    - monitoring
+    maintainers:
+    - name: Andru Cherny
+      url: https://github.com/wirwolf
+    name: longhorn-monitoring
+    sources:
+    - https://github.com/SomeBlackMagic/helm-charts
+    type: application
+    urls:
+    - https://github.com/SomeBlackMagic/helm-charts/releases/download/longhorn-monitoring-1.0.1/longhorn-monitoring-1.0.1.tgz
+    version: 1.0.1
+  - apiVersion: v2
     appVersion: 1.0.0
     created: "2022-04-16T11:08:10.776449277Z"
     description: Monitor longhorn storage driver
@@ -993,6 +1012,26 @@ entries:
     urls:
     - https://github.com/SomeBlackMagic/helm-charts/releases/download/phpmyadmin-6.5.2/phpmyadmin-6.5.2.tgz
     version: 6.5.2
+  redis-monitoring:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2022-12-26T13:36:16.439107457Z"
+    description: Monitor redis storage driver
+    digest: 93803c5b87c7c37f0e87c8d5470048dbaa567fd4c3135d07f9df8a9d3e027aa4
+    icon: https://raw.githubusercontent.com/SomeBlackMagic/helm-charts/master/charts/redis-monitoring/redis-prometheus-grafana.png
+    keywords:
+    - redis
+    - monitoring
+    maintainers:
+    - name: Andru Cherny
+      url: https://github.com/wirwolf
+    name: redis-monitoring
+    sources:
+    - https://github.com/SomeBlackMagic/helm-charts
+    type: application
+    urls:
+    - https://github.com/SomeBlackMagic/helm-charts/releases/download/redis-monitoring-1.0.0/redis-monitoring-1.0.0.tgz
+    version: 1.0.0
   smtp-fake-server:
   - apiVersion: v1
     created: "2021-06-25T07:58:17.314081175Z"
