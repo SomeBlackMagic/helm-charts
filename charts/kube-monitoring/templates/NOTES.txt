@@ -1,5 +1,5 @@
 Deployed resources:
-{{- if and .Values.prometheus.enabled .Values.prometheus.rule.enabled }}
+{{- if and .Values.prometheus.enabled }}
 - monitoring.coreos.com/v1/PrometheusRule: {{ include "kube-monitoring.fullname" . }}
 {{- end }}
 {{- if .Values.grafana.enabled }}
@@ -10,4 +10,10 @@ Deployed resources:
 - v1/ConfigMap: {{ printf "%s-%s" (include "kube-monitoring.fullname" $) $dashboardName | trunc 63 | trimSuffix "-" }}
 {{- end }}
 {{- end }}
+{{- end }}
+
+{{- if not ( .Capabilities.APIVersions.Has "monitoring.coreos.com/v1" )  }}
+
+!!! WARNING !!!
+Custom resource monitoring.coreos.com/v1 is not found. Deploy some resource is skipped
 {{- end }}

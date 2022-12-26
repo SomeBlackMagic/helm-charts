@@ -1,4 +1,5 @@
 prometheus:
+  enabled: true
   rule:
     additionalLabels:
       foo: bar

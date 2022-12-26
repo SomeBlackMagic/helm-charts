@@ -16,8 +16,6 @@ prometheus:
   # -- Create prometheus-operator resources
   enabled: true
   rule:
-    # -- Create PrometheusRule resource
-    enabled: true
     # -- Optional Namespace for PrometheusRule resource
     namespace: ""
     # -- Additional Labels for PrometheusRule resource
@@ -29,6 +27,10 @@ prometheus:
       horizontalPodAutoscalerIsNotAbleToScale:
         enabled: true
         severity: warning
+      podIsOOMKilled:
+        enabled: true
+        severity: warning
+        timeInterval: 1h
 
     additionalAlerts: []
     # - alert: CertManagerCertificateReadyStatus

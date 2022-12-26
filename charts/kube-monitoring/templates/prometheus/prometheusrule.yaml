@@ -1,21 +1,21 @@
-{{- if and .Values.prometheus.enabled .Values.prometheus.rule.enabled }}
+{{- if and $.Values.prometheus.enabled ( .Capabilities.APIVersions.Has "monitoring.coreos.com/v1" )  }}
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
   name: {{ include "kube-monitoring.fullname" . }}
-  {{- if .Values.prometheus.rule.namespace }}
-  namespace: {{ .Values.prometheus.rule.namespace }}
+  {{- if $.Values.prometheus.rule.namespace }}
+  namespace: {{ $.Values.prometheus.rule.namespace }}
   {{- end }}
   labels:
     {{- include "kube-monitoring.labels" . | nindent 4 }}
-    {{- if .Values.prometheus.rule.additionalLabels }}
-    {{- toYaml .Values.prometheus.rule.additionalLabels | nindent 4 }}
+    {{- if $.Values.prometheus.rule.additionalLabels }}
+    {{- toYaml $.Values.prometheus.rule.additionalLabels | nindent 4 }}
     {{- end }}
 spec:
   groups:
   - name: kube
     rules:
-    {{- if .Values.prometheus.rule.alerts.horizontalPodAutoscalerIsNotActive.enabled }}
+    {{- if $.Values.prometheus.rule.alerts.horizontalPodAutoscalerIsNotActive.enabled }}
     - alert: kubeHorizontalPodAutoscalerIsNotActive
       annotations:
         description: {{`HorizontalPodAutoscaler {{$labels.horizontalpodautoscaler}} in namespace {{$labels.namespace}}
@@ -27,18 +27,28 @@ spec:
         severity: "{{ $.Values.prometheus.rule.alerts.horizontalPodAutoscalerIsNotActive.severity }}"
     {{- end }}
 
-    {{- if .Values.prometheus.rule.alerts.horizontalPodAutoscalerIsNotAbleToScale.enabled }}
-    - alert: kubeHorizontalPodAutoscalerIsNotActive
+    {{- if $.Values.prometheus.rule.alerts.horizontalPodAutoscalerIsNotAbleToScale.enabled }}
+    - alert: kubeHorizontalPodAutoscalerIsNotAbleToScale
       annotations:
         description: {{`HorizontalPodAutoscaler {{$labels.horizontalpodautoscaler}} in namespace {{$labels.namespace}}
           is not able to scale or unknown status more than 5 minutes.`}}
-        summary: The actual used space of kube volume is over 90% of the capacity.
+        summary: The HorizontalPodAutoscaler Is Not Able To Scale.
       expr: (kube_horizontalpodautoscaler_status_condition{condition="AbleToScale", status="false"} == 1 or kube_horizontalpodautoscaler_status_condition{condition="AbleToScale", status="unknown"}  == 1)
       for: 5m
       labels:
         severity: "{{ $.Values.prometheus.rule.alerts.horizontalPodAutoscalerIsNotAbleToScale.severity }}"
     {{- end }}
 
+    {{- if $.Values.prometheus.rule.alerts.podIsOOMKilled.enabled }}
+    - alert: kubePodIsOOMKilled
+      annotations:
+        description: {{`Killed pod {{$labels.pod}} in namespace {{$labels.namespace}}`}}
+        summary: Pod is killed by OOMKiller
+      expr: rate(kube_pod_container_status_terminated_reason{reason="OOMKilled"}[{{ $.Values.prometheus.rule.alerts.podIsOOMKilled.timeInterval }}])
+      for: 5m
+      labels:
+        severity: "{{ $.Values.prometheus.rule.alerts.podIsOOMKilled.severity }}"
+    {{- end }}
 
     {{- with $.Values.prometheus.rule.additionalAlerts }}
     {{ . | nindent 4 }}

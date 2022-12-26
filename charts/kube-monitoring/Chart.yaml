@@ -2,8 +2,8 @@ apiVersion: v2
 name: kube-monitoring
 description: More rules for base kubernetes metrics
 type: application
-version: 0.1.0
-appVersion: 0.1.0
+version: 0.2.0
+appVersion: 0.2.0
 icon: https://raw.githubusercontent.com/SomeBlackMagic/helm-charts/master/charts/kube-monitoring/kube-monitoring.png
 keywords:
   - kube
