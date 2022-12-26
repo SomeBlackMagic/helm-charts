@@ -1,0 +1,19 @@
+Deployed resources:
+{{- if and .Values.prometheus.enabled }}
+- monitoring.coreos.com/v1/PrometheusRule: {{ include "redis-monitoring.fullname" . }}
+{{- end }}
+{{- if .Values.grafana.enabled }}
+{{- $files := .Files.Glob "grafana/dashboards/*.json" }}
+{{- if $files }}
+{{- range $path, $fileContents := $files }}
+{{- $dashboardName := regexReplaceAll "(^.*/)(.*)\\.json$" $path "${2}" }}
+- v1/ConfigMap: {{ printf "%s-%s" (include "redis-monitoring.fullname" $) $dashboardName | trunc 63 | trimSuffix "-" }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- if not ( .Capabilities.APIVersions.Has "monitoring.coreos.com/v1" )  }}
+
+!!! WARNING !!!
+Custom resource monitoring.coreos.com/v1 is not found. Deploy some resource is skipped
+{{- end }}
