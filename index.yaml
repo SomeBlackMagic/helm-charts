@@ -486,6 +486,28 @@ entries:
     urls:
     - https://github.com/SomeBlackMagic/helm-charts/releases/download/banzaicloud-logging-operator-monitoring-0.1.0/banzaicloud-logging-operator-monitoring-0.1.0.tgz
     version: 0.1.0
+  cert-manager-monitoring:
+  - apiVersion: v2
+    created: "2022-12-26T13:37:38.719650456Z"
+    description: Monitor cert-manager with cert-manager-mixin.
+    digest: b8b254db689f8dcc6c3d7343c53e14e7d4f2b44fbea969e92eb40b7ae37579c9
+    home: https://github.com/jetstack/cert-manager/issues/3342
+    keywords:
+    - cert-manager
+    - tls
+    - monitoring
+    maintainers:
+    - name: Andru Cherny
+      url: https://github.com/wirwolf
+    name: cert-manager-monitoring
+    sources:
+    - https://github.com/SomeBlackMagic/helm-charts
+    - https://gitlab.com/uneeq-oss/cert-manager-mixin
+    - https://github.com/jetstack/cert-manager/pull/3368#issuecomment-949346251
+    type: application
+    urls:
+    - https://github.com/SomeBlackMagic/helm-charts/releases/download/cert-manager-monitoring-0.1.0/cert-manager-monitoring-0.1.0.tgz
+    version: 0.1.0
   cilium-monitoring:
   - apiVersion: v2
     appVersion: 0.1.4
