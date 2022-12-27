@@ -510,6 +510,26 @@ entries:
     version: 0.1.0
   cilium-monitoring:
   - apiVersion: v2
+    appVersion: 0.1.7
+    created: "2022-12-27T09:33:16.880182816Z"
+    description: Monitor cilium CNI
+    digest: d3b52928c890e5d64e6060b707456e18df83ce8ad4df578532649da4754df7e2
+    icon: https://raw.githubusercontent.com/SomeBlackMagic/helm-charts/master/charts/cilium-monitoring/cilium-prometheus-grafana.png
+    keywords:
+    - ebpf
+    - network
+    - monitoring
+    maintainers:
+    - name: Andru Cherny
+      url: https://github.com/wirwolf
+    name: cilium-monitoring
+    sources:
+    - https://github.com/SomeBlackMagic/helm-charts
+    type: application
+    urls:
+    - https://github.com/SomeBlackMagic/helm-charts/releases/download/cilium-monitoring-0.1.7/cilium-monitoring-0.1.7.tgz
+    version: 0.1.7
+  - apiVersion: v2
     appVersion: 0.1.6
     created: "2022-12-26T14:16:31.96332776Z"
     description: Monitor cilium CNI
