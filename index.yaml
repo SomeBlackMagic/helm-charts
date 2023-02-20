@@ -1146,6 +1146,30 @@ entries:
       category: Infrastructure
       licenses: Apache-2.0
     apiVersion: v2
+    appVersion: 0.2.0
+    created: "2023-02-20T15:12:47.056766191Z"
+    description: A Library Helm Chart for grouping common logic between charts. This chart is not deployable by itself.
+    digest: 04b1be1ae0dc6204ac65af726f26fa74f829f7efbfe1d7e516bc95553cfb6ae7
+    keywords:
+    - common
+    - helper
+    - template
+    - function
+    maintainers:
+    - name: Andru Cherny
+      url: https://github.com/wirwolf
+    name: someblackmagic-common
+    sources:
+    - https://github.com/bitnami/charts
+    - https://www.bitnami.com/
+    type: library
+    urls:
+    - https://github.com/SomeBlackMagic/helm-charts/releases/download/someblackmagic-common-0.2.0/someblackmagic-common-0.2.0.tgz
+    version: 0.2.0
+  - annotations:
+      category: Infrastructure
+      licenses: Apache-2.0
+    apiVersion: v2
     appVersion: 0.1.0
     created: "2023-02-19T11:20:23.536226918Z"
     description: A Library Helm Chart for grouping common logic between charts. This chart is not deployable by itself.
