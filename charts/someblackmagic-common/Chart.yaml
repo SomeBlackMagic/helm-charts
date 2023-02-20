@@ -3,8 +3,8 @@ annotations:
   licenses: Apache-2.0
 apiVersion: v2
 # Please make sure that version and appVersion are always the same.
-appVersion: 0.1.0
-version: 0.1.0
+appVersion: 0.2.0
+version: 0.2.0
 
 description: A Library Helm Chart for grouping common logic between charts. This chart is not deployable by itself.
 keywords:
