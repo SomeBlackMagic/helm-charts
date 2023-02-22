@@ -50,13 +50,13 @@ spec:
 
     {{- if .Values.prometheus.rule.alerts.tooMany400s.enabled }}
     - alert: NGINXTooMany400s
-      expr: 100 * (sum(rate(nginx_ingress_controller_requests{status=~"4.+"}[1h])) by (ingress, exported_namespace) / sum(rate(nginx_ingress_controller_requests[1h])) by (ingress, exported_namespace) ) > 5
+      expr: 100 * (sum(rate(nginx_ingress_controller_requests{status=~"4.+"}[1h])) by (ingress, exported_namespace, status) / sum(rate(nginx_ingress_controller_requests[1h])) by (ingress, exported_namespace, status) ) > 5
       for: 1m
       labels:
         severity: "{{ $.Values.prometheus.rule.alerts.tooMany400s.severity }}"
       annotations:
         description: Too many 4XXs
-        summary: More than 5% of all requests returned 4XX, this requires your attention
+        summary: {{` More than 5% of all requests returned {{$labels.status}} on ingress {{$labels.ingress}} in namespace {{$labels.exported_namespace}}`}}
     {{- end }}
 
 
