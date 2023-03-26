@@ -11,7 +11,6 @@ serviceMonitor:
   # service monitors configured.
   # namespace: ""
 
-
 prometheus:
   # -- Create prometheus-operator resources
   enabled: true
@@ -55,7 +54,7 @@ prometheus:
     #     severity: critical
 
 grafana:
-  # -- Enable deploying cert-manager dashboard to Grafana
+  # -- Enable deploying longhorn dashboard to Grafana
   enabled: false
   # -- Add `grafana_dashboard: "1"` default label
   defaultLabel: true
@@ -63,3 +62,5 @@ grafana:
   extraLabels: {}
   # -- Extra annotations for dashboard ConfigMap
   extraAnnotations: {}
+  # -- Optional Namespace for Grafana dashboard
+  namespace: ""
