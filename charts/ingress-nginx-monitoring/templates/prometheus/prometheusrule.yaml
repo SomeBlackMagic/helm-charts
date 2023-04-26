@@ -45,7 +45,7 @@ spec:
         severity: "{{ $.Values.prometheus.rule.alerts.tooMany500s.severity }}"
       annotations:
         description: {{`Too many {{$labels.status}} on {{$labels.host}} `}}
-        summary: {{` More than 5% of all requests returned {{$labels.status}}. Metadata: {namespace="{{$labels.exported_namespace}}", ingress="{{$labels.ingress}}", method="{{$labels.method}}", path="{{$labels.path}})" } `}}
+        summary: {{` More than 5% of all requests returned {{$labels.status}}. Metadata -> {namespace="{{$labels.exported_namespace}}", ingress="{{$labels.ingress}}", method="{{$labels.method}}", path="{{$labels.path}})" } `}}
     {{- end }}
 
     {{- if $.Values.prometheus.rule.alerts.tooMany400s.enabled }}
@@ -56,7 +56,7 @@ spec:
         severity: "{{ $.Values.prometheus.rule.alerts.tooMany400s.severity }}"
       annotations:
         description: {{`Too many {{$labels.status}} on {{$labels.host}} `}}
-        summary: {{` More than 5% of all requests returned {{$labels.status}}. Metadata: {namespace="{{$labels.exported_namespace}}", ingress="{{$labels.ingress}}", method="{{$labels.method}}", path="{{$labels.path}})" } `}}
+        summary: {{` More than 5% of all requests returned {{$labels.status}}. Metadata -> {namespace="{{$labels.exported_namespace}}", ingress="{{$labels.ingress}}", method="{{$labels.method}}", path="{{$labels.path}})" } `}}
     {{- end }}
 
 
