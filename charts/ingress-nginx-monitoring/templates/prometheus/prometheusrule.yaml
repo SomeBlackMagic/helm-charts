@@ -1,21 +1,21 @@
-{{- if and .Values.prometheus.enabled ( .Capabilities.APIVersions.Has "monitoring.coreos.com/v1" )  }}
+{{- if and $.Values.prometheus.enabled ( $.Capabilities.APIVersions.Has "monitoring.coreos.com/v1" )  }}
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
   name: {{ include "ingress-nginx-monitoring.fullname" . }}
-  {{- if .Values.prometheus.rule.namespace }}
-  namespace: {{ .Values.prometheus.rule.namespace }}
+  {{- if $.Values.prometheus.rule.namespace }}
+  namespace: {{ $.Values.prometheus.rule.namespace }}
   {{- end }}
   labels:
-    {{- include "ingress-nginx-monitoring.labels" . | nindent 4 }}
-    {{- if .Values.prometheus.rule.additionalLabels }}
-    {{- toYaml .Values.prometheus.rule.additionalLabels | nindent 4 }}
+    {{- include "ingress-nginx-monitoring.labels" $ | nindent 4 }}
+    {{- if $.Values.prometheus.rule.additionalLabels }}
+    {{- toYaml $.Values.prometheus.rule.additionalLabels | nindent 4 }}
     {{- end }}
 spec:
   groups:
   - name: ingress-nginx
     rules:
-    {{- if .Values.prometheus.rule.alerts.configFailed.enabled }}
+    {{- if $.Values.prometheus.rule.alerts.configFailed.enabled }}
     - alert: NGINXConfigFailed
       expr: count(nginx_ingress_controller_config_last_reload_successful == 0) > 0
       for: 1s
@@ -26,7 +26,7 @@ spec:
         summary: uninstall the latest ingress changes to allow config reloads to resume
     {{- end }}
 
-    {{- if .Values.prometheus.rule.alerts.certificateExpiry.enabled }}
+    {{- if $.Values.prometheus.rule.alerts.certificateExpiry.enabled }}
     - alert: NGINXCertificateExpiry
       expr: (avg(nginx_ingress_controller_ssl_expire_time_seconds) by (host) - time()) < 604800
       for: 1s
@@ -37,30 +37,30 @@ spec:
         summary: renew expiring certificates to avoid downtime
     {{- end }}
 
-    {{- if .Values.prometheus.rule.alerts.tooMany500s.enabled }}
+    {{- if $.Values.prometheus.rule.alerts.tooMany500s.enabled }}
     - alert: NGINXTooMany500s
-      expr: 100 * (sum(rate(nginx_ingress_controller_requests{status=~"5.+"}[1h])) by (ingress, exported_namespace) / sum(rate(nginx_ingress_controller_requests[1h])) by (ingress, exported_namespace) ) > 5
+      expr: 100 * (sum by(ingress, exported_namespace, status,method,path,host) (rate(nginx_ingress_controller_requests{status=~"5.+"}[1h])) / sum by(ingress, exported_namespace, status,method,path,host) (rate(nginx_ingress_controller_requests[1h]))) > 5
       for: 1m
       labels:
         severity: "{{ $.Values.prometheus.rule.alerts.tooMany500s.severity }}"
       annotations:
-        description: Too many 5XXs
-        summary: More than 5% of all requests returned 5XX, this requires your attention
+        description: {{`Too many {{$labels.status}} on {{$labels.host}} `}}
+        summary: {{` More than 5% of all requests returned {{$labels.status}}. Metadata: {namespace="{{$labels.exported_namespace}}", ingress="{{$labels.ingress}}", method="{{$labels.method}}", path="{{$labels.path}})" } `}}
     {{- end }}
 
-    {{- if .Values.prometheus.rule.alerts.tooMany400s.enabled }}
+    {{- if $.Values.prometheus.rule.alerts.tooMany400s.enabled }}
     - alert: NGINXTooMany400s
       expr: 100 * (sum(rate(nginx_ingress_controller_requests{status=~"4.+"}[1h])) by (ingress, exported_namespace, status) / sum(rate(nginx_ingress_controller_requests[1h])) by (ingress, exported_namespace, status) ) > 5
       for: 1m
       labels:
         severity: "{{ $.Values.prometheus.rule.alerts.tooMany400s.severity }}"
       annotations:
-        description: Too many 4XXs
-        summary: {{` More than 5% of all requests returned {{$labels.status}} on ingress {{$labels.ingress}} in namespace {{$labels.exported_namespace}}`}}
+        description: {{`Too many {{$labels.status}} on {{$labels.host}} `}}
+        summary: {{` More than 5% of all requests returned {{$labels.status}}. Metadata: {namespace="{{$labels.exported_namespace}}", ingress="{{$labels.ingress}}", method="{{$labels.method}}", path="{{$labels.path}})" } `}}
     {{- end }}
 
 
-    {{- with .Values.prometheus.rule.additionalAlerts }}
+    {{- with $.Values.prometheus.rule.additionalAlerts }}
     {{ . | nindent 4 }}
     {{- end }}
 {{- end }}

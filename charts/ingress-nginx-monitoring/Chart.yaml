@@ -2,8 +2,8 @@ apiVersion: v2
 name: ingress-nginx-monitoring
 description: Monitor nginx ingress controller
 type: application
-version: 1.1.0
-appVersion: 1.1.0
+version: 1.1.1
+appVersion: 1.1.1
 icon: https://raw.githubusercontent.com/SomeBlackMagic/helm-charts/master/charts/ingress-nginx-monitoring/nginx-prometheus-grafana.png
 keywords:
   - http
