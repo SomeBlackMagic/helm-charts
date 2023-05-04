@@ -1,4 +1,4 @@
-{{- if and $.Values.prometheus.enabled ( .Capabilities.APIVersions.Has "monitoring.coreos.com/v1" )  }}
+{{- if and $.Values.prometheus.enabled ( $.Capabilities.APIVersions.Has "monitoring.coreos.com/v1" )  }}
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
@@ -13,10 +13,10 @@ metadata:
     {{- end }}
 spec:
   groups:
-  - name: kube
+  - name: kube-monitoring
     rules:
     {{- if $.Values.prometheus.rule.alerts.horizontalPodAutoscalerIsNotActive.enabled }}
-    - alert: kubeHorizontalPodAutoscalerIsNotActive
+    - alert: KubeHorizontalPodAutoscalerIsNotActive
       annotations:
         description: {{`HorizontalPodAutoscaler {{$labels.horizontalpodautoscaler}} in namespace {{$labels.namespace}}
           is not work or unknown status more than 5 minutes.`}}
@@ -28,7 +28,7 @@ spec:
     {{- end }}
 
     {{- if $.Values.prometheus.rule.alerts.horizontalPodAutoscalerIsNotAbleToScale.enabled }}
-    - alert: kubeHorizontalPodAutoscalerIsNotAbleToScale
+    - alert: KubeHorizontalPodAutoscalerIsNotAbleToScale
       annotations:
         description: {{`HorizontalPodAutoscaler {{$labels.horizontalpodautoscaler}} in namespace {{$labels.namespace}}
           is not able to scale or unknown status more than 5 minutes.`}}
@@ -39,15 +39,16 @@ spec:
         severity: "{{ $.Values.prometheus.rule.alerts.horizontalPodAutoscalerIsNotAbleToScale.severity }}"
     {{- end }}
 
-    {{- if $.Values.prometheus.rule.alerts.podIsOOMKilled.enabled }}
-    - alert: kubePodIsOOMKilled
+    {{- if $.Values.prometheus.rule.alerts.containerIsOOMKilled.enabled }}
+    #https://github.com/PostHog/charts-clickhouse/blob/26d2568433b8fc772d400656120b3d130b787b4f/charts/posthog/values.yaml#L2463
+    - alert: KubeContainerIsOOMKilled
       annotations:
-        description: {{`Killed pod {{$labels.pod}} in namespace {{$labels.namespace}}`}}
-        summary: Pod is killed by OOMKiller
-      expr: rate(kube_pod_container_status_terminated_reason{reason="OOMKilled"}[{{ $.Values.prometheus.rule.alerts.podIsOOMKilled.timeInterval }}])
-      for: 5m
+        summary: {{`Kubernetes container oom killer (instance {{ $labels.instance }})`}}
+        description: {{`Container {{ $labels.container }} in pod {{ $labels.namespace }}/{{ $labels.pod }} has been OOMKilled {{ $value }} times in the last 10 minutes.`}}
+      expr: (kube_pod_container_status_restarts_total - kube_pod_container_status_restarts_total offset 10m >= 1) and ignoring (reason) min_over_time(kube_pod_container_status_last_terminated_reason{reason="OOMKilled"}[10m]) == 1
+      for: 10m
       labels:
-        severity: "{{ $.Values.prometheus.rule.alerts.podIsOOMKilled.severity }}"
+        severity: "{{ $.Values.prometheus.rule.alerts.containerIsOOMKilled.severity }}"
     {{- end }}
 
     {{- with $.Values.prometheus.rule.additionalAlerts }}

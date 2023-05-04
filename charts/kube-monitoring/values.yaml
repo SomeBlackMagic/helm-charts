@@ -27,10 +27,9 @@ prometheus:
       horizontalPodAutoscalerIsNotAbleToScale:
         enabled: true
         severity: warning
-      podIsOOMKilled:
+      containerIsOOMKilled:
         enabled: true
-        severity: warning
-        timeInterval: 1h
+        severity: critical
 
     additionalAlerts: []
     # - alert: CertManagerCertificateReadyStatus
