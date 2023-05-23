@@ -10,7 +10,10 @@ serviceMonitor:
   # -- Specify the Kubernetes namespace where Prometheus expects to find
   # service monitors configured.
   # namespace: ""
-
+  # -- Relabeling configs for the ServiceMonitor
+  relabelings: []
+  # -- Metrics relabeling configs for the ServiceMonitor
+  metricRelabelings: ~
 
 prometheus:
   # -- Create prometheus-operator resources

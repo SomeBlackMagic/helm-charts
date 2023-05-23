@@ -11,6 +11,11 @@ serviceMonitor:
   # service monitors configured.
   # namespace: ""
 
+  # -- Relabeling configs for the ServiceMonitor
+  relabelings: []
+  # -- Metrics relabeling configs for the ServiceMonitor
+  metricRelabelings: ~
+
 prometheus:
   # -- Create prometheus-operator resources
   enabled: true
