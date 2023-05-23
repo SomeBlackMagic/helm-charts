@@ -2,8 +2,8 @@ apiVersion: v2
 name: redis-monitoring
 description: Monitor redis storage driver
 type: application
-version: 1.1.0
-appVersion: 1.1.0
+version: 1.1.1
+appVersion: 1.1.1
 icon: https://raw.githubusercontent.com/SomeBlackMagic/helm-charts/master/charts/redis-monitoring/redis-prometheus-grafana.png
 keywords:
   - redis
