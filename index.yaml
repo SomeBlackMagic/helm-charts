@@ -1039,6 +1039,25 @@ entries:
     version: 0.1.0
   longhorn-monitoring:
   - apiVersion: v2
+    appVersion: 1.2.0
+    created: "2023-05-23T18:51:13.208414202Z"
+    description: Monitor longhorn storage driver
+    digest: fcac62bcd17bf84ef089ab8ca355a42af59e872407c4df592450ff610ff1efdb
+    icon: https://raw.githubusercontent.com/SomeBlackMagic/helm-charts/master/charts/longhorn-monitoring/longhorn-prometheus-grafana.png
+    keywords:
+    - longhorn
+    - monitoring
+    maintainers:
+    - name: Andru Cherny
+      url: https://github.com/wirwolf
+    name: longhorn-monitoring
+    sources:
+    - https://github.com/SomeBlackMagic/helm-charts
+    type: application
+    urls:
+    - https://github.com/SomeBlackMagic/helm-charts/releases/download/longhorn-monitoring-1.2.0/longhorn-monitoring-1.2.0.tgz
+    version: 1.2.0
+  - apiVersion: v2
     appVersion: 1.1.0
     created: "2023-03-27T07:00:56.071640471Z"
     description: Monitor longhorn storage driver
@@ -1255,6 +1274,25 @@ entries:
     version: 6.5.2
   redis-monitoring:
   - apiVersion: v2
+    appVersion: 1.1.0
+    created: "2023-05-23T18:51:13.339571737Z"
+    description: Monitor redis storage driver
+    digest: 2fc1d7d8c0cf0abe4a4bc71d8126b770d6e7b64c9d45f75dcf25c8d8ce310f3a
+    icon: https://raw.githubusercontent.com/SomeBlackMagic/helm-charts/master/charts/redis-monitoring/redis-prometheus-grafana.png
+    keywords:
+    - redis
+    - monitoring
+    maintainers:
+    - name: Andru Cherny
+      url: https://github.com/wirwolf
+    name: redis-monitoring
+    sources:
+    - https://github.com/SomeBlackMagic/helm-charts
+    type: application
+    urls:
+    - https://github.com/SomeBlackMagic/helm-charts/releases/download/redis-monitoring-1.1.0/redis-monitoring-1.1.0.tgz
+    version: 1.1.0
+  - apiVersion: v2
     appVersion: 1.0.0
     created: "2022-12-26T13:36:16.439107457Z"
     description: Monitor redis storage driver
@@ -1399,4 +1437,4 @@ entries:
     urls:
     - https://github.com/SomeBlackMagic/helm-charts/releases/download/testing-multitool-0.1.0/testing-multitool-0.1.0.tgz
     version: 0.1.0
-generated: "2023-05-04T13:56:25.180015691Z"
+generated: "2023-05-23T18:51:13.339679338Z"
