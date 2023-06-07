@@ -760,6 +760,26 @@ entries:
     version: 0.1.0
   ingress-nginx-monitoring:
   - apiVersion: v2
+    appVersion: 1.2.1
+    created: "2023-06-07T07:30:28.791025454Z"
+    description: Monitor nginx ingress controller
+    digest: 7f0553dfd6b405e0ec91ec1004839f23bc72fb0b8fd6465bb4a3d502e9bb7728
+    icon: https://raw.githubusercontent.com/SomeBlackMagic/helm-charts/master/charts/ingress-nginx-monitoring/nginx-prometheus-grafana.png
+    keywords:
+    - http
+    - nginx
+    - monitoring
+    maintainers:
+    - name: Andru Cherny
+      url: https://github.com/wirwolf
+    name: ingress-nginx-monitoring
+    sources:
+    - https://github.com/SomeBlackMagic/helm-charts
+    type: application
+    urls:
+    - https://github.com/SomeBlackMagic/helm-charts/releases/download/ingress-nginx-monitoring-1.2.1/ingress-nginx-monitoring-1.2.1.tgz
+    version: 1.2.1
+  - apiVersion: v2
     appVersion: 1.2.0
     created: "2023-06-07T07:09:19.067475941Z"
     description: Monitor nginx ingress controller
@@ -1495,4 +1515,4 @@ entries:
     urls:
     - https://github.com/SomeBlackMagic/helm-charts/releases/download/testing-multitool-0.1.0/testing-multitool-0.1.0.tgz
     version: 0.1.0
-generated: "2023-06-07T07:09:19.067689645Z"
+generated: "2023-06-07T07:30:28.791287255Z"
