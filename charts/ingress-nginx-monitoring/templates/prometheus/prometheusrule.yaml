@@ -17,7 +17,7 @@ spec:
     rules:
     {{- if $.Values.prometheus.rule.alerts.configFailed.enabled }}
     - alert: NGINXConfigFailed
-      expr: count(nginx_ingress_controller_config_last_reload_successful{controller_class=~"{{ $.Values.prometheus.rule.ingressClass}}"}} == 0) > 0
+      expr: count(nginx_ingress_controller_config_last_reload_successful{controller_class=~"{{ $.Values.prometheus.rule.ingressClass}}"} == 0) > 0
       for: 1s
       labels:
         severity: "{{ $.Values.prometheus.rule.alerts.configFailed.severity }}"
