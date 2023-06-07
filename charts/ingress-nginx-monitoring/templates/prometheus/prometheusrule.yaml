@@ -17,7 +17,7 @@ spec:
     rules:
     {{- if $.Values.prometheus.rule.alerts.configFailed.enabled }}
     - alert: NGINXConfigFailed
-      expr: count(nginx_ingress_controller_config_last_reload_successful == 0) > 0
+      expr: count(nginx_ingress_controller_config_last_reload_successful{controller_class=~"{{ $.Values.prometheus.rule.ingressClass}}"}} == 0) > 0
       for: 1s
       labels:
         severity: "{{ $.Values.prometheus.rule.alerts.configFailed.severity }}"
@@ -28,7 +28,7 @@ spec:
 
     {{- if $.Values.prometheus.rule.alerts.certificateExpiry.enabled }}
     - alert: NGINXCertificateExpiry
-      expr: (avg(nginx_ingress_controller_ssl_expire_time_seconds) by (host) - time()) < 604800
+      expr: (avg(nginx_ingress_controller_ssl_expire_time_seconds{class=~"{{ $.Values.prometheus.rule.ingressClass}}"}}) by (host) - time()) < 604800
       for: 1s
       labels:
         severity: "{{ $.Values.prometheus.rule.alerts.certificateExpiry.severity }}"
@@ -39,7 +39,7 @@ spec:
 
     {{- if $.Values.prometheus.rule.alerts.tooMany500s.enabled }}
     - alert: NGINXTooMany500s
-      expr: 100 * (sum by(ingress, exported_namespace, status,method,path,host) (rate(nginx_ingress_controller_requests{status=~"5.+"}[1h])) / sum by(ingress, exported_namespace, status,method,path,host) (rate(nginx_ingress_controller_requests[1h]))) > 5
+      expr: 100 * (sum by(ingress, exported_namespace, status,method,path,host) (rate(nginx_ingress_controller_requests{status=~"5.+" controller_class=~"{{ $.Values.prometheus.rule.ingressClass}}"}[1h])) / sum by(ingress, exported_namespace, status,method,path,host) (rate(nginx_ingress_controller_requests{controller_class=~"{{ $.Values.prometheus.rule.ingressClass}}"}[1h]))) > 5
       for: 1m
       labels:
         severity: "{{ $.Values.prometheus.rule.alerts.tooMany500s.severity }}"
@@ -50,7 +50,7 @@ spec:
 
     {{- if $.Values.prometheus.rule.alerts.tooMany400s.enabled }}
     - alert: NGINXTooMany400s
-      expr: 100 * (sum by(ingress, exported_namespace, status,method,path,host) (rate(nginx_ingress_controller_requests{status=~"4.+"}[1h])) / sum by(ingress, exported_namespace, status,method,path,host) (rate(nginx_ingress_controller_requests[1h]))) > 5
+      expr: 100 * (sum by(ingress, exported_namespace, status,method,path,host) (rate(nginx_ingress_controller_requests{status=~"4.+" controller_class=~"{{ $.Values.prometheus.rule.ingressClass}}"}[1h])) / sum by(ingress, exported_namespace, status,method,path,host) (rate(nginx_ingress_controller_requests{controller_class=~"{{ $.Values.prometheus.rule.ingressClass}}"}[1h]))) > 5
       for: 1m
       labels:
         severity: "{{ $.Values.prometheus.rule.alerts.tooMany400s.severity }}"

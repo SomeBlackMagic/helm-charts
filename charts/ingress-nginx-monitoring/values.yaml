@@ -6,6 +6,9 @@ prometheus:
     namespace: ""
     # -- Additional Labels for PrometheusRule resource
     additionalLabels: {}
+
+    ingressClass: ".*"
+
     alerts:
       configFailed:
         enabled: true
