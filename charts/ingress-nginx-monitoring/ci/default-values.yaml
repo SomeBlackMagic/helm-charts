@@ -1,7 +1,8 @@
 prometheus:
   rule:
+    ingressClass: "k8s.io/external-ingress-nginx"
     additionalLabels:
       foo: bar
 
 grafana:
-  enabled: true
+  enabled: false
