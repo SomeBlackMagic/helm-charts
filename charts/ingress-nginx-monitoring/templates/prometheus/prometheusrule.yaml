@@ -28,7 +28,7 @@ spec:
 
     {{- if $.Values.prometheus.rule.alerts.certificateExpiry.enabled }}
     - alert: NGINXCertificateExpiry
-      expr: (avg(nginx_ingress_controller_ssl_expire_time_seconds{class=~"{{ $.Values.prometheus.rule.ingressClass}}"}}) by (host) - time()) < 604800
+      expr: (avg(nginx_ingress_controller_ssl_expire_time_seconds{class=~"{{ $.Values.prometheus.rule.ingressClass}}"}) by (host) - time()) < 604800
       for: 1s
       labels:
         severity: "{{ $.Values.prometheus.rule.alerts.certificateExpiry.severity }}"
