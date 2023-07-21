@@ -486,6 +486,21 @@ entries:
     urls:
     - https://github.com/SomeBlackMagic/helm-charts/releases/download/banzaicloud-logging-operator-monitoring-0.1.0/banzaicloud-logging-operator-monitoring-0.1.0.tgz
     version: 0.1.0
+  cert-manager-issuers:
+  - apiVersion: v2
+    appVersion: "1"
+    created: "2023-07-21T12:09:39.393751125Z"
+    description: Configure cert-manager Issuers and ClusterIssuers via Helm
+    digest: 84d19c6f9c9e5c137033c93694099c481afeafa960a040da149556113d3620cf
+    icon: https://raw.githubusercontent.com/SomeBlackMagic/helm-charts/master/charts/cert-manager-issuers/logo.png
+    keywords:
+    - cert-manager
+    - tls
+    name: cert-manager-issuers
+    type: application
+    urls:
+    - https://github.com/SomeBlackMagic/helm-charts/releases/download/cert-manager-issuers-0.1.0/cert-manager-issuers-0.1.0.tgz
+    version: 0.1.0
   cert-manager-monitoring:
   - apiVersion: v2
     created: "2022-12-26T13:37:38.719650456Z"
@@ -1555,4 +1570,4 @@ entries:
     urls:
     - https://github.com/SomeBlackMagic/helm-charts/releases/download/testing-multitool-0.1.0/testing-multitool-0.1.0.tgz
     version: 0.1.0
-generated: "2023-06-07T07:54:00.048957671Z"
+generated: "2023-07-21T12:09:39.393889225Z"
