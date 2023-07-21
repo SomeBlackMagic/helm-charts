@@ -1,0 +1,31 @@
+# clusterIssuers -- Array of cert-manager ClusterIssuer [configurations](https://cert-manager.io/docs/configuration/)
+# Example
+#  - enabled: true
+#    name: test-cluster
+#    secret: - not required field
+#      name: foo-bar-baz
+#      spec:
+#        stringData:
+#          api: "123"
+#    issuerSpec:
+#      selfSigned: {}
+clusterIssuers: []
+
+
+# Add certificate into cluster for wildcard generation
+# Example
+#  - enabled: true
+#    name: top-level-name-syntax-sugar
+#    spec:
+#      secretName: secretName
+#      issuerRef:
+#        name: acme-issuer-name
+#        kind: ClusterIssuer
+#      commonName: 'common domain name'
+#      dnsNames:
+#        - "common domain"
+#        - "another domain"
+#      secretTemplate:
+#        annotations:
+#          foo: "bar"
+certificates: []

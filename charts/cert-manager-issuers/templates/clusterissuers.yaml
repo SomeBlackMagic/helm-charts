@@ -1,0 +1,26 @@
+{{- range $.Values.clusterIssuers }}
+---
+# raw issuer: {{ . | toJson }}
+{{- if .enabled }}
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: {{ .name | quote }}
+spec:
+  {{- .issuerSpec | toYaml | nindent 2 }}
+
+{{- if .secret }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ .secret.name | quote }}
+type: Opaque
+{{ .secret.spec | toYaml }}
+
+
+{{- end }}
+
+
+{{- end }}
+{{- end }}

@@ -1,0 +1,12 @@
+{{- range $.Values.certificates }}
+---
+# raw issuer: {{ . | toJson }}
+{{- if .enabled }}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ .name }}
+spec:
+{{- .spec | toYaml | nindent 2 }}
+{{- end }}
+{{- end }}
