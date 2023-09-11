@@ -28,6 +28,7 @@ prometheus:
       volumeActualSpaceUsedWarning:
         enabled: true
         severity: warning
+        threshold: 90
       volumeStatusCritical:
         enabled: true
         severity: critical
@@ -37,9 +38,11 @@ prometheus:
       nodeStorageWarning:
         enabled: true
         severity: warning
+        threshold: 70
       diskStorageWarning:
         enabled: true
         severity: warning
+        threshold: 70
       nodeDown:
         enabled: true
         severity: critical
