@@ -1,0 +1,16 @@
+apiVersion: v2
+description: allure framework
+name: allure
+version: 0.1.0
+dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    version: 2.x.x
+    tags:
+      - bitnami-common
+
+  - name: someblackmagic-common
+    repository: https://someblackmagic.github.io/helm-charts
+    version: 0.x.x
+    tags:
+      - someblackmagic-common

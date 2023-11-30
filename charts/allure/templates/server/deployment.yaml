@@ -1,0 +1,118 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $.Release.Name }}-server
+  labels:
+    app.kubernetes.io/name: {{ $.Chart.Name }}
+    helm.sh/chart: {{ $.Chart.Name }}-{{ $.Chart.Version }}
+    app.kubernetes.io/instance: {{ $.Release.Name }}
+    app.kubernetes.io/managed-by: {{ $.Release.Service }}
+spec:
+  replicas: {{ $.Values.server.replicaCount }}
+  strategy: {{- toYaml $.Values.server.updateStrategy | nindent 4 }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/chart-name: {{ $.Chart.Name }}
+      app.kubernetes.io/release-name: {{ $.Release.Name }}
+      app.kubernetes.io/application-type: server
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: {{ $.Release.Name }} # duplicate release name only for work helm-assistant
+        app.kubernetes.io/chart-name: {{ $.Chart.Name }}
+        app.kubernetes.io/release-name: {{ $.Release.Name }}
+        app.kubernetes.io/application-type: server
+        app.metadata.io/version: {{ $.Chart.AppVersion | default $.Values.server.image.tag | trunc 63 }}
+        checksum/config: {{ include (print $.Template.BasePath "/server/config-map.yaml") . | sha256sum | trunc 63 }}
+        checksum/secrets: {{ include (print $.Template.BasePath "/server/secret.yaml") . | sha256sum | trunc 63 }}
+        {{- if $.Values.server.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" $.Values.server.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+      annotations:
+        {{- if $.Values.server.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" $.Values.server.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      automountServiceAccountToken: false
+      {{- if $.Values.server.podSecurityContext.enabled }}
+      securityContext: {{- omit $.Values.server.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if $.Values.server.image.pullSecrets }}
+      imagePullSecrets: {{ toYaml $.Values.server.image.pullSecrets | nindent 8 }}
+      {{- end }}
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: allure
+          {{- with $.Values.server.image }}
+          image: "{{- if .registry -}}{{ .registry }}/{{ .repository }}{{ else }}{{ .repository }}{{- end -}}:{{ .tag }}{{- if (.digest) -}} @{{.digest}} {{- end -}}"
+          {{- end }}
+          imagePullPolicy: {{ $.Values.server.image.pullPolicy }}
+
+          envFrom:
+            {{- include "common.containerEnvVarsSecrets" (dict "value" $.Values.server.extraEnvVarsSecrets "context" $) | nindent 12 }}
+            - secretRef:
+                name: {{ $.Release.Name }}-server-secrets
+            - configMapRef:
+                name: {{ $.Release.Name }}-server-config-map
+
+
+          env: {{- include "common.containerEnvVars" (dict "value" $.Values.server.extraEnvVars "context" $) | nindent 12 }}
+
+          {{- if $.Values.server.resources.enabled }}
+          resources: {{- omit $.Values.server.resources "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+
+          {{- if $.Values.server.containerSecurityContext.enabled }}
+          securityContext: {{- omit $.Values.server.containerSecurityContext "enabled" "active" | toYaml | nindent 12 }}
+          {{- end }}
+
+          ports:
+            - containerPort: {{ $.Values.server.containerPorts.application }}
+              name: application
+              protocol: TCP
+
+          volumeMounts:
+            - name: reports-volume
+              mountPath: /app/allure-docker-api/static/projects/default/reports
+            - name: results-volume
+              mountPath: /app/allure-docker-api/static/projects/default/results
+
+          {{- if $.Values.server.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" $.Values.server.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+
+          {{- if $.Values.server.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              port: {{ $.Values.server.containerPorts.application }}
+              path: /
+            initialDelaySeconds: {{ $.Values.server.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ $.Values.server.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ $.Values.server.readinessProbe.timeoutSeconds }}
+            failureThreshold: {{ $.Values.server.readinessProbe.failureThreshold }}
+            successThreshold: {{ $.Values.server.readinessProbe.successThreshold }}
+          {{- end }}
+
+
+      volumes:
+        - name: results-volume
+          persistentVolumeClaim:
+            claimName: {{ $.Release.Name }}-server-results
+        - name: reports-volume
+          persistentVolumeClaim:
+            claimName: {{ $.Release.Name }}-server-reports
+        {{- if $.Values.server.extraVolumes }}
+        {{- include "common.tplvalues.render" ( dict "value" $.Values.server.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/chart-name: {{ $.Chart.Name }}
+                    app.kubernetes.io/release-name: {{ $.Release.Name }}
+                    app.kubernetes.io/application-type: server
+                topologyKey: kubernetes.io/hostname

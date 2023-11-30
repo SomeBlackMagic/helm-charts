@@ -1,0 +1,22 @@
+image:
+  registry: registry
+  repository: repository
+  tag: some-tag
+  digest: sha256:some-sha-code
+
+externalUpstream:
+  enabled: true
+  serviceName: externalUpstream
+  servicePort: 9000
+  maxFails: 3
+  failTimeout: 30
+
+#ingress:
+#  enabled: true
+#  selfSigned: false
+#  tls: true
+#  hostname: nginx.local
+#  extraTls:
+#  - hosts:
+#      - extraTls.local
+#    secretName: extraTls-local-tls

@@ -1,0 +1,26 @@
+image:
+  registry: docker.io
+  repository: nginxinc/nginx-unprivileged
+  tag: 1.23-alpine
+  id: sha256:some-sha-code
+
+externalUpstream:
+  enabled: false
+  serviceName: externalUpstream
+  servicePort: 9000
+  maxFails: 3
+  failTimeout: 30
+
+ingress:
+  enabled: true
+  selfSigned: true
+  tls: true
+  hostname: nginx.local
+#  extraTls:
+#  - hosts:
+#      - extraTls.local
+#    secretName: extraTls-local-tls
+
+
+extraEnvVars:
+  APP_FOO: bar

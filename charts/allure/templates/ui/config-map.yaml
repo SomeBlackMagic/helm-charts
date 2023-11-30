@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $.Release.Name }}-ui-config-map
+data:
+  ALLURE_DOCKER_PUBLIC_API_URL: "{{ $.Values.ui.extraEnvVars.ALLURE_DOCKER_PUBLIC_API_URL }}"
+  ALLURE_DOCKER_PUBLIC_API_URL_PREFIX: "/allure-api"
+  URL_PREFIX: ""
