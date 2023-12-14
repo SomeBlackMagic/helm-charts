@@ -7,6 +7,8 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-body-size: "500m"
     #https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md#rewrite
     nginx.ingress.kubernetes.io/rewrite-target: /$1
+    {{- $.Values.ingress.annotations | toYaml | nindent 4 }}
+
 spec:
   {{- if and $.Values.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" $)) }}
   ingressClassName: {{ $.Values.ingress.ingressClassName | quote }}
