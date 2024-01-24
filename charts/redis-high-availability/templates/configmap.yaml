@@ -1,0 +1,71 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "haproxy.fullname" . }}-config
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "haproxy.labels" . | nindent 4 }}
+data:
+  haproxy.cfg: |-
+    global
+        daemon
+        maxconn {{ .Values.configmap.global.maxconn }}
+
+    defaults
+        mode tcp
+        timeout connect {{ .Values.configmap.defaults.timeoutConnect }}
+        timeout client {{ .Values.configmap.defaults.timeoutClient }}
+        timeout server {{ .Values.configmap.defaults.timeoutServer }}
+
+    {{- if .Values.configmap.frontendHttpEnabled }}
+    frontend http
+        bind :8080
+        default_backend stats
+    {{- end }}
+
+    {{- with .Values.configmap.backendStats }}
+    backend stats
+        mode http
+        stats enable
+        stats uri {{ .uri }}
+        stats refresh {{ .refresh }}
+        stats show-legends
+        stats admin if {{ .admin }}
+    {{- end }}
+
+    resolvers k8s
+      parse-resolv-conf
+      hold other           10s
+      hold refused         10s
+      hold nx              10s
+      hold timeout         10s
+      hold valid           10s
+      hold obsolete        10s
+
+    frontend redis-read
+    	bind *:6380
+        default_backend redis-online
+
+    frontend redis-write
+        bind *:6379
+    	default_backend redis-primary
+
+    backend redis-primary
+    	mode tcp
+    	balance first
+    	option tcp-check
+    	tcp-check send AUTH\ {{ .Values.configmap.redis.auth }}\r\n
+    	tcp-check expect string +OK
+    	tcp-check send info\ replication\r\n
+    	tcp-check expect string role:master
+        server-template redis 3 _tcp-redis._tcp.redis-headless.redis.svc.cluster.local:6379 check inter 1s resolvers k8s init-addr none
+
+    backend redis-online
+    	mode tcp
+    	balance roundrobin
+    	option tcp-check
+    	tcp-check send AUTH\ {{ .Values.configmap.redis.auth }}\r\n
+    	tcp-check expect string +OK
+    	tcp-check send PING\r\n
+    	tcp-check expect string +PONG
+        server-template redis 3 _tcp-redis._tcp.redis-headless.redis.svc.cluster.local:6379 check inter 1s resolvers k8s init-addr none
