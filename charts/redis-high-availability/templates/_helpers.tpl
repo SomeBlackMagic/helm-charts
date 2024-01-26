@@ -39,3 +39,9 @@ Define the chart version
 {{- define "haproxy.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" }}
 {{- end }}
+{{/*
+Create Redis backend server address.
+*/}}
+{{- define "haproxy.redisBackendAddress" -}}
+_tcp-redis._tcp.redis-headless.{{ $.Release.Namespace }}.svc.{{ .Values.configmap.redis.clusterDomain }}:6379
+{{- end }}

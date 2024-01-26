@@ -11,6 +11,7 @@ data:
         daemon
         maxconn {{ .Values.configmap.global.maxconn }}
 
+
     defaults
         mode tcp
         timeout connect {{ .Values.configmap.defaults.timeoutConnect }}
@@ -35,37 +36,38 @@ data:
 
     resolvers k8s
       parse-resolv-conf
-      hold other           10s
-      hold refused         10s
-      hold nx              10s
-      hold timeout         10s
-      hold valid           10s
-      hold obsolete        10s
+      hold other {{ .Values.configmap.resolvers.holdOther }}
+      hold refused {{ .Values.configmap.resolvers.holdRefused }}
+      hold nx {{ .Values.configmap.resolvers.holdNx }}
+      hold timeout {{ .Values.configmap.resolvers.holdTimeout }}
+      hold valid {{ .Values.configmap.resolvers.holdValid }}
+      hold obsolete {{ .Values.configmap.resolvers.holdObsolete }}
 
     frontend redis-read
-    	bind *:6380
+    	bind *:{{ .Values.configmap.frontend.redisReadPort }}
         default_backend redis-online
 
     frontend redis-write
-        bind *:6379
+        bind *:{{ .Values.configmap.frontend.redisWritePort }}
     	default_backend redis-primary
 
     backend redis-primary
-    	mode tcp
-    	balance first
-    	option tcp-check
-    	tcp-check send AUTH\ {{ .Values.configmap.redis.auth }}\r\n
-    	tcp-check expect string +OK
-    	tcp-check send info\ replication\r\n
-    	tcp-check expect string role:master
-        server-template redis 3 _tcp-redis._tcp.redis-headless.redis.svc.cluster.local:6379 check inter 1s resolvers k8s init-addr none
+        mode tcp
+        balance {{ .Values.configmap.backend.balanceAlgorithm }}
+        option tcp-check
+        tcp-check send AUTH\ {{ .Values.configmap.redis.auth }}\r\n
+        tcp-check expect string +OK
+        tcp-check send info\ replication\r\n
+        tcp-check expect string role:master
+        server-template redis {{ .Values.configmap.backend.redisServerCount }} {{ include "haproxy.redisBackendAddress" . }} check inter 1s resolvers k8s init-addr none
 
     backend redis-online
     	mode tcp
-    	balance roundrobin
+    	balance {{ .Values.configmap.backend.balanceAlgorithm }}
     	option tcp-check
     	tcp-check send AUTH\ {{ .Values.configmap.redis.auth }}\r\n
     	tcp-check expect string +OK
     	tcp-check send PING\r\n
     	tcp-check expect string +PONG
-        server-template redis 3 _tcp-redis._tcp.redis-headless.redis.svc.cluster.local:6379 check inter 1s resolvers k8s init-addr none
+        server-template redis {{ .Values.configmap.backend.redisServerCount }} {{ include "haproxy.redisBackendAddress" . }} check inter 1s resolvers k8s init-addr none
+
