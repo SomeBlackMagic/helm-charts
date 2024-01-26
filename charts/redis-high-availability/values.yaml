@@ -1,0 +1,135 @@
+replicaCount: 2
+
+image:
+  repository: haproxy
+  tag: 2.3
+
+service:
+  type: ClusterIP
+  ports:
+    - name: dashboard
+      port: 8080
+      targetPort: 8080
+    - name: redis-write
+      port: 6379
+      targetPort: 6379
+    - name: redis-read
+      port: 6380
+      targetPort: 6380
+
+configmap:
+  global:
+    maxconn: 256
+  defaults:
+    timeoutConnect: "5000ms"
+    timeoutClient: "50000ms"
+    timeoutServer: "50000ms"
+  frontendHttpEnabled: true
+  backendStats:
+    uri: "/"
+    refresh: "1s"
+    admin: "TRUE"
+  redis:
+    auth: "XXXXXXX"
+    clusterDomain: "cluster.local"
+
+  defaultSettings:
+    optionRedispatch: true
+
+  frontend:
+    redisReadPort: 6380
+    redisWritePort: 6379
+
+  backend:
+    redisServerCount: 3
+    balanceAlgorithm: "first"
+
+  resolvers:
+    holdOther: "10s"
+    holdRefused: "10s"
+    holdNx: "10s"
+    holdTimeout: "10s"
+    holdValid: "10s"
+    holdObsolete: "10s"
+
+affinity:
+  podAntiAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+          - key: app
+            operator: In
+            values:
+              - haproxy
+        topologyKey: "kubernetes.io/hostname"
+redis:
+  image:
+    registry: docker.io
+    repository: bitnami/redis
+    tag: 6.2.5-debian-10-r63
+
+  clusterDomain: "cluster.local"
+
+  ## @param architecture Redis(TM) architecture. Allowed values: `standalone` or `replication`
+  ##
+  architecture: replication
+
+
+  ## Redis(TM) Authentication parameters
+  ## ref: https://github.com/bitnami/bitnami-docker-redis#setting-the-server-password-on-first-run
+  ##
+  auth:
+    ## @param auth.password Redis&trade; password
+    ## Defaults to a random 10-character alphanumeric string if not set
+    ##
+    password: "redis_pass"
+
+  master:
+    count: 1
+    persistence:
+      ## @param master.persistence.enabled Enable persistence on Redis&trade; master nodes using Persistent Volume Claims
+      ##
+      enabled: false
+
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 5
+      timeoutSeconds: 5
+      successThreshold: 1
+      failureThreshold: 30
+    readinessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 5
+      timeoutSeconds: 1
+      successThreshold: 1
+
+  replica:
+    ## @param replica.replicaCount Number of Redis(TM) replicas to deploy
+    ##
+    replicaCount: 3
+    persistence:
+      enabled: false
+
+  sentinel:
+    enabled: true
+    image:
+      registry: docker.io
+      repository: bitnami/redis-sentinel
+      tag: 6.2.5-debian-10-r63
+    getMasterTimeout: 15
+
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 5
+      timeoutSeconds: 5
+      successThreshold: 1
+      failureThreshold: 30
+    readinessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 5
+      timeoutSeconds: 1
+      successThreshold: 1

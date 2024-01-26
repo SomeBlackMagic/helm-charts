@@ -2,4 +2,4 @@
 **/*.log
 **/*test-values.y*ml
 /charts/**/charts/
-
+.DS_Store

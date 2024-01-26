@@ -1,0 +1,73 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "haproxy.fullname" . }}-config
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "haproxy.labels" . | nindent 4 }}
+data:
+  haproxy.cfg: |-
+    global
+        daemon
+        maxconn {{ .Values.configmap.global.maxconn }}
+
+
+    defaults
+        mode tcp
+        timeout connect {{ .Values.configmap.defaults.timeoutConnect }}
+        timeout client {{ .Values.configmap.defaults.timeoutClient }}
+        timeout server {{ .Values.configmap.defaults.timeoutServer }}
+
+    {{- if .Values.configmap.frontendHttpEnabled }}
+    frontend http
+        bind :8080
+        default_backend stats
+    {{- end }}
+
+    {{- with .Values.configmap.backendStats }}
+    backend stats
+        mode http
+        stats enable
+        stats uri {{ .uri }}
+        stats refresh {{ .refresh }}
+        stats show-legends
+        stats admin if {{ .admin }}
+    {{- end }}
+
+    resolvers k8s
+      parse-resolv-conf
+      hold other {{ .Values.configmap.resolvers.holdOther }}
+      hold refused {{ .Values.configmap.resolvers.holdRefused }}
+      hold nx {{ .Values.configmap.resolvers.holdNx }}
+      hold timeout {{ .Values.configmap.resolvers.holdTimeout }}
+      hold valid {{ .Values.configmap.resolvers.holdValid }}
+      hold obsolete {{ .Values.configmap.resolvers.holdObsolete }}
+
+    frontend redis-read
+    	bind *:{{ .Values.configmap.frontend.redisReadPort }}
+        default_backend redis-online
+
+    frontend redis-write
+        bind *:{{ .Values.configmap.frontend.redisWritePort }}
+    	default_backend redis-primary
+
+    backend redis-primary
+        mode tcp
+        balance {{ .Values.configmap.backend.balanceAlgorithm }}
+        option tcp-check
+        tcp-check send AUTH\ {{ .Values.configmap.redis.auth }}\r\n
+        tcp-check expect string +OK
+        tcp-check send info\ replication\r\n
+        tcp-check expect string role:master
+        server-template redis {{ .Values.configmap.backend.redisServerCount }} {{ include "haproxy.redisBackendAddress" . }} check inter 1s resolvers k8s init-addr none
+
+    backend redis-online
+    	mode tcp
+    	balance {{ .Values.configmap.backend.balanceAlgorithm }}
+    	option tcp-check
+    	tcp-check send AUTH\ {{ .Values.configmap.redis.auth }}\r\n
+    	tcp-check expect string +OK
+    	tcp-check send PING\r\n
+    	tcp-check expect string +PONG
+        server-template redis {{ .Values.configmap.backend.redisServerCount }} {{ include "haproxy.redisBackendAddress" . }} check inter 1s resolvers k8s init-addr none
+
