@@ -1444,6 +1444,19 @@ entries:
     urls:
     - https://github.com/SomeBlackMagic/helm-charts/releases/download/phpmyadmin-6.5.2/phpmyadmin-6.5.2.tgz
     version: 6.5.2
+  redis-high-availability:
+  - apiVersion: v2
+    created: "2024-01-26T13:35:08.928441814Z"
+    dependencies:
+    - name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 17.4.3
+    description: redis high availability
+    digest: f7ba72ace5c722fff059a1d29bf7825e5427011d19c08b12c50ab1b3944d30e2
+    name: redis-high-availability
+    urls:
+    - https://github.com/SomeBlackMagic/helm-charts/releases/download/redis-high-availability-0.1.0/redis-high-availability-0.1.0.tgz
+    version: 0.1.0
   redis-monitoring:
   - apiVersion: v2
     appVersion: 1.1.1
@@ -1628,4 +1641,4 @@ entries:
     urls:
     - https://github.com/SomeBlackMagic/helm-charts/releases/download/testing-multitool-0.1.0/testing-multitool-0.1.0.tgz
     version: 0.1.0
-generated: "2023-12-14T13:34:33.839497399Z"
+generated: "2024-01-26T13:35:08.928574062Z"
