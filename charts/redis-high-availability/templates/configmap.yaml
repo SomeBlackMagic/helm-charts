@@ -6,7 +6,7 @@ metadata:
   labels:
     {{- include "haproxy.labels" . | nindent 4 }}
 data:
-  haproxy.cfg: |-
+  haproxy.cfg: |+
     global
         daemon
         maxconn {{ .Values.configmap.global.maxconn }}
@@ -64,7 +64,7 @@ data:
         tcp-check expect string role:master
 
         {{- range $i := until (int .Values.configmap.backend.redisServerCount) }}
-        server redis-node-{{ $i }} {{ $.Values.configmap.redis.prefix }}-redis-node-{{ $i }}.{{ $.Values.configmap.redis.headlessServiceName }}.{{ $.Release.Namespace }}.svc.{{ $.Values.configmap.redis.clusterDomain }}:6379 check inter 1s rise 2 fall 2
+        server redis-node-{{ $i }} app-redis-node-{{ $i }}.{{ $.Values.configmap.redis.headlessServiceName }}.{{ $.Release.Namespace }}.svc.{{ $.Values.configmap.redis.clusterDomain }}:6379 check inter 1s rise 2 fall 2
         {{- end }}
 
 
@@ -73,5 +73,5 @@ data:
         balance {{ .Values.configmap.backend.balanceAlgorithm }}
 
         {{- range $i := until (int .Values.configmap.backend.redisServerCount) }}
-        server redis-node-{{ $i }} {{ $.Values.configmap.redis.prefix }}-redis-node-{{ $i }}.{{ $.Values.configmap.redis.headlessServiceName }}.{{ $.Release.Namespace }}.svc.{{ $.Values.configmap.redis.clusterDomain }}:6379 check inter 1s rise 2 fall 2
+        server redis-node-{{ $i }} app-redis-node-{{ $i }}.{{ $.Values.configmap.redis.headlessServiceName }}.{{ $.Release.Namespace }}.svc.{{ $.Values.configmap.redis.clusterDomain }}:6379 check inter 1s rise 2 fall 2
         {{- end }}
