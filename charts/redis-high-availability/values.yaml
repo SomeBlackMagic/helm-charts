@@ -1,3 +1,4 @@
+namespace: namespace
 replicaCount: 2
 
 image:
@@ -21,7 +22,7 @@ configmap:
   global:
     maxconn: 256
   defaults:
-    timeoutConnect: "5000ms"
+    timeoutConnect: "5000ms" 
     timeoutClient: "50000ms"
     timeoutServer: "50000ms"
   frontendHttpEnabled: true
@@ -30,8 +31,10 @@ configmap:
     refresh: "1s"
     admin: "TRUE"
   redis:
-    auth: "XXXXXXX"
+    auth: "redis_pass"
     clusterDomain: "cluster.local"
+    prefix: app-redis-node
+    headlessServiceName: app-redis-headless
 
   defaultSettings:
     optionRedispatch: true
