@@ -43,5 +43,5 @@ Define the chart version
 Create Redis backend server address.
 */}}
 {{- define "haproxy.redisBackendAddress" -}}
-_tcp-redis._tcp.redis-headless.{{ $.Release.Namespace }}.svc.{{ .Values.configmap.redis.clusterDomain }}:6379
+_tcp-redis._tcp.redis-headless.{{ $.Release.Namespace }}.svc.{{ $.Values.configmap.redis.clusterDomain }}:6379
 {{- end }}

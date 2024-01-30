@@ -1,3 +1,4 @@
+namespace: namespace
 replicaCount: 2
 
 image:
@@ -30,8 +31,10 @@ configmap:
     refresh: "1s"
     admin: "TRUE"
   redis:
-    auth: "XXXXXXX"
+    auth: "redis_pass"
     clusterDomain: "cluster.local"
+    prefix: app-redis-node
+    headlessServiceName: app-redis-headless
 
   defaultSettings:
     optionRedispatch: true
