@@ -1,9 +1,10 @@
-namespace: namespace
-replicaCount: 2
+replicaCount: 1
+
+clusterDomain: "cluster.local"
 
 image:
   repository: haproxy
-  tag: 2.3
+  tag: 2.9
 
 service:
   type: ClusterIP
@@ -30,14 +31,6 @@ configmap:
     uri: "/"
     refresh: "1s"
     admin: "TRUE"
-  redis:
-    auth: "redis_pass"
-    clusterDomain: "cluster.local"
-    prefix: app-redis-node
-    headlessServiceName: app-redis-headless
-
-  defaultSettings:
-    optionRedispatch: true
 
   frontend:
     redisReadPort: 6380
@@ -66,73 +59,10 @@ affinity:
               - haproxy
         topologyKey: "kubernetes.io/hostname"
 redis:
-  image:
-    registry: docker.io
-    repository: bitnami/redis
-    tag: 6.2.5-debian-10-r63
-
-  clusterDomain: "cluster.local"
 
   ## @param architecture Redis(TM) architecture. Allowed values: `standalone` or `replication`
   ##
   architecture: replication
 
-
-  ## Redis(TM) Authentication parameters
-  ## ref: https://github.com/bitnami/bitnami-docker-redis#setting-the-server-password-on-first-run
-  ##
-  auth:
-    ## @param auth.password Redis&trade; password
-    ## Defaults to a random 10-character alphanumeric string if not set
-    ##
-    password: "redis_pass"
-
-  master:
-    count: 1
-    persistence:
-      ## @param master.persistence.enabled Enable persistence on Redis&trade; master nodes using Persistent Volume Claims
-      ##
-      enabled: false
-
-    livenessProbe:
-      enabled: true
-      initialDelaySeconds: 5
-      periodSeconds: 5
-      timeoutSeconds: 5
-      successThreshold: 1
-      failureThreshold: 30
-    readinessProbe:
-      enabled: true
-      initialDelaySeconds: 5
-      periodSeconds: 5
-      timeoutSeconds: 1
-      successThreshold: 1
-
-  replica:
-    ## @param replica.replicaCount Number of Redis(TM) replicas to deploy
-    ##
-    replicaCount: 3
-    persistence:
-      enabled: false
-
   sentinel:
     enabled: true
-    image:
-      registry: docker.io
-      repository: bitnami/redis-sentinel
-      tag: 6.2.5-debian-10-r63
-    getMasterTimeout: 15
-
-    livenessProbe:
-      enabled: true
-      initialDelaySeconds: 5
-      periodSeconds: 5
-      timeoutSeconds: 5
-      successThreshold: 1
-      failureThreshold: 30
-    readinessProbe:
-      enabled: true
-      initialDelaySeconds: 5
-      periodSeconds: 5
-      timeoutSeconds: 1
-      successThreshold: 1

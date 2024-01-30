@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "haproxy.fullname" . }}
-  namespace: {{ .Values.namespace }}
   labels:
     {{- include "haproxy.labels" . | nindent 4 }}
 spec:
@@ -14,6 +13,7 @@ spec:
     metadata:
       labels:
         app: {{ include "haproxy.name" . }}
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum | trunc 63 }}
     spec:
       {{- with .Values.affinity }}
       affinity:
