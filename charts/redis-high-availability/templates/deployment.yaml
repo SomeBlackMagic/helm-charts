@@ -19,6 +19,14 @@ spec:
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      initContainers:
+        - name: check-haproxy-config
+          image: haproxy:latest
+          volumeMounts:
+            - name: config
+              mountPath: /usr/local/etc/haproxy
+              readOnly: true
+          command: ["sh", "-c", "while true; do if haproxy -c -V -f /usr/local/etc/haproxy/haproxy.cfg; then echo 'HAProxy config is valid, continuing to start the pod'; break; else echo 'HAProxy config is not valid yet, waiting for Redis nodes'; sleep 2; fi; done;"]
       containers:
         - name: haproxy
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
