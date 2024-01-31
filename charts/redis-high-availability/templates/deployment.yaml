@@ -21,7 +21,7 @@ spec:
       {{- end }}
       initContainers:
         - name: check-haproxy-config
-          image: haproxy:latest
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           volumeMounts:
             - name: config
               mountPath: /usr/local/etc/haproxy
