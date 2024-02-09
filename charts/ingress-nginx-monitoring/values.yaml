@@ -20,7 +20,7 @@ prometheus:
 
       tooMany500s:
         enabled: true
-        severity: error
+        severity: warning
 
       tooMany400s:
         enabled: true
