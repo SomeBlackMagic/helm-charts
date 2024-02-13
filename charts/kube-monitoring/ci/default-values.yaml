@@ -5,4 +5,4 @@ prometheus:
       foo: bar
 
 grafana:
-  enabled: true
+  enabled: false

@@ -55,8 +55,8 @@ spec:
     #https://stackoverflow.com/a/69340335
     - alert: FailedEvictedPods
       annotations:
-        summary: {{`Failed Evicted pod: {{ $labels.pod }}`}}
-        description: {{`Pod {{ $labels.namespace }}/{{ $labels.pod }} has been Evicted. Please check reason and remove evicted pod`}}
+        summary: "{{`Failed Evicted pod: {{ $labels.pod }}`}}"
+        description: "{{`Pod {{ $labels.namespace }}/{{ $labels.pod }} has been Evicted. Please check reason and remove evicted pod`}}"
       expr: sum by(namespace, pod) (kube_pod_status_phase{phase="Failed"} > 0 and on(namespace, pod) kube_pod_status_reason{reason="Evicted"} > 0) > 0
       for: 10m
       labels:
@@ -67,8 +67,8 @@ spec:
     #https://stackoverflow.com/a/69340335
     - alert: TooManyEvictedPodsOnNamespace
       annotations:
-        summary: {{`Too many Failed Evicted Pods in {{ $labels.namespace }}`}}
-        description: {{`Too many Failed Evicted Pods: {{ $value }} on namespace {{ $labels.namespace }}`}}
+        summary: "{{`Too many Failed Evicted Pods in {{ $labels.namespace }}`}}"
+        description: "{{`Too many Failed Evicted Pods: {{ $value }} on namespace {{ $labels.namespace }}`}}"
       expr: sum by(namespace) (kube_pod_status_reason{reason="Evicted"}) >= {{ $.Values.prometheus.rule.alerts.tooManyEvictedPods.threshold }}
       labels:
         severity: "{{ $.Values.prometheus.rule.alerts.tooManyEvictedPods.severity }}"
