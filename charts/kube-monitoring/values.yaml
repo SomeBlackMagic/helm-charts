@@ -30,6 +30,15 @@ prometheus:
       containerIsOOMKilled:
         enabled: true
         severity: critical
+      failedEvictedPods:
+        enabled: true
+        severity: warning
+      tooManyEvictedPods:
+        enabled: true
+        severity: warning
+        threshold: 5
+
+
 
     additionalAlerts: []
     # - alert: CertManagerCertificateReadyStatus
