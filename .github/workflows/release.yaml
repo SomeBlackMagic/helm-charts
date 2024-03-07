@@ -28,6 +28,7 @@ jobs:
         run: |
           helm repo add bitnami https://charts.bitnami.com/bitnami/
           helm repo add someblackmagic https://someblackmagic.github.io/helm-charts
+          helm repo add haproxy https://haproxytech.github.io/helm-charts/
 
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@v1.5.0

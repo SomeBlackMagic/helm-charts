@@ -1,5 +1,6 @@
 chart-repos:
   - bitnami=https://charts.bitnami.com/bitnami/
   - someblackmagic=https://someblackmagic.github.io/helm-charts/
+  - haproxy=https://haproxytech.github.io/helm-charts/
 helm-extra-args: --timeout 600s
 
