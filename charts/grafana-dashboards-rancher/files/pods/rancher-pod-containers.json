@@ -195,6 +195,18 @@
           "interval": "",
           "legendFormat": "({{container}})",
           "refId": "A"
+        },
+        {
+          "expr": "kube_pod_container_resource_requests{namespace=~\"$namespace\",pod=~\"$pod\", resource=\"memory\", unit=\"byte\"}",
+          "interval": "",
+          "legendFormat": "Request ({{container}})",
+          "refId": "G"
+        },
+        {
+          "expr": "kube_pod_container_resource_limits{namespace=~\"$namespace\",pod=~\"$pod\", resource=\"memory\", unit=\"byte\"}",
+          "interval": "",
+          "legendFormat": "Limit ({{container}})",
+          "refId": "H"
         }
       ],
       "thresholds": [],
