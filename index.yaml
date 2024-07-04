@@ -162,6 +162,25 @@ entries:
     version: 0.1.1
   allure:
   - apiVersion: v2
+    created: "2024-07-04T10:12:42.929594584Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    - name: someblackmagic-common
+      repository: https://someblackmagic.github.io/helm-charts
+      tags:
+      - someblackmagic-common
+      version: 0.x.x
+    description: allure framework
+    digest: 51e5240abe492ec5811b59f9a8ad072cd95a023c73bc9db248862d6d42b0328b
+    name: allure
+    urls:
+    - https://github.com/SomeBlackMagic/helm-charts/releases/download/allure-0.1.3/allure-0.1.3.tgz
+    version: 0.1.3
+  - apiVersion: v2
     created: "2024-07-04T09:45:03.62900925Z"
     dependencies:
     - name: common
@@ -1824,4 +1843,4 @@ entries:
     urls:
     - https://github.com/SomeBlackMagic/helm-charts/releases/download/testing-multitool-0.1.0/testing-multitool-0.1.0.tgz
     version: 0.1.0
-generated: "2024-07-04T09:45:03.629200338Z"
+generated: "2024-07-04T10:12:42.929784238Z"
