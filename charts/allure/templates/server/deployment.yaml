@@ -52,9 +52,6 @@ spec:
             {{- include "common.containerEnvVarsSecrets" (dict "value" $.Values.server.extraEnvVarsSecrets "context" $) | nindent 12 }}
             - secretRef:
                 name: {{ $.Release.Name }}-server-secrets
-            - configMapRef:
-                name: {{ $.Release.Name }}-server-config-map
-
 
           env: {{- include "common.containerEnvVars" (dict "value" $.Values.server.extraEnvVars "context" $) | nindent 12 }}
 
