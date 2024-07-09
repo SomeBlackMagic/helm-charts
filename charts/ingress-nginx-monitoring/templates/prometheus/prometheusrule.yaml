@@ -39,15 +39,14 @@ spec:
 
     {{- if $.Values.prometheus.rule.alerts.tooMany500s.enabled }}
     - alert: NGINXTooMany500s
-      expr: 100 * (sum by(ingress, exported_namespace, status,method,path,host) (rate(nginx_ingress_controller_requests{status=~"5.+", controller_class=~"{{ $.Values.prometheus.rule.ingressClass}}"}[1h])) / sum by(ingress, exported_namespace, status,method,path,host) (rate(nginx_ingress_controller_requests{controller_class=~"{{ $.Values.prometheus.rule.ingressClass}}"}[1h]))) > 5
-      for: 1m
+      expr: 100 * (sum by (ingress, exported_namespace, status, method, path, host) (rate(nginx_ingress_controller_requests{status=~"5.+", controller_class=~"{{ $.Values.prometheus.rule.ingressClass}}"}[2h])) / sum by (ingress, exported_namespace, status, method, path, host) (rate(nginx_ingress_controller_requests{controller_class=~"{{ $.Values.prometheus.rule.ingressClass}}"}[2h]))) > 10
+      for: {{ $.Values.prometheus.rule.alerts.tooMany500s.for }}
       labels:
         severity: "{{ $.Values.prometheus.rule.alerts.tooMany500s.severity }}"
       annotations:
         description: {{`Too many {{$labels.status}} on {{$labels.host}} `}}
-        summary: {{` More than 5% of all requests returned {{$labels.status}}. Metadata -> { namespace="{{$labels.exported_namespace}}", ingress="{{$labels.ingress}}", method="{{$labels.method}}", path="{{$labels.path}})" } `}}
+        summary: {{`{{ $.Values.prometheus.rule.alerts.tooMany500s.summary }}. Metadata -> { namespace="{{$labels.exported_namespace}}", ingress="{{$labels.ingress}}", method="{{$labels.method}}", path="{{$labels.path}})" } `}}
     {{- end }}
-
     {{- if $.Values.prometheus.rule.alerts.tooMany400s.enabled }}
     - alert: NGINXTooMany400s
       expr: 100 * (sum by(ingress, exported_namespace, status,method,path,host) (rate(nginx_ingress_controller_requests{status=~"4.+", controller_class=~"{{ $.Values.prometheus.rule.ingressClass}}"}[1h])) / sum by(ingress, exported_namespace, status,method,path,host) (rate(nginx_ingress_controller_requests{controller_class=~"{{ $.Values.prometheus.rule.ingressClass}}"}[1h]))) > 5
