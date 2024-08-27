@@ -59,8 +59,8 @@ spec:
         summary: {{`More than 5% of all requests returned {{$labels.status}}. Metadata -> { namespace="{{$labels.exported_namespace}}", ingress="{{$labels.ingress}}", method="{{$labels.method}}", path="{{$labels.path}})" } `}}
     {{- end }}
 
-    {{- with $.Values.prometheus.rule.additionalAlerts }}
-    {{ . | nindent 6 }}
+    {{- if $.Values.prometheus.rule.additionalAlerts }}
+    {{- toYaml $.Values.prometheus.rule.additionalAlerts | nindent 4 }}
     {{- end }}
   {{- end }}
 {{- end }}
