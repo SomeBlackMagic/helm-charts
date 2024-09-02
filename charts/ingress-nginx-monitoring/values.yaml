@@ -21,8 +21,6 @@ prometheus:
       tooMany500s:
         enabled: true
         severity: warning
-        for: 5m
-        summary: More than 10% of all requests returned {{$labels.status}}
 
       tooMany400s:
         enabled: true
