@@ -39,7 +39,7 @@ spec:
 
     {{- if $.Values.prometheus.rule.alerts.tooMany500s.enabled }}
     - alert: NGINXTooMany500s
-      expr: 100 * (sum by(ingress, exported_namespace, status,method,path,host) (rate(nginx_ingress_controller_requests{status=~"5.+", controller_class=~"{{ $.Values.prometheus.rule.ingressClass}}"}[1h])) / sum by(ingress, exported_namespace, status,method,path,host) (rate(nginx_ingress_controller_requests{controller_class=~"{{ $.Values.prometheus.rule.ingressClass}}"}[2h]))) > 10
+      expr: 100 * (sum by(ingress, exported_namespace, status,method,path,host) (rate(nginx_ingress_controller_requests{status=~"5.+", controller_class=~"{{ $.Values.prometheus.rule.ingressClass}}"}[2h])) / sum by(ingress, exported_namespace, status,method,path,host) (rate(nginx_ingress_controller_requests{controller_class=~"{{ $.Values.prometheus.rule.ingressClass}}"}[2h]))) > 10
       for: 5m
       labels:
         severity: "{{ $.Values.prometheus.rule.alerts.tooMany500s.severity }}"
