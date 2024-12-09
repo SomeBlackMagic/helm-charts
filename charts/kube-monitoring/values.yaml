@@ -37,6 +37,9 @@ prometheus:
         enabled: true
         severity: warning
         threshold: 5
+      highCPURequests:
+        enabled: true
+        severity: warning
 
 
 
