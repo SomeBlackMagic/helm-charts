@@ -1328,6 +1328,25 @@ entries:
     version: 0.1.0
   kube-monitoring:
   - apiVersion: v2
+    appVersion: 0.4.1
+    created: "2024-12-09T14:30:04.292233774Z"
+    description: More rules for base kubernetes metrics
+    digest: 1222ae2dbb4ad846e444fb90fe1d4187de6cdf1cb92a3bd5f7e8ce4b44eb024a
+    icon: https://raw.githubusercontent.com/SomeBlackMagic/helm-charts/master/charts/kube-monitoring/kube-monitoring.png
+    keywords:
+    - kube
+    - monitoring
+    maintainers:
+    - name: Andru Cherny
+      url: https://github.com/wirwolf
+    name: kube-monitoring
+    sources:
+    - https://github.com/SomeBlackMagic/helm-charts
+    type: application
+    urls:
+    - https://github.com/SomeBlackMagic/helm-charts/releases/download/kube-monitoring-0.4.1/kube-monitoring-0.4.1.tgz
+    version: 0.4.1
+  - apiVersion: v2
     appVersion: 0.4.0
     created: "2024-12-09T13:58:32.07675334Z"
     description: More rules for base kubernetes metrics
@@ -1962,4 +1981,4 @@ entries:
     urls:
     - https://github.com/SomeBlackMagic/helm-charts/releases/download/testing-multitool-0.1.0/testing-multitool-0.1.0.tgz
     version: 0.1.0
-generated: "2024-12-09T13:58:32.076972912Z"
+generated: "2024-12-09T14:30:04.292464284Z"
