@@ -1,22 +1,22 @@
-{{- if and .Values.prometheus.enabled ( .Capabilities.APIVersions.Has "monitoring.coreos.com/v1" ) }}
+{{- if and $.Values.prometheus.enabled ( .Capabilities.APIVersions.Has "monitoring.coreos.com/v1" ) }}
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
   name: {{ $.Release.Name }}-fluent-bit
-  {{- if .Values.prometheus.rule.namespace }}
-  namespace: {{ .Values.prometheus.rule.namespace }}
+  {{- if $.Values.prometheus.rule.namespace }}
+  namespace: {{ $.Values.prometheus.rule.namespace }}
   {{- end }}
   labels:
     {{- include "banzaicloud-logging-operator-monitoring.labels" . | nindent 4 }}
-    {{- if .Values.prometheus.rule.additionalLabels }}
-    {{- toYaml .Values.prometheus.rule.additionalLabels | nindent 4 }}
+    {{- if $.Values.prometheus.rule.additionalLabels }}
+    {{- toYaml $.Values.prometheus.rule.additionalLabels | nindent 4 }}
     {{- end }}
 spec:
   groups:
   - name: logging-operator-fluent-bit
     rules:
 
-    {{- if .Values.prometheus.rule.alerts.fluentBit.serviceDown.enabled }}
+    {{- if $.Values.prometheus.rule.alerts.fluentBit.serviceDown.enabled }}
     - alert: FluentBitDown
       expr: absent(up{container="fluent-bit"}== 1)
       for: 1m
@@ -27,7 +27,7 @@ spec:
         description: {{`"{{ $labels.statefulset }} on {{ $labels.instance }} is down. No logs will be collected."`}}
     {{- end }}
 
-    {{- if .Values.prometheus.rule.alerts.fluentBit.noOutputBytesProcessed.enabled }}
+    {{- if $.Values.prometheus.rule.alerts.fluentBit.noOutputBytesProcessed.enabled }}
     - alert: FluentBitNoOutputBytesProcessed
       expr: rate(fluentbit_output_proc_bytes_total[5m]) == 0
       for: 15m
@@ -37,10 +37,9 @@ spec:
         summary: "Fluent Bit no output bytes processed"
         description: {{`"Output plugin {{ $labels.name }} on Pod {{ $labels.namespace }}/{{ $labels.pod }} has not processed any bytes for at least 5 minutes.\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"`}}
 
-
     {{- end }}
 
-    {{- if .Values.prometheus.rule.alerts.fluentBit.noOutputBytesProcessed.enabled }}
+    {{- if $.Values.prometheus.rule.alerts.fluentBit.noOutputBytesProcessed.enabled }}
     - alert: FluentBitNoOutputBytesProcessed
       expr: sum by (pod) (increase(fluentbit_input_bytes_total{container=~"fluent-bit.*"}[4m])) == 0
       for: 6h
@@ -53,7 +52,7 @@ spec:
     {{- end }}
 
 
-    {{- with .Values.prometheus.rule.additionalAlerts }}
+    {{- with $.Values.prometheus.rule.additionalAlerts }}
     {{ . | nindent 4 }}
     {{- end }}
 {{- end }}

@@ -19,3 +19,12 @@ Deployed resources:
 !!! WARNING !!!
 Custom resource monitoring.coreos.com/v1 is not found. Deploy some resource is skipped
 {{- end }}
+
+
+
+{{- if $.Values.prometheus.rule.alerts.fluentd.outputBufferQueueLength.enabled }}
+
+!!! WARNING !!!
+$.Values.prometheus.rule.alerts.fluentd.outputBufferQueueLength is deprecated:
+use queueLengthWarning and queueLengthCritical alert
+{{- end }}

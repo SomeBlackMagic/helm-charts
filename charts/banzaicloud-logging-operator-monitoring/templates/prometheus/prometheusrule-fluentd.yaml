@@ -1,4 +1,4 @@
-{{- if and .Values.prometheus.enabled ( .Capabilities.APIVersions.Has "monitoring.coreos.com/v1" ) }}
+{{- if and $.Values.prometheus.enabled ( .Capabilities.APIVersions.Has "monitoring.coreos.com/v1" ) }}
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
@@ -62,7 +62,8 @@ spec:
         description: {{`"Output plugin {{ $labels.type }} on Pod {{ $labels.namespace }}/{{ $labels.instance }} has a buffer that can not been flushed.\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"`}}
     {{- end }}
 
-    {{- if .Values.prometheus.rule.alerts.fluentd.highErrorRatio.enabled }}
+
+    {{- if $.Values.prometheus.rule.alerts.fluentd.highErrorRatio.enabled }}
     - alert: FluentdHighErrorRatio
       expr: |
         sum by (type, plugin_id)(rate(fluentd_output_status_num_errors[5m])) /sum by (type, plugin_id)(rate(fluentd_output_status_emit_count[5m]))> 0.05
@@ -74,7 +75,7 @@ spec:
         description: {{`"High Error Ratio"`}}
     {{- end }}
 
-    {{- if .Values.prometheus.rule.alerts.fluentd.highRetryRatio.enabled }}
+    {{- if $.Values.prometheus.rule.alerts.fluentd.highRetryRatio.enabled }}
     - alert: FluentdHighErrorRatio
       expr: |
         sum by (type, plugin_id)(rate(fluentd_output_status_retry_count[5m])) /sum by (type, plugin_id)(rate(fluentd_output_status_emit_count[5m]))> 0.05
@@ -87,7 +88,44 @@ spec:
     {{- end }}
 
 
-    {{- with .Values.prometheus.rule.additionalAlerts }}
+    {{- if .Values.prometheus.rule.alerts.fluentd.queueLengthWarning.enabled }}
+    - alert: FluentdOutputBufferQueueLength
+      expr: rate(fluentd_status_buffer_queue_length[5m]) > 0.3
+      for: 1m
+      labels:
+        severity: "warning"
+      annotations:
+        summary: {{`"Fluentd node are failing"`}}
+        description: {{`"In the last 5 minutes, fluentd queues increased 30%. Current value is {{ $value }}. PluginId: {{ $labels.plugin_id }}"`}}
+    {{- end }}
+
+    {{- if .Values.prometheus.rule.alerts.fluentd.queueLengthCritical.enabled }}
+    - alert: FluentdOutputBufferQueueLength
+      expr: rate(fluentd_status_buffer_queue_length[5m]) > 0.5
+      for: 1m
+      labels:
+        severity: "critical"
+      annotations:
+        summary: {{`"Fluentd node are failing"`}}
+        description: {{`"In the last 5 minutes, fluentd queues increased 50%. Current value is {{ $value }}. PluginId: {{ $labels.plugin_id }}"`}}
+
+    {{- end }}
+
+    {{- if $.Values.prometheus.rule.alerts.fluentd.outputRetryErrors.enabled }}
+    - alert: FluentdOutputRetryErrors
+      expr: rate(fluentd_output_status_num_errors[{{ $.Values.prometheus.rule.alerts.fluentd.outputRetryErrors.rateTime }}]) > {{ $.Values.prometheus.rule.alerts.fluentd.outputRetryErrors.limitValue }}
+      for: 1m
+      labels:
+        severity: "{{ $.Values.prometheus.rule.alerts.fluentd.outputRetryErrors.severity }}"
+      annotations:
+        summary: {{`"Fluentd send data errors"`}}
+        description: {{`"Fluentd have erros when try to send data to output. PluginId: {{ $labels.plugin_id }}"`}}
+
+    {{- end }}
+
+
+
+    {{- with $.Values.prometheus.rule.additionalAlerts }}
     {{ . | nindent 4 }}
     {{- end }}
 {{- end }}
