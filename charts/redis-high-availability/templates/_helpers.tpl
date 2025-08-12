@@ -39,3 +39,11 @@ Define the chart version
 {{- define "haproxy.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" }}
 {{- end }}
+
+{{- define "redis-ha.password" -}}
+{{- printf "%s-%s-redis" .Release.Name .Release.Namespace | sha256sum | trunc 32 }}
+{{- end }}
+
+{{- define "redis-ha.secretName" -}}
+{{ .Release.Name }}-redis-auth
+{{- end }}
