@@ -80,8 +80,12 @@ haproxy:
         option tcp-smart-connect
         option tcpka
         option tcp-check
-        {{- if  $.Values.redis.auth.enabled }}
+        {{- if  $.Values.haproxy.redis.auth.enabled }}
+        {{- if $.Values.haproxy.redis.auth.password }}
+        tcp-check send AUTH\ {{ $.Values.haproxy.redis.auth.password }}\r\n
+        {{- else }}
         tcp-check send AUTH\ {{ include "redis-ha.password" $ }}\r\n
+        {{- end }}
         {{- end }}
         tcp-check expect string +OK
         tcp-check send info\ replication\r\n
@@ -106,8 +110,8 @@ haproxy:
 
   redis:
     auth:
-      enabled: false
-      password: ~
+      enabled: true
+      password: ""
 
     replica:
       replicaCount: ~
@@ -155,6 +159,7 @@ redis:
 
   auth:
     enabled: true
+    password: ""
     existingSecret: '{{ .Release.Name }}-redis-auth'
     existingSecretPasswordKey: "redis-password"
 
