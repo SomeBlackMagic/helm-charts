@@ -45,5 +45,5 @@ Define the chart version
 {{- end }}
 
 {{- define "redis-ha.secretName" -}}
-{{ .Release.Name }}-redis-auth
+{{ .Release.Name }}-auth
 {{- end }}

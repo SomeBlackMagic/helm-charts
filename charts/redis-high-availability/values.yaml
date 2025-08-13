@@ -154,7 +154,7 @@ redis:
   auth:
     enabled: true
     password: ""
-    existingSecret: '{{ .Release.Name }}-redis-auth'
+    existingSecret: '{{ .Release.Name }}-auth'
     existingSecretPasswordKey: "redis-password"
 
   sentinel:
