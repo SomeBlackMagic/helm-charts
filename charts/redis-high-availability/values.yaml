@@ -105,7 +105,8 @@ haproxy:
   redis:
     auth:
       enabled: true
-      password: ""
+      existingSecret: '{{ .Release.Name }}-auth'
+      existingSecretPasswordKey: "redis-password"
 
     replica:
       replicaCount: ~
@@ -153,7 +154,6 @@ redis:
 
   auth:
     enabled: true
-    password: ""
     existingSecret: '{{ .Release.Name }}-auth'
     existingSecretPasswordKey: "redis-password"
 
