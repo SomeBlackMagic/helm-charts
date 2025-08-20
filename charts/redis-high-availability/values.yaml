@@ -143,6 +143,8 @@ haproxy:
       holdValid: "10s"
       holdObsolete: "10s"
 
+networkPolicy:
+  enabled: true
 
 redis:
   ## @param architecture Redis(TM) architecture. Allowed values: `standalone` or `replication`
