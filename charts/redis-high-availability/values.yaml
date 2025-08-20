@@ -80,15 +80,13 @@ haproxy:
         option tcp-smart-connect
         option tcpka
         option tcp-check
-        {{- if  $.Values.redis.auth.enabled }}
-        tcp-check send AUTH\ {{  $.Values.redis.auth.password }}\r\n
-        {{- end }}
+        tcp-check send AUTH\ {{ include "redis-ha.password" $ }}\r\n
         tcp-check expect string +OK
         tcp-check send info\ replication\r\n
         tcp-check expect string role:master
 
         {{- range $i := until (int  $.Values.redis.replica.replicaCount) }}
-        server redis-node-{{ $i }} {{ $.Release.Name }}-node-{{ $i }}.{{ $.Release.Name }}-headless.{{ $.Release.Namespace }}.svc.{{  $.Values.clusterDomain }}:6379 resolvers k8s check inter 1s rise 30 fall 2
+        server redis-node-{{ $i }} {{ $.Release.Name }}-node-{{ $i }}.{{ $.Release.Name }}-headless.{{ $.Release.Namespace }}.svc.{{  $.Values.clusterDomain }}:6379 resolvers k8s check inter {{ $.Values.configmap.backend.healthCheck.interval }} rise {{ $.Values.configmap.backend.healthCheck.rise }} fall {{ $.Values.configmap.backend.healthCheck.fall }}
         {{- end }}
 
 
@@ -97,7 +95,7 @@ haproxy:
         balance {{ $.Values.configmap.backend.balanceAlgorithm }}
 
         {{- range $i := until (int  $.Values.redis.replica.replicaCount) }}
-        server redis-node-{{ $i }} {{ $.Release.Name }}-node-{{ $i }}.{{ $.Release.Name }}-headless.{{ $.Release.Namespace }}.svc.{{  $.Values.clusterDomain }}:6379 resolvers k8s check inter 1s rise 30 fall 2
+        server redis-node-{{ $i }} {{ $.Release.Name }}-node-{{ $i }}.{{ $.Release.Name }}-headless.{{ $.Release.Namespace }}.svc.{{  $.Values.clusterDomain }}:6379 resolvers k8s check inter {{ $.Values.configmap.backend.healthCheck.interval }} rise {{ $.Values.configmap.backend.healthCheck.rise }} fall {{ $.Values.configmap.backend.healthCheck.fall }}
         {{- end }}
 
   serviceMonitor:
@@ -106,8 +104,9 @@ haproxy:
 
   redis:
     auth:
-      enabled: false
-      password: ~
+      enabled: true
+      existingSecret: '{{ .Release.Name }}-auth'
+      existingSecretPasswordKey: "redis-password"
 
     replica:
       replicaCount: ~
@@ -134,6 +133,10 @@ haproxy:
 
     backend:
       balanceAlgorithm: "first"
+      healthCheck:
+        interval: "2s"
+        rise: 2
+        fall: 2
 
     resolvers:
       holdOther: "10s"
@@ -150,6 +153,11 @@ redis:
   ## @param architecture Redis(TM) architecture. Allowed values: `standalone` or `replication`
   ##
   architecture: replication
+
+  auth:
+    enabled: true
+    existingSecret: '{{ .Release.Name }}-auth'
+    existingSecretPasswordKey: "redis-password"
 
   sentinel:
     enabled: true

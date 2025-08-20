@@ -21,7 +21,13 @@ server:
       maxUnavailable: 20%
       maxSurge: 1
 
-  extraEnvVars: {}
+  extraEnvVars:
+    CHECK_RESULTS_EVERY_SECONDS: 'NONE'
+    KEEP_HISTORY: "1"
+    URL_PREFIX: "/allure-api"
+    TLS: "1"
+    SECURITY_ENABLED: "1"
+    MAKE_VIEWER_ENDPOINTS_PUBLIC: "0"
 
   extraEnvVarsSecrets: []
 

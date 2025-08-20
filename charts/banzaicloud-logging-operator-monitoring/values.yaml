@@ -31,9 +31,24 @@ prometheus:
           enabled: true
           severity: warning
 
+        outputRetryErrors:
+          enabled: true
+          severity: error
+          rateTime: 10m
+          limitValue: 0.01
+
+        #DEPRECATED Metric!
         outputBufferQueueLength:
           enabled: true
           severity: critical
+
+        queueLengthWarning:
+          enabled: true
+          severity: warning
+
+        queueLengthCritical:
+          enabled: true
+
 
         highErrorRatio:
           enabled: true

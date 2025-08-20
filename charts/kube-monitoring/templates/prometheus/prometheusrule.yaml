@@ -74,6 +74,20 @@ spec:
         severity: "{{ $.Values.prometheus.rule.alerts.tooManyEvictedPods.severity }}"
     {{- end }}
 
+    {{- if $.Values.prometheus.rule.alerts.highCPURequests.enabled }}
+    - alert: HighCPURequests
+      annotations:
+        summary: "{{`High CPU Requests on Node {{ $labels.node }}`}}"
+        description: "{{`CPU requests on node {{ $labels.node }} exceed 90% of capacity. Requests: {{ $value | humanizePercentage }}.`}}"
+      for: {{ $.Values.prometheus.rule.alerts.highCPURequests.thresholdTime }}
+      expr: |
+        sum(kube_pod_container_resource_requests{resource="cpu"}) by (node)
+        /
+        sum(kube_node_status_capacity{resource="cpu"}) by (node) > 0.9
+      labels:
+        severity: "{{ $.Values.prometheus.rule.alerts.highCPURequests.severity }}"
+    {{- end }}
+
 
 
     {{- with $.Values.prometheus.rule.additionalAlerts }}

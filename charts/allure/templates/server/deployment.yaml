@@ -23,7 +23,6 @@ spec:
         app.kubernetes.io/release-name: {{ $.Release.Name }}
         app.kubernetes.io/application-type: server
         app.metadata.io/version: {{ $.Chart.AppVersion | default $.Values.server.image.tag | trunc 63 }}
-        checksum/config: {{ include (print $.Template.BasePath "/server/config-map.yaml") . | sha256sum | trunc 63 }}
         checksum/secrets: {{ include (print $.Template.BasePath "/server/secret.yaml") . | sha256sum | trunc 63 }}
         {{- if $.Values.server.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" $.Values.server.podLabels "context" $) | nindent 8 }}
@@ -52,9 +51,6 @@ spec:
             {{- include "common.containerEnvVarsSecrets" (dict "value" $.Values.server.extraEnvVarsSecrets "context" $) | nindent 12 }}
             - secretRef:
                 name: {{ $.Release.Name }}-server-secrets
-            - configMapRef:
-                name: {{ $.Release.Name }}-server-config-map
-
 
           env: {{- include "common.containerEnvVars" (dict "value" $.Values.server.extraEnvVars "context" $) | nindent 12 }}
 
