@@ -2,7 +2,7 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: {{ .Release.Name }}-redis-nodes-isolation
+  name: {{ .Release.Name }}-nodes-isolation
   namespace: {{ .Release.Namespace }}
   labels:
     {{- include "haproxy.labels" . | nindent 4 }}
