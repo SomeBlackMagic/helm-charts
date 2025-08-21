@@ -105,8 +105,7 @@ haproxy:
   redis:
     auth:
       enabled: true
-      existingSecret: '{{ .Release.Name }}-auth'
-      existingSecretPasswordKey: "redis-password"
+      password: redis_pass  # Use when secretGeneration.enabled=false
 
     replica:
       replicaCount: ~
@@ -149,6 +148,14 @@ haproxy:
 networkPolicy:
   enabled: true
 
+secretGeneration:
+  enabled: false
+  # When enabled=true, use:
+  # redis.auth.existingSecret: '{{ .Release.Name }}-auth'
+  # redis.auth.existingSecretPasswordKey: "redis-password"
+  # haproxy.redis.auth.existingSecret: '{{ .Release.Name }}-auth'
+  # haproxy.redis.auth.existingSecretPasswordKey: "redis-password"
+
 redis:
   ## @param architecture Redis(TM) architecture. Allowed values: `standalone` or `replication`
   ##
@@ -156,8 +163,7 @@ redis:
 
   auth:
     enabled: true
-    existingSecret: '{{ .Release.Name }}-auth'
-    existingSecretPasswordKey: "redis-password"
+    password: redis_pass  # Use when secretGeneration.enabled=false
 
   sentinel:
     enabled: true
