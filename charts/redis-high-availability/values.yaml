@@ -80,7 +80,9 @@ haproxy:
         option tcp-smart-connect
         option tcpka
         option tcp-check
-        tcp-check send AUTH\ {{ include "redis-ha.password" $ }}\r\n
+        {{- if $.Values.haproxy.redis.auth.enabled }}
+        tcp-check send AUTH\ {{ $.Values.haproxy.redis.auth.password }}\r\n
+        {{- end }}
         tcp-check expect string +OK
         tcp-check send info\ replication\r\n
         tcp-check expect string role:master
