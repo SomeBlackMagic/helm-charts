@@ -24,7 +24,15 @@ spec:
       port: 6379
     - protocol: TCP
       port: 26379
-  - from: []
+  - from:
+    - podSelector:
+        matchExpressions:
+        - key: app.kubernetes.io/name
+          operator: NotIn
+          values: ["redis"]
+      namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: {{ .Release.Namespace }}
     ports:
     - protocol: TCP
       port: 6379
