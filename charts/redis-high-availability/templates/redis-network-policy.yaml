@@ -36,6 +36,15 @@ spec:
     ports:
     - protocol: TCP
       port: 6379
+  - from:
+    - namespaceSelector:
+        matchExpressions:
+        - key: kubernetes.io/metadata.name
+          operator: In
+          values: ["cattle-monitoring-system", "kube-system", "monitoring-system", "prometheus-system"]
+    ports:
+    - protocol: TCP
+      port: 9101
   egress:
   - to:
     - podSelector:
