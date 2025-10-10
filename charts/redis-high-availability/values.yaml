@@ -1,4 +1,4 @@
-# https://github.com/haproxytech/helm-charts/blob/main/haproxy/values.yaml
+## https://github.com/haproxytech/helm-charts/blob/main/haproxy/values.yaml
 haproxy:
   ## Pod termination grace period
   ## ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/
@@ -158,7 +158,10 @@ secretGeneration:
   # haproxy.redis.auth.existingSecret: '{{ .Release.Name }}-auth'
   # haproxy.redis.auth.existingSecretPasswordKey: "redis-password"
 
+## https://github.com/bitnami/charts/blob/main/bitnami/redis/values.yaml
 redis:
+  image:
+    repository: bitnamilegacy/redis
   ## @param architecture Redis(TM) architecture. Allowed values: `standalone` or `replication`
   ##
   architecture: replication
