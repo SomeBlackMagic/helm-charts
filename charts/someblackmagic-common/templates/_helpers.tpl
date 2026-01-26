@@ -22,3 +22,27 @@
     name: {{ $val.name }}
 {{- end -}}
 {{- end -}}
+
+{{- define "common.nodePlacementAffinity" -}}
+- key: node-role.kubernetes.io/{{ .group }}
+  operator: In
+  values: ["{{ .group }}"]
+{{- end -}}
+
+{{- define "common.nodePlacementTolerations" -}}
+- key: node-role.kubernetes.io/{{ .group }}
+  operator: Equal
+  value: {{ .group }}
+  effect: NoSchedule
+{{- end -}}
+
+
+{{- define "common.podAntiAffinitySpread" -}}
+- weight: {{ .weight }}
+  podAffinityTerm:
+    labelSelector:
+      matchLabels:
+        app.kubernetes.io/chart-name: {{ .context.Chart.Name }}
+        app.kubernetes.io/release-name: {{ .context.Release.Name }}
+    topologyKey: kubernetes.io/hostname
+{{- end -}}
