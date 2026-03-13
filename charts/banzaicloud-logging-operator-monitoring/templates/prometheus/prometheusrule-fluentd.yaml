@@ -31,7 +31,7 @@ spec:
 
     {{- if .Values.prometheus.rule.alerts.fluentd.outputBufferWarning.enabled }}
     - alert: FluentdOutputBufferWarning
-      expr: max_over_time(fluentd_output_status_buffer_queue_length[1m]) > 16
+      expr: max_over_time(fluentd_output_status_buffer_queue_length[{{ $.Values.prometheus.rule.alerts.fluentd.outputBufferWarning.time }}]) > 16
       for: 5m
       labels:
         severity: "{{ $.Values.prometheus.rule.alerts.fluentd.outputBufferWarning.severity }}"

@@ -7,9 +7,9 @@ metadata:
   namespace: {{ $.Values.prometheus.rule.namespace }}
   {{- end }}
   labels:
-    {{- include "banzaicloud-logging-operator-monitoring.labels" . | nindent 4 }}
+    {{ include "banzaicloud-logging-operator-monitoring.labels" . | nindent 4 }}
     {{- if $.Values.prometheus.rule.additionalLabels }}
-    {{- toYaml $.Values.prometheus.rule.additionalLabels | nindent 4 }}
+    {{ toYaml $.Values.prometheus.rule.additionalLabels | nindent 4 }}
     {{- end }}
 spec:
   groups:
@@ -29,7 +29,7 @@ spec:
 
     {{- if $.Values.prometheus.rule.alerts.fluentBit.noOutputBytesProcessed.enabled }}
     - alert: FluentBitNoOutputBytesProcessed
-      expr: rate(fluentbit_output_proc_bytes_total[5m]) == 0
+      expr: rate(fluentbit_output_proc_bytes_total[{{ $.Values.prometheus.rule.alerts.fluentBit.noOutputBytesProcessed.time }}]) == 0
       for: 15m
       labels:
         severity: "{{ $.Values.prometheus.rule.alerts.fluentBit.noOutputBytesProcessed.severity }}"

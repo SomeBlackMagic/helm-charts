@@ -16,6 +16,7 @@ prometheus:
         noOutputBytesProcessed:
           enabled: true
           severity: critical
+          time: 5m
 
 
       fluentd:
@@ -26,6 +27,7 @@ prometheus:
         outputBufferWarning:
           enabled: true
           severity: warning
+          time: 5m
 
         outputRetryWarning:
           enabled: true
