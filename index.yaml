@@ -396,6 +396,27 @@ entries:
     version: 3.3.0
   banzaicloud-logging-operator-monitoring:
   - apiVersion: v2
+    appVersion: 2.3.2
+    created: "2026-03-14T08:05:38.400500638Z"
+    description: Monitor logging-operator
+    digest: 5c44523fc5e0d494e678c83897f0b0fac2b9b60897e7c11527705f63441290a7
+    icon: https://raw.githubusercontent.com/SomeBlackMagic/helm-charts/master/charts/banzaicloud-logging-operator-monitoring/icon.png
+    keywords:
+    - banzaicloud
+    - logging-operator
+    - monitoring
+    maintainers:
+    - name: Andru Cherny
+      url: https://github.com/wirwolf
+    name: banzaicloud-logging-operator-monitoring
+    sources:
+    - https://github.com/SomeBlackMagic/helm-charts
+    - https://github.com/banzaicloud/logging-operator
+    type: application
+    urls:
+    - https://github.com/SomeBlackMagic/helm-charts/releases/download/banzaicloud-logging-operator-monitoring-2.3.2/banzaicloud-logging-operator-monitoring-2.3.2.tgz
+    version: 2.3.2
+  - apiVersion: v2
     appVersion: 2.3.1
     created: "2026-03-13T14:02:09.327669205Z"
     description: Monitor logging-operator
@@ -2228,4 +2249,4 @@ entries:
     urls:
     - https://github.com/SomeBlackMagic/helm-charts/releases/download/testing-multitool-0.1.0/testing-multitool-0.1.0.tgz
     version: 0.1.0
-generated: "2026-03-13T14:02:09.327979782Z"
+generated: "2026-03-14T08:05:38.400744585Z"
