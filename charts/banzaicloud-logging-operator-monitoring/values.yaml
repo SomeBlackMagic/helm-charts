@@ -12,53 +12,68 @@ prometheus:
         serviceDown:
           enabled: true
           severity: critical
+          for: 2m
 
         noOutputBytesProcessed:
           enabled: true
           severity: critical
-          time: 5m
+          rateTime: 5m
+          for: 20m
+
+        noInputBytesProcessed:
+          enabled: true
+          severity: warning
+          increaseTime: 10m
+          for: 2h
 
 
       fluentd:
         serviceDown:
           enabled: true
           severity: critical
+          for: 1m
 
         outputBufferWarning:
           enabled: true
           severity: warning
-          time: 5m
+          lookbackTime: 5m
+          threshold: 32
+          for: 5m
 
         outputRetryWarning:
           enabled: true
           severity: warning
+          rateTime: 1m
+          threshold: 0.3
+          for: 10m
 
         outputRetryErrors:
           enabled: true
           severity: error
           rateTime: 10m
-          limitValue: 0.01
+          threshold: 0.05
+          for: 5m
 
-        #DEPRECATED Metric!
         outputBufferQueueLength:
           enabled: true
           severity: critical
-
-        queueLengthWarning:
-          enabled: true
-          severity: warning
-
-        queueLengthCritical:
-          enabled: true
-
+          lookbackTime: 5m
+          threshold: 8
+          for: 5m
 
         highErrorRatio:
           enabled: true
           severity: critical
+          rateTime: 5m
+          threshold: 0.05
+          for: 5m
 
         highRetryRatio:
           enabled: true
           severity: critical
+          rateTime: 5m
+          threshold: 0.05
+          for: 5m
 
 
 

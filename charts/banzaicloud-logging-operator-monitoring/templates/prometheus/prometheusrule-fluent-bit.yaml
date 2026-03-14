@@ -18,37 +18,35 @@ spec:
 
     {{- if $.Values.prometheus.rule.alerts.fluentBit.serviceDown.enabled }}
     - alert: FluentBitDown
-      expr: absent(up{container="fluent-bit"}== 1)
-      for: 1m
+      expr: absent(up{container="fluent-bit",namespace="{{ $.Release.Namespace }}"}== 1)
+      for: {{ $.Values.prometheus.rule.alerts.fluentBit.serviceDown.for }}
       labels:
         severity: "{{ $.Values.prometheus.rule.alerts.fluentBit.serviceDown.severity }}"
       annotations:
-        summary: "Fluentd Down"
-        description: {{`"{{ $labels.statefulset }} on {{ $labels.instance }} is down. No logs will be collected."`}}
+        summary: "Fluent Bit Down"
+        description: {{`"Fluent Bit on {{ $labels.instance }} is down. No logs will be collected."`}}
     {{- end }}
 
     {{- if $.Values.prometheus.rule.alerts.fluentBit.noOutputBytesProcessed.enabled }}
     - alert: FluentBitNoOutputBytesProcessed
-      expr: rate(fluentbit_output_proc_bytes_total[{{ $.Values.prometheus.rule.alerts.fluentBit.noOutputBytesProcessed.time }}]) == 0
-      for: 15m
+      expr: rate(fluentbit_output_proc_bytes_total[{{ $.Values.prometheus.rule.alerts.fluentBit.noOutputBytesProcessed.rateTime }}]) == 0
+      for: {{ $.Values.prometheus.rule.alerts.fluentBit.noOutputBytesProcessed.for }}
       labels:
         severity: "{{ $.Values.prometheus.rule.alerts.fluentBit.noOutputBytesProcessed.severity }}"
       annotations:
         summary: "Fluent Bit no output bytes processed"
-        description: {{`"Output plugin {{ $labels.name }} on Pod {{ $labels.namespace }}/{{ $labels.pod }} has not processed any bytes for at least 5 minutes.\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"`}}
-
+        description: {{`"Output plugin {{ $labels.name }} on Pod {{ $labels.namespace }}/{{ $labels.pod }} has not processed any bytes.\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"`}}
     {{- end }}
 
-    {{- if $.Values.prometheus.rule.alerts.fluentBit.noOutputBytesProcessed.enabled }}
-    - alert: FluentBitNoOutputBytesProcessed
-      expr: sum by (pod) (increase(fluentbit_input_bytes_total{container=~"fluent-bit.*"}[4m])) == 0
-      for: 6h
+    {{- if $.Values.prometheus.rule.alerts.fluentBit.noInputBytesProcessed.enabled }}
+    - alert: FluentBitNoInputBytesProcessed
+      expr: sum by (pod) (increase(fluentbit_input_bytes_total{container=~"fluent-bit.*"}[{{ $.Values.prometheus.rule.alerts.fluentBit.noInputBytesProcessed.increaseTime }}])) == 0
+      for: {{ $.Values.prometheus.rule.alerts.fluentBit.noInputBytesProcessed.for }}
       labels:
-        severity: "{{ $.Values.prometheus.rule.alerts.fluentBit.noOutputBytesProcessed.severity }}"
+        severity: "{{ $.Values.prometheus.rule.alerts.fluentBit.noInputBytesProcessed.severity }}"
       annotations:
-        summary: Fluent-bit input plugins haven't process any data for the past 6 hours
-        message: |
-          {{`The input plugins of Fluent-bit pod {{$labels.pod}} haven't collected any logs for the last 6 hours.`}}
+        summary: "Fluent Bit input plugins have not processed any data"
+        description: {{`"The input plugins of Fluent Bit pod {{ $labels.pod }} have not collected any logs.\n  LABELS: {{ $labels }}"`}}
     {{- end }}
 
 

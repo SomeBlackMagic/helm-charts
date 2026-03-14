@@ -7,9 +7,9 @@ metadata:
   namespace: {{ .Values.prometheus.rule.namespace }}
   {{- end }}
   labels:
-    {{- include "banzaicloud-logging-operator-monitoring.labels" . | nindent 4 }}
+    {{ include "banzaicloud-logging-operator-monitoring.labels" . | nindent 4 }}
     {{- if .Values.prometheus.rule.additionalLabels }}
-    {{- toYaml .Values.prometheus.rule.additionalLabels | nindent 4 }}
+    {{ toYaml .Values.prometheus.rule.additionalLabels | nindent 4 }}
     {{- end }}
 spec:
   groups:
@@ -18,8 +18,8 @@ spec:
 
     {{- if .Values.prometheus.rule.alerts.fluentd.serviceDown.enabled }}
     - alert: FluentdDown
-      expr: kube_statefulset_status_replicas{statefulset=~".*fluentd.*"} == 0
-      for: 1m
+      expr: kube_statefulset_status_replicas{statefulset=~".*fluentd.*",namespace="{{ $.Release.Namespace }}"} == 0
+      for: {{ $.Values.prometheus.rule.alerts.fluentd.serviceDown.for }}
       labels:
         context: fluentd
         severity: "{{ $.Values.prometheus.rule.alerts.fluentd.serviceDown.severity }}"
@@ -31,8 +31,8 @@ spec:
 
     {{- if .Values.prometheus.rule.alerts.fluentd.outputBufferWarning.enabled }}
     - alert: FluentdOutputBufferWarning
-      expr: max_over_time(fluentd_output_status_buffer_queue_length[{{ $.Values.prometheus.rule.alerts.fluentd.outputBufferWarning.time }}]) > 16
-      for: 5m
+      expr: max_over_time(fluentd_output_status_buffer_queue_length[{{ $.Values.prometheus.rule.alerts.fluentd.outputBufferWarning.lookbackTime }}]) > {{ $.Values.prometheus.rule.alerts.fluentd.outputBufferWarning.threshold }}
+      for: {{ $.Values.prometheus.rule.alerts.fluentd.outputBufferWarning.for }}
       labels:
         severity: "{{ $.Values.prometheus.rule.alerts.fluentd.outputBufferWarning.severity }}"
       annotations:
@@ -42,85 +42,61 @@ spec:
 
     {{- if .Values.prometheus.rule.alerts.fluentd.outputRetryWarning.enabled }}
     - alert: FluentdOutputRetryWarning
-      expr: rate(fluentd_output_status_retry_count[1m]) > 0
-      for: 5m
+      expr: rate(fluentd_output_status_retry_count[{{ $.Values.prometheus.rule.alerts.fluentd.outputRetryWarning.rateTime }}]) > {{ $.Values.prometheus.rule.alerts.fluentd.outputRetryWarning.threshold }}
+      for: {{ $.Values.prometheus.rule.alerts.fluentd.outputRetryWarning.for }}
       labels:
         severity: "{{ $.Values.prometheus.rule.alerts.fluentd.outputRetryWarning.severity }}"
       annotations:
-        summary: {{`"Fluentd output retry counter non-null (instance {{ $labels.instance }})"`}}
+        summary: {{`"Fluentd output retry counter is high (instance {{ $labels.instance }})"`}}
         description: {{`"Fluentd is not forwarding all logs\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"`}}
     {{- end }}
 
     {{- if .Values.prometheus.rule.alerts.fluentd.outputBufferQueueLength.enabled }}
     - alert: FluentdOutputBufferQueueLength
-      expr: max_over_time(fluentd_status_buffer_queue_length[5m]) > 2
-      for: 5m
+      expr: max_over_time(fluentd_status_buffer_queue_length[{{ $.Values.prometheus.rule.alerts.fluentd.outputBufferQueueLength.lookbackTime }}]) > {{ $.Values.prometheus.rule.alerts.fluentd.outputBufferQueueLength.threshold }}
+      for: {{ $.Values.prometheus.rule.alerts.fluentd.outputBufferQueueLength.for }}
       labels:
         severity: "{{ $.Values.prometheus.rule.alerts.fluentd.outputBufferQueueLength.severity }}"
       annotations:
-        summary: {{`"Fluentd output buffer queue length"`}}
-        description: {{`"Output plugin {{ $labels.type }} on Pod {{ $labels.namespace }}/{{ $labels.instance }} has a buffer that can not been flushed.\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"`}}
+        summary: {{`"Fluentd output buffer queue length size is too big"`}}
+        description: {{`"Output plugin {{ $labels.type }} on Pod {{ $labels.namespace }}/{{ $labels.pod }} has a buffer that cannot be flushed.\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"`}}
     {{- end }}
 
 
     {{- if $.Values.prometheus.rule.alerts.fluentd.highErrorRatio.enabled }}
     - alert: FluentdHighErrorRatio
       expr: |
-        sum by (type, plugin_id)(rate(fluentd_output_status_num_errors[5m])) /sum by (type, plugin_id)(rate(fluentd_output_status_emit_count[5m]))> 0.05
-      for: 5m
+        sum by (type, plugin_id)(rate(fluentd_output_status_num_errors[{{ $.Values.prometheus.rule.alerts.fluentd.highErrorRatio.rateTime }}])) / sum by (type, plugin_id)(rate(fluentd_output_status_emit_count[{{ $.Values.prometheus.rule.alerts.fluentd.highErrorRatio.rateTime }}])) > {{ $.Values.prometheus.rule.alerts.fluentd.highErrorRatio.threshold }}
+      for: {{ $.Values.prometheus.rule.alerts.fluentd.highErrorRatio.for }}
       labels:
         severity: "{{ $.Values.prometheus.rule.alerts.fluentd.highErrorRatio.severity }}"
       annotations:
-        summary: {{`"High Error Ratio."`}}
-        description: {{`"High Error Ratio"`}}
+        summary: {{`"Fluentd high error ratio detected"`}}
+        description: {{`"Fluentd error ratio is {{ $value | humanizePercentage }} for plugin {{ $labels.plugin_id }}\n  LABELS: {{ $labels }}"`}}
     {{- end }}
 
     {{- if $.Values.prometheus.rule.alerts.fluentd.highRetryRatio.enabled }}
-    - alert: FluentdHighErrorRatio
+    - alert: FluentdHighRetryRatio
       expr: |
-        sum by (type, plugin_id)(rate(fluentd_output_status_retry_count[5m])) /sum by (type, plugin_id)(rate(fluentd_output_status_emit_count[5m]))> 0.05
-      for: 5m
+        sum by (type, plugin_id)(rate(fluentd_output_status_retry_count[{{ $.Values.prometheus.rule.alerts.fluentd.highRetryRatio.rateTime }}])) / sum by (type, plugin_id)(rate(fluentd_output_status_emit_count[{{ $.Values.prometheus.rule.alerts.fluentd.highRetryRatio.rateTime }}])) > {{ $.Values.prometheus.rule.alerts.fluentd.highRetryRatio.threshold }}
+      for: {{ $.Values.prometheus.rule.alerts.fluentd.highRetryRatio.for }}
       labels:
         severity: "{{ $.Values.prometheus.rule.alerts.fluentd.highRetryRatio.severity }}"
       annotations:
-        summary: {{`"High Retry Ratio."`}}
-        description: {{`"High Retry Ratio"`}}
+        summary: {{`"Fluentd high retry ratio detected"`}}
+        description: {{`"Fluentd retry ratio is {{ $value | humanizePercentage }} for plugin {{ $labels.plugin_id }}\n  LABELS: {{ $labels }}"`}}
     {{- end }}
 
-
-    {{- if .Values.prometheus.rule.alerts.fluentd.queueLengthWarning.enabled }}
-    - alert: FluentdOutputBufferQueueLength
-      expr: rate(fluentd_status_buffer_queue_length[5m]) > 0.3
-      for: 1m
-      labels:
-        severity: "warning"
-      annotations:
-        summary: {{`"Fluentd node are failing"`}}
-        description: {{`"In the last 5 minutes, fluentd queues increased 30%. Current value is {{ $value }}. PluginId: {{ $labels.plugin_id }}"`}}
-    {{- end }}
-
-    {{- if .Values.prometheus.rule.alerts.fluentd.queueLengthCritical.enabled }}
-    - alert: FluentdOutputBufferQueueLength
-      expr: rate(fluentd_status_buffer_queue_length[5m]) > 0.5
-      for: 1m
-      labels:
-        severity: "critical"
-      annotations:
-        summary: {{`"Fluentd node are failing"`}}
-        description: {{`"In the last 5 minutes, fluentd queues increased 50%. Current value is {{ $value }}. PluginId: {{ $labels.plugin_id }}"`}}
-
-    {{- end }}
 
     {{- if $.Values.prometheus.rule.alerts.fluentd.outputRetryErrors.enabled }}
     - alert: FluentdOutputRetryErrors
-      expr: rate(fluentd_output_status_num_errors[{{ $.Values.prometheus.rule.alerts.fluentd.outputRetryErrors.rateTime }}]) > {{ $.Values.prometheus.rule.alerts.fluentd.outputRetryErrors.limitValue }}
-      for: 1m
+      expr: rate(fluentd_output_status_num_errors[{{ $.Values.prometheus.rule.alerts.fluentd.outputRetryErrors.rateTime }}]) > {{ $.Values.prometheus.rule.alerts.fluentd.outputRetryErrors.threshold }}
+      for: {{ $.Values.prometheus.rule.alerts.fluentd.outputRetryErrors.for }}
       labels:
         severity: "{{ $.Values.prometheus.rule.alerts.fluentd.outputRetryErrors.severity }}"
       annotations:
         summary: {{`"Fluentd send data errors"`}}
-        description: {{`"Fluentd have erros when try to send data to output. PluginId: {{ $labels.plugin_id }}"`}}
-
+        description: {{`"Fluentd has errors when trying to send data to output. PluginId: {{ $labels.plugin_id }}"`}}
     {{- end }}
 
 
