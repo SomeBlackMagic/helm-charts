@@ -7,9 +7,9 @@ metadata:
   namespace: {{ $.Values.prometheus.rule.namespace }}
   {{- end }}
   labels:
-    {{- include "kube-monitoring.labels" . | nindent 4 }}
+    {{ include "kube-monitoring.labels" . | nindent 4 }}
     {{- if $.Values.prometheus.rule.additionalLabels }}
-    {{- toYaml $.Values.prometheus.rule.additionalLabels | nindent 4 }}
+    {{ toYaml $.Values.prometheus.rule.additionalLabels | nindent 4 }}
     {{- end }}
 spec:
   groups:
@@ -40,15 +40,18 @@ spec:
     {{- end }}
 
     {{- if $.Values.prometheus.rule.alerts.containerIsOOMKilled.enabled }}
-    #https://github.com/PostHog/charts-clickhouse/blob/26d2568433b8fc772d400656120b3d130b787b4f/charts/posthog/values.yaml#L2463
     - alert: KubeContainerIsOOMKilled
-      annotations:
-        summary: {{`Kubernetes container oom killer (instance {{ $labels.instance }})`}}
-        description: {{`Container {{ $labels.container }} in pod {{ $labels.namespace }}/{{ $labels.pod }} has been OOMKilled {{ $value }} times in the last 10 minutes.`}}
-      expr: (kube_pod_container_status_restarts_total - kube_pod_container_status_restarts_total offset 10m >= 1) and ignoring (reason) min_over_time(kube_pod_container_status_last_terminated_reason{reason="OOMKilled"}[10m]) == 1
+      expr: |
+        increase(kube_pod_container_status_restarts_total[10m]) > 0
+        and on(namespace,pod,container)
+        kube_pod_container_status_last_terminated_reason{reason="OOMKilled"} == 1
       for: 10m
       labels:
         severity: "{{ $.Values.prometheus.rule.alerts.containerIsOOMKilled.severity }}"
+
+      annotations:
+        summary: {{`Kubernetes container oom killer (instance {{ $labels.instance }})`}}
+        description: {{`Container {{ $labels.container }} in pod {{ $labels.namespace }}/{{ $labels.pod }} has been OOMKilled {{ $value }} times in the last 10 minutes.`}}
     {{- end }}
 
     {{- if $.Values.prometheus.rule.alerts.failedEvictedPods.enabled }}
@@ -67,27 +70,47 @@ spec:
     #https://stackoverflow.com/a/69340335
     - alert: TooManyEvictedPodsOnNamespace
       annotations:
-        summary: "{{`Too many Failed Evicted Pods in {{ $labels.namespace }}`}}"
+        summary: "{{`Too many Failed Evicted Pods in {{ $labels.namespace }} `}}"
         description: "{{`Too many Failed Evicted Pods: {{ $value }} on namespace {{ $labels.namespace }}`}}"
-      expr: sum by(namespace) (kube_pod_status_reason{reason="Evicted"}) >= {{ $.Values.prometheus.rule.alerts.tooManyEvictedPods.threshold }}
+      expr: sum by(namespace, pod) (kube_pod_status_reason{reason="Evicted"}) >= {{ $.Values.prometheus.rule.alerts.tooManyEvictedPods.threshold }}
       labels:
         severity: "{{ $.Values.prometheus.rule.alerts.tooManyEvictedPods.severity }}"
     {{- end }}
 
-    {{- if $.Values.prometheus.rule.alerts.highCPURequests.enabled }}
-    - alert: HighCPURequests
+    {{- if $.Values.prometheus.rule.alerts.nodeHighCPURequests.enabled }}
+    - alert: NodeHighCPURequests
       annotations:
         summary: "{{`High CPU Requests on Node {{ $labels.node }}`}}"
         description: "{{`CPU requests on node {{ $labels.node }} exceed 90% of capacity. Requests: {{ $value | humanizePercentage }}.`}}"
-      for: {{ $.Values.prometheus.rule.alerts.highCPURequests.thresholdTime }}
+      for: {{ $.Values.prometheus.rule.alerts.nodeHighCPURequests.thresholdTime }}
       expr: |
         sum(kube_pod_container_resource_requests{resource="cpu"}) by (node)
         /
         sum(kube_node_status_capacity{resource="cpu"}) by (node) > 0.9
       labels:
-        severity: "{{ $.Values.prometheus.rule.alerts.highCPURequests.severity }}"
+        severity: "{{ $.Values.prometheus.rule.alerts.nodeHighCPURequests.severity }}"
     {{- end }}
 
+
+    {{- if $.Values.prometheus.rule.alerts.containerCpuThrottlingHigh.enabled }}
+    - alert: ContainerCpuThrottlingHigh
+      expr: |
+        (
+          sum by (namespace,pod,container)(
+            rate(container_cpu_cfs_throttled_periods_total[5m])
+          )
+          /
+          sum by (namespace,pod,container)(
+            rate(container_cpu_cfs_periods_total[5m])
+          )
+        ) > 0.5
+      for: {{ $.Values.prometheus.rule.alerts.containerCpuThrottlingHigh.thresholdTime }}
+      labels:
+        severity: "{{ $.Values.prometheus.rule.alerts.containerCpuThrottlingHigh.severity }}"
+      annotations:
+        summary: "{{`Container CPU throttled more than 50% of time`}}"
+        description: "{{`Container {{ $labels.container }} in pod {{ $labels.namespace }}/{{ $labels.pod }} is throttled by CPU limit more than 50% of the time.`}}"
+    {{- end }}
 
 
     {{- with $.Values.prometheus.rule.additionalAlerts }}

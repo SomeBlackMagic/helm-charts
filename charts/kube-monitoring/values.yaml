@@ -37,7 +37,12 @@ prometheus:
         enabled: true
         severity: warning
         threshold: 5
-      highCPURequests:
+      nodeHighCPURequests:
+        enabled: true
+        severity: warning
+        thresholdTime: 5m
+
+      containerCpuThrottlingHigh:
         enabled: true
         severity: warning
         thresholdTime: 5m
