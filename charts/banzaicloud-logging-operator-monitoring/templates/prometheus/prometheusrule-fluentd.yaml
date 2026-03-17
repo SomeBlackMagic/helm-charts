@@ -42,7 +42,7 @@ spec:
 
     {{- if .Values.prometheus.rule.alerts.fluentd.outputRetryWarning.enabled }}
     - alert: FluentdOutputRetryWarning
-      expr: rate(fluentd_output_status_retry_count[{{ $.Values.prometheus.rule.alerts.fluentd.outputRetryWarning.rateTime }}]) > {{ $.Values.prometheus.rule.alerts.fluentd.outputRetryWarning.threshold }}
+      expr: rate(fluentd_output_status_retry_count{plugin_id!~"{{ $.Values.prometheus.rule.alerts.fluentd.excludePluginIdRegex }}"}[{{ $.Values.prometheus.rule.alerts.fluentd.outputRetryWarning.rateTime }}]) > {{ $.Values.prometheus.rule.alerts.fluentd.outputRetryWarning.threshold }}
       for: {{ $.Values.prometheus.rule.alerts.fluentd.outputRetryWarning.for }}
       labels:
         severity: "{{ $.Values.prometheus.rule.alerts.fluentd.outputRetryWarning.severity }}"
@@ -66,7 +66,13 @@ spec:
     {{- if $.Values.prometheus.rule.alerts.fluentd.highErrorRatio.enabled }}
     - alert: FluentdHighErrorRatio
       expr: |
-        sum by (type, plugin_id)(rate(fluentd_output_status_num_errors[{{ $.Values.prometheus.rule.alerts.fluentd.highErrorRatio.rateTime }}])) / sum by (type, plugin_id)(rate(fluentd_output_status_emit_count[{{ $.Values.prometheus.rule.alerts.fluentd.highErrorRatio.rateTime }}])) > {{ $.Values.prometheus.rule.alerts.fluentd.highErrorRatio.threshold }}
+        (
+          sum by (type, plugin_id)(rate(fluentd_output_status_num_errors{plugin_id!~"{{ $.Values.prometheus.rule.alerts.fluentd.excludePluginIdRegex }}"}[{{ $.Values.prometheus.rule.alerts.fluentd.highErrorRatio.rateTime }}]))
+          /
+          sum by (type, plugin_id)(rate(fluentd_output_status_emit_count{plugin_id!~"{{ $.Values.prometheus.rule.alerts.fluentd.excludePluginIdRegex }}"}[{{ $.Values.prometheus.rule.alerts.fluentd.highErrorRatio.rateTime }}]))
+        ) > {{ $.Values.prometheus.rule.alerts.fluentd.highErrorRatio.threshold }}
+        and
+        sum by (type, plugin_id)(rate(fluentd_output_status_emit_count{plugin_id!~"{{ $.Values.prometheus.rule.alerts.fluentd.excludePluginIdRegex }}"}[{{ $.Values.prometheus.rule.alerts.fluentd.highErrorRatio.rateTime }}])) > 0
       for: {{ $.Values.prometheus.rule.alerts.fluentd.highErrorRatio.for }}
       labels:
         severity: "{{ $.Values.prometheus.rule.alerts.fluentd.highErrorRatio.severity }}"
@@ -78,7 +84,13 @@ spec:
     {{- if $.Values.prometheus.rule.alerts.fluentd.highRetryRatio.enabled }}
     - alert: FluentdHighRetryRatio
       expr: |
-        sum by (type, plugin_id)(rate(fluentd_output_status_retry_count[{{ $.Values.prometheus.rule.alerts.fluentd.highRetryRatio.rateTime }}])) / sum by (type, plugin_id)(rate(fluentd_output_status_emit_count[{{ $.Values.prometheus.rule.alerts.fluentd.highRetryRatio.rateTime }}])) > {{ $.Values.prometheus.rule.alerts.fluentd.highRetryRatio.threshold }}
+        (
+          sum by (type, plugin_id)(rate(fluentd_output_status_retry_count{plugin_id!~"{{ $.Values.prometheus.rule.alerts.fluentd.excludePluginIdRegex }}"}[{{ $.Values.prometheus.rule.alerts.fluentd.highRetryRatio.rateTime }}]))
+          /
+          sum by (type, plugin_id)(rate(fluentd_output_status_emit_count{plugin_id!~"{{ $.Values.prometheus.rule.alerts.fluentd.excludePluginIdRegex }}"}[{{ $.Values.prometheus.rule.alerts.fluentd.highRetryRatio.rateTime }}]))
+        ) > {{ $.Values.prometheus.rule.alerts.fluentd.highRetryRatio.threshold }}
+        and
+        sum by (type, plugin_id)(rate(fluentd_output_status_emit_count{plugin_id!~"{{ $.Values.prometheus.rule.alerts.fluentd.excludePluginIdRegex }}"}[{{ $.Values.prometheus.rule.alerts.fluentd.highRetryRatio.rateTime }}])) > 0
       for: {{ $.Values.prometheus.rule.alerts.fluentd.highRetryRatio.for }}
       labels:
         severity: "{{ $.Values.prometheus.rule.alerts.fluentd.highRetryRatio.severity }}"
@@ -90,7 +102,7 @@ spec:
 
     {{- if $.Values.prometheus.rule.alerts.fluentd.outputRetryErrors.enabled }}
     - alert: FluentdOutputRetryErrors
-      expr: rate(fluentd_output_status_num_errors[{{ $.Values.prometheus.rule.alerts.fluentd.outputRetryErrors.rateTime }}]) > {{ $.Values.prometheus.rule.alerts.fluentd.outputRetryErrors.threshold }}
+      expr: rate(fluentd_output_status_num_errors{plugin_id!~"{{ $.Values.prometheus.rule.alerts.fluentd.excludePluginIdRegex }}"}[{{ $.Values.prometheus.rule.alerts.fluentd.outputRetryErrors.rateTime }}]) > {{ $.Values.prometheus.rule.alerts.fluentd.outputRetryErrors.threshold }}
       for: {{ $.Values.prometheus.rule.alerts.fluentd.outputRetryErrors.for }}
       labels:
         severity: "{{ $.Values.prometheus.rule.alerts.fluentd.outputRetryErrors.severity }}"

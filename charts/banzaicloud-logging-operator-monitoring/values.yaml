@@ -28,6 +28,9 @@ prometheus:
 
 
       fluentd:
+        #Regex to exclude internal Fluentd plugins from alerts
+        excludePluginIdRegex: "main.*"
+
         serviceDown:
           enabled: true
           severity: critical
