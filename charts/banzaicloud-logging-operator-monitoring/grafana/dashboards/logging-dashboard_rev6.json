@@ -1667,7 +1667,7 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "node_filesystem_size_bytes{pod=~\"$fluentd\" ,endpoint=\"buffer-metrics\", fstype!=\"\"} - node_filesystem_free_bytes{pod=~\"$fluentd\", endpoint=\"buffer-metrics\", fstype!=\"\"}",
+          "expr": "node_filesystem_size_bytes{pod=~\"$fluentd\", endpoint=\"buffer-metrics\", fstype!=\"\", mountpoint=\"/buffers\"} - node_filesystem_free_bytes{pod=~\"$fluentd\", endpoint=\"buffer-metrics\", fstype!=\"\"}",
           "hide": false,
           "interval": "",
           "legendFormat": "Used: {{pod}}",
