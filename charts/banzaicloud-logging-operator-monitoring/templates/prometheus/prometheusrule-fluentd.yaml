@@ -53,7 +53,7 @@ spec:
 
     {{- if .Values.prometheus.rule.alerts.fluentd.outputBufferQueueLength.enabled }}
     - alert: FluentdOutputBufferQueueLength
-      expr: max_over_time(fluentd_status_buffer_queue_length[{{ $.Values.prometheus.rule.alerts.fluentd.outputBufferQueueLength.lookbackTime }}]) > {{ $.Values.prometheus.rule.alerts.fluentd.outputBufferQueueLength.threshold }}
+      expr: avg_over_time(fluentd_status_buffer_queue_length[{{ $.Values.prometheus.rule.alerts.fluentd.outputBufferQueueLength.lookbackTime }}]) > {{ $.Values.prometheus.rule.alerts.fluentd.outputBufferQueueLength.threshold }}
       for: {{ $.Values.prometheus.rule.alerts.fluentd.outputBufferQueueLength.for }}
       labels:
         severity: "{{ $.Values.prometheus.rule.alerts.fluentd.outputBufferQueueLength.severity }}"
