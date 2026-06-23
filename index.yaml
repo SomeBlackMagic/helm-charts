@@ -1857,6 +1857,17 @@ entries:
     urls:
     - https://github.com/SomeBlackMagic/helm-charts/releases/download/phpmyadmin-6.5.2/phpmyadmin-6.5.2.tgz
     version: 6.5.2
+  raw-manifests:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2026-06-23T12:29:56.877008421Z"
+    description: Generic Helm chart for rendering raw Kubernetes manifests from values.resources
+    digest: 5f3ce117574987416ecdb3089f36a89632df5605bbd3ae786b2f777cd09e8c13
+    name: raw-manifests
+    type: application
+    urls:
+    - https://github.com/SomeBlackMagic/helm-charts/releases/download/raw-manifests-0.1.0/raw-manifests-0.1.0.tgz
+    version: 0.1.0
   redis-high-availability:
   - apiVersion: v2
     created: "2025-10-10T06:50:05.77188128Z"
@@ -2310,4 +2321,4 @@ entries:
     urls:
     - https://github.com/SomeBlackMagic/helm-charts/releases/download/testing-multitool-0.1.0/testing-multitool-0.1.0.tgz
     version: 0.1.0
-generated: "2026-04-14T14:18:55.206903661Z"
+generated: "2026-06-23T12:29:56.877261213Z"
