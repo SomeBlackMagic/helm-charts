@@ -1,0 +1,4 @@
+# List of arbitrary Kubernetes resources to render.
+# Each item is rendered as YAML and then passed through Helm tpl,
+# so values may contain template expressions like "{{ .Release.Namespace }}".
+resources: []

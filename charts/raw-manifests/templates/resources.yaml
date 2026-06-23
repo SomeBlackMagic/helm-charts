@@ -1,0 +1,17 @@
+{{- /*
+Render arbitrary Kubernetes resources from .Values.resources.
+
+This chart is intentionally generic.
+It allows Flux HelmRelease dependsOn to be used for CR manifests
+that require CRDs installed by another HelmRelease.
+
+tpl is used so resources inside values.yaml may reference Helm context, for example:
+  namespace: "{{ .Release.Namespace }}"
+  name: "{{ .Values.global.appName }}-secret"
+*/ -}}
+{{- if .Values.resources }}
+{{- range $index, $resource := .Values.resources }}
+---
+{{ tpl (toYaml $resource) $ | nindent 0 }}
+{{- end }}
+{{- end }}
