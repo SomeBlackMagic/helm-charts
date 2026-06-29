@@ -1870,6 +1870,21 @@ entries:
     version: 0.1.0
   redis-high-availability:
   - apiVersion: v2
+    created: "2026-06-29T08:19:46.730982376Z"
+    dependencies:
+    - name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 17.4.3
+    - name: haproxy
+      repository: https://haproxytech.github.io/helm-charts
+      version: 1.x.x
+    description: redis high availability
+    digest: b384b2d04df9de24af8be39f012d83ceaceb1e176773b4cbda87edd0da943d2a
+    name: redis-high-availability
+    urls:
+    - https://github.com/SomeBlackMagic/helm-charts/releases/download/redis-high-availability-1.3.10/redis-high-availability-1.3.10.tgz
+    version: 1.3.10
+  - apiVersion: v2
     created: "2025-10-10T06:50:05.77188128Z"
     dependencies:
     - name: redis
@@ -2321,4 +2336,4 @@ entries:
     urls:
     - https://github.com/SomeBlackMagic/helm-charts/releases/download/testing-multitool-0.1.0/testing-multitool-0.1.0.tgz
     version: 0.1.0
-generated: "2026-06-23T12:29:56.877261213Z"
+generated: "2026-06-29T08:19:46.731281906Z"
