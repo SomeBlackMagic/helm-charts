@@ -172,5 +172,8 @@ redis:
     existingSecret: ""    # Set to '{{ .Release.Name }}-auth' when secretGeneration.enabled=true
     existingSecretPasswordKey: "redis-password"
 
+  replica:
+    podManagementPolicy: Parallel
+
   sentinel:
     enabled: true
