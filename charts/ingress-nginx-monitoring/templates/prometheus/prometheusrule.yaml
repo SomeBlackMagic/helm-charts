@@ -7,9 +7,9 @@ metadata:
   namespace: {{ $.Values.prometheus.rule.namespace }}
   {{- end }}
   labels:
-    {{ include "ingress-nginx-monitoring.labels" $ | nindent 4 }}
+    {{- include "ingress-nginx-monitoring.labels" $ | nindent 4 }}
     {{- if $.Values.prometheus.rule.additionalLabels }}
-    {{ toYaml $.Values.prometheus.rule.additionalLabels | nindent 4 }}
+    {{- toYaml $.Values.prometheus.rule.additionalLabels | nindent 4 }}
     {{- end }}
 spec:
   groups:
@@ -58,8 +58,8 @@ spec:
       labels:
         severity: "{{ $.Values.prometheus.rule.alerts.tooMany500s.severity }}"
       annotations:
-        summary: {{`Too many 5xx errors on ingress {{$labels.ingress}}`}}
-        description: {{`More than 5% of all requests returned 5xx on ingress {{$labels.ingress}} in namespace {{$labels.exported_namespace}} (threshold: 100 req/h minimum)`}}
+        summary: '{{`Too many 5xx errors on ingress {{$labels.ingress}}`}}'
+        description: '{{`More than 5% of all requests returned 5xx on ingress {{$labels.ingress}} in namespace {{$labels.exported_namespace}} (minimum 100 req/h)`}}'
     {{- end }}
 
     {{- if $.Values.prometheus.rule.alerts.tooMany400s.enabled }}
@@ -83,8 +83,8 @@ spec:
       labels:
         severity: "{{ $.Values.prometheus.rule.alerts.tooMany400s.severity }}"
       annotations:
-        summary: {{`Too many 4xx errors on ingress {{$labels.ingress}}`}}
-        description: {{`More than 5% of all requests returned 4xx on ingress {{$labels.ingress}} in namespace {{$labels.exported_namespace}} (threshold: 100 req/h minimum)`}}
+        summary: '{{`Too many 4xx errors on ingress {{$labels.ingress}}`}}'
+        description: '{{`More than 5% of all requests returned 4xx on ingress {{$labels.ingress}} in namespace {{$labels.exported_namespace}} (minimum 100 req/h)`}}'
     {{- end }}
 
 
