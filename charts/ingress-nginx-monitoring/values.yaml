@@ -13,18 +13,27 @@ prometheus:
       configFailed:
         enabled: true
         severity: critical
+        for: 1s
 
       certificateExpiry:
         enabled: true
         severity: critical
+        for: 1s
+        daysBeforeExpiry: 7
 
       tooMany500s:
         enabled: true
         severity: warning
+        for: 5m
+        threshold: 5
+        minRequestsPerHour: 100
 
       tooMany400s:
         enabled: true
         severity: warning
+        for: 1m
+        threshold: 5
+        minRequestsPerHour: 100
 
     additionalAlerts: []
     # - alert: CertManagerCertificateReadyStatus
