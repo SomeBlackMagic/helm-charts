@@ -111,9 +111,4 @@ spec:
         description: {{`"Fluentd has errors when trying to send data to output. PluginId: {{ $labels.plugin_id }}"`}}
     {{- end }}
 
-
-
-    {{- with $.Values.prometheus.rule.additionalAlerts }}
-    {{ . | nindent 4 }}
-    {{- end }}
 {{- end }}

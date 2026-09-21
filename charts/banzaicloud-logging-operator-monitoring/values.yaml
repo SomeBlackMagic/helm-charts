@@ -8,6 +8,42 @@ prometheus:
     additionalLabels: {}
     alerts:
 
+      operator:
+        resourceProblem:
+          enabled: true
+          severity: critical
+          for: 5m
+
+        resourceInactive:
+          enabled: true
+          severity: critical
+          for: 5m
+
+        terminalReconcileError:
+          enabled: true
+          severity: critical
+          increaseTime: 10m
+          # for: not set by default (fires immediately)
+
+        reconcileErrors:
+          enabled: true
+          severity: warning
+          increaseTime: 10m
+          threshold: 3
+          for: 5m
+
+        workqueueStuck:
+          enabled: true
+          severity: critical
+          threshold: 60
+          for: 5m
+
+        kubernetesAPIError:
+          enabled: true
+          severity: warning
+          increaseTime: 10m
+          for: 5m
+
       fluentBit:
         serviceDown:
           enabled: true

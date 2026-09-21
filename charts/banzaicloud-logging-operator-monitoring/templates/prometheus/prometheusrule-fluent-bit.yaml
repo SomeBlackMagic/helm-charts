@@ -49,8 +49,4 @@ spec:
         description: {{`"The input plugins of Fluent Bit pod {{ $labels.pod }} have not collected any logs.\n  LABELS: {{ $labels }}"`}}
     {{- end }}
 
-
-    {{- with $.Values.prometheus.rule.additionalAlerts }}
-    {{ . | nindent 4 }}
-    {{- end }}
 {{- end }}

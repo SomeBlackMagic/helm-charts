@@ -1,0 +1,96 @@
+{{- if and $.Values.prometheus.enabled ( .Capabilities.APIVersions.Has "monitoring.coreos.com/v1" ) }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ $.Release.Name }}-operator
+  {{- if .Values.prometheus.rule.namespace }}
+  namespace: {{ .Values.prometheus.rule.namespace }}
+  {{- end }}
+  labels:
+    {{ include "banzaicloud-logging-operator-monitoring.labels" . | nindent 4 }}
+    {{- if .Values.prometheus.rule.additionalLabels }}
+    {{ toYaml .Values.prometheus.rule.additionalLabels | nindent 4 }}
+    {{- end }}
+spec:
+  groups:
+  - name: logging-operator
+    rules:
+
+    {{- if .Values.prometheus.rule.alerts.operator.resourceProblem.enabled }}
+    - alert: LoggingResourceProblem
+      expr: |
+        logging_resource_problems > 0
+      for: {{ $.Values.prometheus.rule.alerts.operator.resourceProblem.for }}
+      labels:
+        severity: "{{ $.Values.prometheus.rule.alerts.operator.resourceProblem.severity }}"
+      annotations:
+        summary: "Logging resource reports a problem"
+        description: {{`"Logging resource {{ $labels.kind }}/{{ $labels.namespace }}/{{ $labels.name }} has reported one or more problems."`}}
+    {{- end }}
+
+    {{- if .Values.prometheus.rule.alerts.operator.resourceInactive.enabled }}
+    - alert: LoggingResourceInactive
+      expr: |
+        logging_resource_state{status="inactive"} == 1
+      for: {{ $.Values.prometheus.rule.alerts.operator.resourceInactive.for }}
+      labels:
+        severity: "{{ $.Values.prometheus.rule.alerts.operator.resourceInactive.severity }}"
+      annotations:
+        summary: "Logging resource is inactive"
+        description: {{`"Logging resource {{ $labels.kind }}/{{ $labels.namespace }}/{{ $labels.name }} has been inactive."`}}
+    {{- end }}
+
+    {{- if .Values.prometheus.rule.alerts.operator.terminalReconcileError.enabled }}
+    - alert: LoggingTerminalReconcileError
+      expr: |
+        increase(controller_runtime_terminal_reconcile_errors_total[{{ $.Values.prometheus.rule.alerts.operator.terminalReconcileError.increaseTime }}]) > 0
+      {{- if $.Values.prometheus.rule.alerts.operator.terminalReconcileError.for }}
+      for: {{ $.Values.prometheus.rule.alerts.operator.terminalReconcileError.for }}
+      {{- end }}
+      labels:
+        severity: "{{ $.Values.prometheus.rule.alerts.operator.terminalReconcileError.severity }}"
+      annotations:
+        summary: "Logging controller encountered a terminal reconciliation error"
+        description: {{`"Controller {{ $labels.controller }} encountered a terminal reconciliation error."`}}
+    {{- end }}
+
+    {{- if .Values.prometheus.rule.alerts.operator.reconcileErrors.enabled }}
+    - alert: LoggingReconcileErrors
+      expr: |
+        increase(controller_runtime_reconcile_errors_total[{{ $.Values.prometheus.rule.alerts.operator.reconcileErrors.increaseTime }}]) >= {{ $.Values.prometheus.rule.alerts.operator.reconcileErrors.threshold }}
+      for: {{ $.Values.prometheus.rule.alerts.operator.reconcileErrors.for }}
+      labels:
+        severity: "{{ $.Values.prometheus.rule.alerts.operator.reconcileErrors.severity }}"
+      annotations:
+        summary: "Logging controller reconciliation errors"
+        description: {{`"Controller {{ $labels.controller }} encountered reconciliation errors."`}}
+    {{- end }}
+
+    {{- if .Values.prometheus.rule.alerts.operator.workqueueStuck.enabled }}
+    - alert: LoggingWorkqueueStuck
+      expr: |
+        workqueue_unfinished_work_seconds > {{ $.Values.prometheus.rule.alerts.operator.workqueueStuck.threshold }}
+      for: {{ $.Values.prometheus.rule.alerts.operator.workqueueStuck.for }}
+      labels:
+        severity: "{{ $.Values.prometheus.rule.alerts.operator.workqueueStuck.severity }}"
+      annotations:
+        summary: "Logging controller workqueue appears stuck"
+        description: {{`"Controller {{ $labels.controller }} has had unfinished work exceeding threshold."`}}
+    {{- end }}
+
+    {{- if .Values.prometheus.rule.alerts.operator.kubernetesAPIError.enabled }}
+    - alert: LoggingKubernetesAPIError
+      expr: |
+        increase(rest_client_requests_total{code=~"5.."}[{{ $.Values.prometheus.rule.alerts.operator.kubernetesAPIError.increaseTime }}]) > 0
+      for: {{ $.Values.prometheus.rule.alerts.operator.kubernetesAPIError.for }}
+      labels:
+        severity: "{{ $.Values.prometheus.rule.alerts.operator.kubernetesAPIError.severity }}"
+      annotations:
+        summary: "Logging Operator receives Kubernetes API 5xx errors"
+        description: {{`"Logging Operator received Kubernetes API server errors. Host={{ $labels.host }}, method={{ $labels.method }}, code={{ $labels.code }}."`}}
+    {{- end }}
+
+    {{- with $.Values.prometheus.rule.additionalAlerts }}
+    {{ . | nindent 4 }}
+    {{- end }}
+{{- end }}
